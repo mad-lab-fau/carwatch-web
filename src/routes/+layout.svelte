@@ -5,6 +5,21 @@
 	import '@skeletonlabs/skeleton/styles/all.css';
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
+
+	import { AppRail, AppRailTile } from '@skeletonlabs/skeleton';
 </script>
 
-<slot />
+<div class="flex h-full">
+	<div>
+	<AppRail>
+		<AppRailTile tag="a" href="/" label="Home" value={-1}>(icon)</AppRailTile>
+		<AppRailTile tag="a" href="/preparation" label="Barcode Generator" value={0}>(icon)</AppRailTile>
+		<AppRailTile tag="a" href="/postprocessing" label="Test" value={1}>(icon)</AppRailTile>
+
+	</AppRail>
+	</div>
+	<div class="w-full">
+		<slot/>
+	</div>
+	
+</div>
