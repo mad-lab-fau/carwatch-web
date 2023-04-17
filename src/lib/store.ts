@@ -33,7 +33,7 @@ interface QrCodeProperties {
 
 // Create the base stores for each data type
 export const studyProps = writable<StudyProperties>({studyName: 'Test', numDays: 0, numSamples: 0, samplePrefix: "S", readSubjectsFromFile: false, numSubjects: 0, subjectPath: '', subjectColumn: 'subject', subjectPrefix: 'VP_', hasEveningSample: false, startSampleFromZero: false, studyType: 0});
-export const barcodeProps = writable();
+export const barcodeProps = writable<BarcodeProperties>({generateBarcodes: false, hasBarcode: false, addName: false, layout: {numCols: 4, numRows: 4, leftMargin: 3, rightMargin: 3, topMargin: 3, bottomMargin: 3, colDist: 3, rowDist: 3}});
 export const qrCodeProps = writable();
 
 export const test = writable("hallo");

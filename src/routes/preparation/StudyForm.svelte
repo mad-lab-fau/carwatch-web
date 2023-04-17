@@ -1,6 +1,6 @@
 <script lang="ts">
     import { studyProps } from '$lib/store';
-
+    import { CAR_STUDY, LAB_STUDY, OTHER_STUDY } from '$lib/constants';
     const submit = () => {
 
         studyProps.update((props) => {
@@ -25,7 +25,7 @@
 
 </script>
 
-<form on:submit|preventDefault={submit} method=POST>
+<form on:submit|preventDefault={submit}>
     <label>
       Study Name:
       <input type="text" bind:value={$studyProps.studyName} maxlength="15" required>
@@ -89,9 +89,9 @@
     <label>
         Study Type:
     <select name="studyType" size="1" bind:value={$studyProps.studyType} class="select" style="width: min-content">
-        <option value=0>CAR Study</option>
-        <option value=1>Lab-based study</option>
-        <option value=2>Other</option>
+        <option value={CAR_STUDY}>CAR Study</option>
+        <option value={LAB_STUDY}>Lab-based study</option>
+        <option value={OTHER_STUDY}>Other</option>
     </select>
     </label>
     </div>
