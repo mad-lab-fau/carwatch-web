@@ -1,9 +1,18 @@
 <script lang="ts">
-	import { barcodeProps, studyProps} from "$lib/store";
+	import { barcodeProps, barcodePropsValid, studyProps} from "$lib/store";
 	import NumericInput from "./NumericInput.svelte";
 
-	const submit = () => {
-
+	export const submit = () => {
+		barcodePropsValid.set(true);
+		barcodeProps.update((props) => {
+			return {
+				...props,
+				generateBarcodes: props.generateBarcodes,
+				addName: props.addName,
+				hasBarcode: props.hasBarcode,
+				layout: props.layout
+			}
+		})
 	}
 </script>
 

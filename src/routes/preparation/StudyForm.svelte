@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { studyProps } from '$lib/store';
+    import { studyProps, studyPropsValid } from '$lib/store';
     import { CAR_STUDY, LAB_STUDY, OTHER_STUDY } from '$lib/constants';
-    const submit = () => {
 
+    const submit = () => {
+        studyPropsValid.set(true);
         studyProps.update((props) => {
             return {
                 ...props,
@@ -17,15 +18,11 @@
                 startSampleFromZero: props.startSampleFromZero
         };
         });
-    // redirect to home page
-    //window.location.href = '/';
-
-    // create grid
     }      
 
 </script>
 
-<form on:submit|preventDefault={submit}>
+<form id="study_form" on:submit|preventDefault={submit}>
     <label>
       Study Name:
       <input type="text" bind:value={$studyProps.studyName} maxlength="15" required>
