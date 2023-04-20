@@ -10,15 +10,13 @@
 </script>
 
 <div class="flex h-full">
-	<div>
 	<AppRail>
 		<AppRailTile tag="a" href="/" label="Home" value={-1}>(icon)</AppRailTile>
 		<AppRailTile tag="a" href="/preparation" label="Barcode Generator" value={0}>(icon)</AppRailTile>
 		<AppRailTile tag="a" href="/postprocessing" label="Test" value={1}>(icon)</AppRailTile>
 
 	</AppRail>
-	</div>
-	<div class="w-full">
+	<div class="w-full overflow-auto">
 		<slot/>
 	</div>
 	
