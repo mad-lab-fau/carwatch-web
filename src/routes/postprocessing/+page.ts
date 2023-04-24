@@ -3,5 +3,4 @@ import type { PageLoad } from './$types';
 
 export const load = (async () => {
     throw redirect(302, '/');
-    return {};
 }) satisfies PageLoad;

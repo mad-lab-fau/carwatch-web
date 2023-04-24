@@ -4,18 +4,15 @@
 	import QrCodeForm from "./QrCodeForm.svelte";
 	import StudyForm from "./StudyForm.svelte";
 	import { barcodePropsValid, studyPropsValid } from "$lib/store";
-
-	
-
+	import { goto } from "$app/navigation";
 
 	function onCompleteHandler(e: CustomEvent<any>): void {
-		throw new Error("Function not implemented.");
+		goto("preparation/results");
 	}
 </script>
 
  <h1>Study Configurator</h1>
  <br>
- <h2>locked value: {$studyPropsValid}</h2>
 
  <Stepper on:complete={onCompleteHandler}>
 	<Step locked={!$studyPropsValid} type=submit>
