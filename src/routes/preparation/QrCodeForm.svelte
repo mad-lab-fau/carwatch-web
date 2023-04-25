@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { CAR_STUDY, OTHER_STUDY } from "$lib/constants";
-	import { studyProps, qrCodeProps, qrCodePropsValid } from "$lib/store";
+	import { studyProps, qrCodeProps, qrCodePropsValid } from "$lib/configStore";
 	let uniformSalivaDistances = false;
 	let salivaDistance = 15;
 	let salivaDistances = [salivaDistance];
@@ -76,7 +76,7 @@
 	{/each}
 	</label>
 	{/if}
-    <button type="submit" class="btn variant-filled">Create QR-Codes</button>
+    <button type="submit" class="btn variant-filled-primary">Create QR-Codes</button>
 	{/if}
 </form>
 {/if}

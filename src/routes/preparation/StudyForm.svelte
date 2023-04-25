@@ -1,9 +1,11 @@
 <script lang="ts">
-    import { studyProps, studyPropsValid } from '$lib/store';
+    import { studyProps, studyPropsValid } from '$lib/configStore';
     import { CAR_STUDY, LAB_STUDY, OTHER_STUDY } from '$lib/constants';
+	  import { get } from 'svelte/store';
 
     const submit = () => {
         studyPropsValid.set(true);
+        let subjectList = createSubjectList();
         studyProps.update((props) => {
             return {
                 ...props,
@@ -11,14 +13,23 @@
                 numDays: props.numDays,
                 numSamples: props.numSamples,
                 numSubjects: props.numSubjects,
-                subjectPath: props.subjectPath,
+                subjectList: subjectList,
                 subjectColumn: props.subjectColumn,
                 subjectPrefix: props.subjectPrefix,
                 hasEveningSample: props.hasEveningSample,
                 startSampleFromZero: props.startSampleFromZero
         };
         });
-    }      
+    }    
+    
+    function createSubjectList(){
+      // TODO handle subject path
+        let subjectList = [];
+        for (let i = 1; i <= get(studyProps).numSubjects; i++){
+            subjectList.push(get(studyProps).subjectPrefix + i.toString().padStart(3, '0'));
+        }
+        return subjectList;
+    }
 
 </script>
 
@@ -93,6 +104,6 @@
     </label>
     </div>
     
-    <button type="submit" class="btn variant-filled">Create Study</button>
+    <button type="submit" class="btn variant-filled-primary">Create Study</button>
 
 </form>

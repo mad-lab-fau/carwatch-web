@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { barcodeProps, barcodePropsValid, studyProps} from "$lib/store";
+	import { barcodeProps, barcodePropsValid, studyProps} from "$lib/configStore";
 	import NumericInput from "./NumericInput.svelte";
 
 	export const submit = () => {
@@ -40,5 +40,5 @@
 		<NumericInput labelName="Distance between columns [mm]" value={$barcodeProps.layout.colDist} isRequired={true} isInt={false}/>	
 		<NumericInput labelName="Distance between rows [mm]" value={$barcodeProps.layout.rowDist} isRequired={true} isInt={false}/>	
 	</div>
-    <button type="submit" class="btn variant-filled">Create Barcodes</button>
+    <button type="submit" class="btn variant-filled-primary">Create Barcodes</button>
 </form>

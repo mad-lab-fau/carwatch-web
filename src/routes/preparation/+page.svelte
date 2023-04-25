@@ -3,7 +3,7 @@
 	import BarcodeForm from "./BarcodeForm.svelte";
 	import QrCodeForm from "./QrCodeForm.svelte";
 	import StudyForm from "./StudyForm.svelte";
-	import { barcodePropsValid, studyPropsValid } from "$lib/store";
+	import { barcodePropsValid, studyPropsValid } from "$lib/configStore";
 	import { goto } from "$app/navigation";
 
 	function onCompleteHandler(e: CustomEvent<any>): void {
