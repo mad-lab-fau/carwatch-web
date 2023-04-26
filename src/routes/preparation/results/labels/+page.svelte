@@ -1,34 +1,57 @@
 <script lang="ts">
-    import { barcodeDataArray, captionArray} from "$lib/dataStore";
-    import JsBarcode from 'jsbarcode';
-	import { onMount } from "svelte";
-    onMount(() => {
-        JsBarcode(".barcode").init();
-    });
+	import Barcodes from "./Barcodes.svelte";
 </script>
-<body>
-    <div class="grid">
-        {#each $barcodeDataArray as item, i}
-            <div>
-            <svg class="barcode"
-                jsbarcode-format="EAN8"
-                jsbarcode-value={item}
-                jsbarcode-textmargin="0"
-                jsbarcode-height="30">
-            </svg>
-            <p>{$captionArray[i]}</p>
-            </div>
-        {/each}
-    </div>
-</body>
 
 <style>
-    .barcode {
-    display: grid;
-    grid-template-columns: repeat(1fr, 5) ;
-    grid-template-rows: repeat(1fr, 5) ;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
+    * {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
     }
-    #each
-</style>
+    .page {
+        width: 210mm;
+        min-height: 297mm;
+        padding: 20mm;
+        margin: 10mm auto;
+        border: 1px #D3D3D3 solid;
+        border-radius: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .subpage {
+        padding: 1cm;
+        border: 5px red solid;
+        height: 257mm;
+        outline: 2cm #FFEAEA solid;
+    }
+    
+    @page {
+        size: A4;
+        margin: 0;
+    }
+    @media print {
+        * {
+            overflow: visible !important;
+        }
+        .page {
+            width: 210mm;
+            height: 297mm; 
+        }
+        .page {
+            margin: 0;
+            border: initial;
+            border-radius: initial;
+            min-height: initial;
+            box-shadow: initial;
+            background: initial;
+        }
+    } 
+  </style>
+    <div class="overflow-visible">
+        <div class="page">
+            <div class="subpage">Page 1/2</div>    
+        </div>
+        <div class="page">
+            <div class="subpage">Page 2/2</div>    
+        </div>
+    </div>
+

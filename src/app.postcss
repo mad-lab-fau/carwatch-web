@@ -7,13 +7,13 @@ html, body { @apply h-full; }
 }
 
 label {
-  	@apply text-primary-50;
+  	@apply text-primary-900 dark:text-primary-50;
 }
 
 input,select {
 	
-	@apply text-primary-50;
-	@apply bg-surface-900;
+	@apply text-primary-900 dark:text-primary-50;
+	@apply bg-surface-50 dark:bg-surface-900;
  	margin: 4px;
   	text-indent: 4px;
   	border-radius: 4px;
@@ -22,3 +22,9 @@ input,select {
 .btn {
 	border-radius: 4px;
 }
+
+ @media print {
+    * {
+        overflow: visible !important;
+	}
+ }
