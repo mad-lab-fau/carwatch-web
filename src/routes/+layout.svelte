@@ -7,22 +7,27 @@
 </script>
 
 <div class="flex h-full">
-	<AppRail class="print:hidden">
-		<AppRailTile tag="a" href="/" label="Home" value={-1}>(icon)</AppRailTile>
-		<AppRailTile tag="a" href="/preparation" label="Barcode Generator" value={0}>(icon)</AppRailTile>
-		<AppRailTile tag="a" href="/postprocessing" label="Test" value={1}>(icon)</AppRailTile>
+	<div class="print:hidden">
+	<AppRail width="w-30">
+		<AppRailTile tag="a" href="/" label="Home" value={-1}>
+			<span class="material-symbols-outlined">home</span>
+		</AppRailTile>
+		<AppRailTile tag="a" href="/preparation" label="Study Configurator" value={0}>
+			<span class="material-symbols-outlined">groups</span>
+		</AppRailTile>
+		<AppRailTile tag="a" href="/download" label="Study Material" value={1}>
+			<span class="material-symbols-outlined">description</span>
+		</AppRailTile>
+		<AppRailTile tag="a" href="/postprocessing" label="Postprocessing" value={2}>
+			<span class="material-symbols-outlined">insert_chart</span>
+		</AppRailTile>
 		<svelte:fragment slot="trail">
-							<AppRailTile>
-								<LightSwitch/>
-							</AppRailTile>
+			<LightSwitch class="mb-6 ml-6"/>
 		</svelte:fragment>
 	</AppRail>
-	
-	<div class="w-full overflow-auto">
+	</div>
+	<div class="w-full">
 		<slot/>
 	</div>
 	
 </div>
-
-
-

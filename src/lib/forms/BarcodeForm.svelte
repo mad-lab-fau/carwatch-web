@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { barcodeProps, barcodePropsValid, studyProps} from "$lib/configStore";
-	import NumericInput from "./NumericInput.svelte";
+	import NumericInput from "$lib/utils/NumericInput.svelte";
 
 	export const submit = () => {
 		barcodePropsValid.set(true);

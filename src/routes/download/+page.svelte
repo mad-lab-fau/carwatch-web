@@ -18,32 +18,23 @@
       }
       */
       createBarcodes();
-      goto("results/labels")
+      goto("download/barcodes")
     }
     
 
 
 </script>
     
+<div class="p-6">
 <h1>You can access your prepared material here.</h1>
-<button on:click={downloadBarcodes} type="button" class="btn variant-filled-primary">
-	<span>(icon)</span>
-	<span>Download Barcodes</span>
+<div>
+<button on:click={downloadBarcodes} type="button" class="btn variant-filled-primary p-6 my-6">
+  <span class="material-symbols-outlined">qr_code_2</span>
+	<span>Get Printable Barcodes</span>
 </button>
-<button type="button" class="btn variant-filled-primary">
-	<span>(icon)</span>
-	<span>Download QR-Code</span>
+</div>
+<button type="button" class="btn variant-filled-primary p-6">
+  <span class="material-symbols-outlined">qr_code_2</span>
+	<span>Get Printable QR-Code</span>
 </button>
-
-
-<style>
-/*@media print {
-
-    page {
-      margin: 0;
-      color: #000;
-      background-color: #fff;
-    }
-  
-  }*/
-</style>
+</div>

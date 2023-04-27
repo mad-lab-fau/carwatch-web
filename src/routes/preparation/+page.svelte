@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { Step, Stepper } from "@skeletonlabs/skeleton";
-	import BarcodeForm from "./BarcodeForm.svelte";
-	import QrCodeForm from "./QrCodeForm.svelte";
-	import StudyForm from "./StudyForm.svelte";
+	import BarcodeForm from "$lib/forms/BarcodeForm.svelte";
+	import QrCodeForm from "$lib/forms/QrCodeForm.svelte";
+	import StudyForm from "$lib/forms/StudyForm.svelte";
 	import { barcodePropsValid, studyPropsValid } from "$lib/configStore";
 	import { goto } from "$app/navigation";
 
 	function onCompleteHandler(e: CustomEvent<any>): void {
-		goto("preparation/results");
+		goto("download");
 	}
 </script>
 
+<div class="p-6">
  <h1>Study Configurator</h1>
  <br>
 
@@ -28,8 +29,7 @@
         <QrCodeForm/>
 	</Step>
 </Stepper>
-
-
+</div>
 
   
   
