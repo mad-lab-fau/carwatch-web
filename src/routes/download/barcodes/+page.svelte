@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Barcodes from "../../preparation/results/labels/Barcodes.svelte";
 </script>
 
 <style>
