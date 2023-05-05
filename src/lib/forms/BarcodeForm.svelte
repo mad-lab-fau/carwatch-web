@@ -1,44 +1,109 @@
 <script lang="ts">
 	import { barcodeProps, barcodePropsValid, studyProps} from "$lib/configStore";
-	import NumericInput from "$lib/utils/NumericInput.svelte";
+	import { Step } from "@skeletonlabs/skeleton";
+	import { onMount, afterUpdate } from "svelte";
 
-	export const submit = () => {
-		barcodePropsValid.set(true);
+	onMount(() => {
+		// to prevent contunuing with invalid settings
 		barcodeProps.update((props) => {
-			return {
-				...props,
-				generateBarcodes: props.generateBarcodes,
-				addName: props.addName,
-				hasBarcode: props.hasBarcode,
-				layout: props.layout
-			}
-		})
-	}
-</script>
+				return {
+					...props,
+					generateBarcodes: false
+			}});	
+		barcodePropsValid.set(isValid());
+	});
+	// after hiding/showing conditional form elements
+	afterUpdate(()=> barcodePropsValid.set(isValid()));
 
-<form on:submit|preventDefault={submit} method=POST>
-	<label>
-        Generate labels for {$studyProps.studyName}?
-        <input type="checkbox" bind:checked={$barcodeProps.generateBarcodes}>
-    </label>
-	<label>
-        Add study name and participant ID to every barcode?
-        <input type="checkbox" bind:checked={$barcodeProps.addName}>
-    </label>
-	<label>
-		Add barcode to label?
-		<input type="checkbox" bind:checked={$barcodeProps.hasBarcode}>
-	</label>
-	<div class="card p-4" style="width: 33%">
-		Print label layout:
-		<NumericInput labelName="Number of columns" value={$barcodeProps.layout.numCols} isRequired={true} isInt={true}/>	
-		<NumericInput labelName="Number of rows" value={$barcodeProps.layout.numRows} isRequired={true} isInt={true}/>	
-		<NumericInput labelName="Left margin [mm]" value={$barcodeProps.layout.leftMargin} isRequired={true} isInt={false}/>	
-		<NumericInput labelName="Right margin [mm]" value={$barcodeProps.layout.rightMargin} isRequired={true} isInt={false}/>	
-		<NumericInput labelName="Top margin [mm]" value={$barcodeProps.layout.topMargin} isRequired={true} isInt={false}/>	
-		<NumericInput labelName="Bottom margin [mm]" value={$barcodeProps.layout.bottomMargin} isRequired={true} isInt={false}/>	
-		<NumericInput labelName="Distance between columns [mm]" value={$barcodeProps.layout.colDist} isRequired={true} isInt={false}/>	
-		<NumericInput labelName="Distance between rows [mm]" value={$barcodeProps.layout.rowDist} isRequired={true} isInt={false}/>	
-	</div>
-    <button type="submit" class="btn variant-filled-primary">Create Barcodes</button>
-</form>
+	// every time the store value changes, check if input is valid
+    $: $barcodeProps, barcodePropsValid.set(isValid());
+	
+	function isValid(){
+		if($barcodeProps.generateBarcodes){
+			let idList = ["num_col", "num_row", "left_m", "right_m", "top_m", "bottom_m", "col_dist", "row_dist"]
+			for(let id of idList) {
+				let element = document.getElementById(id);
+				if(element instanceof HTMLInputElement){
+					if(!(element.reportValidity())){
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+    }    
+</script>
+<Step locked={!$barcodePropsValid}>
+	<svelte:fragment slot="header">Barcode Details</svelte:fragment>
+
+	<form id="barcode_form">
+		<label class="flex items-center space-x-2">
+			<input class="checkbox" id="generate_labels" type="checkbox" bind:checked={$barcodeProps.generateBarcodes}>
+			<p>Generate labels for {$studyProps.studyName}</p>
+		</label>
+		{#if $barcodeProps.generateBarcodes}
+		<label class="flex items-center space-x-2">
+			<input class="checkbox" id="add_details" type="checkbox" bind:checked={$barcodeProps.addName}>
+			<p>Add study name and participant ID to label<p>
+		</label>
+		<label class="flex items-center space-x-2">
+			<input class="checkbox" id="addr_barcodes" type="checkbox" bind:checked={$barcodeProps.hasBarcode}>
+			<p>Add barcode to label<p>
+		</label>
+		<br>
+		<h4>Print label layout:</h4>
+		<div class="flex">
+      		<div class="w-1/4">
+				<label class="label">
+					<span>Number of columns</span>
+					<input class="input" id="num_col" type="number" bind:value={$barcodeProps.numCols} min="1" step="1" required>
+				</label> 
+			</div>
+   	 		<div class="w-1/4 mx-6">
+				<label class="label">
+					<span>Number of rows</span>
+					<input class="input" id="num_row" type="number" bind:value={$barcodeProps.numRows} min="1" step="1" required>
+				</label> 
+			</div>
+			<div class="w-1/4 mr-6">
+				<label class="label">
+					<span>Distance between columns [mm]</span>
+					<input class="input" id="col_dist" type="number" bind:value={$barcodeProps.colDist} required>
+				</label>
+			</div>
+      		<div class="w-1/4">
+				<label class="label">
+					<span>Distance between rows [mm]</span>
+					<input class="input" id="row_dist" type="number" bind:value={$barcodeProps.rowDist} required>
+				</label>
+			</div>   		
+		</div>
+		<div class="flex">
+			<div class="w-1/4">
+				<label class="label">
+					<span>Left margin [mm]</span>
+					<input class="input" id="left_m" type="number" bind:value={$barcodeProps.leftMargin} required>
+				</label>
+			</div>
+			<div class="w-1/4 mx-6">
+				<label class="label">
+					<span>Right margin [mm]</span>
+					<input class="input" id="right_m" type="number" bind:value={$barcodeProps.rightMargin} required>
+				</label>
+			</div>
+			<div class="w-1/4 mr-6">
+				<label class="label">
+					<span>Top margin [mm]</span>
+					<input class="input" id="top_m" type="number" bind:value={$barcodeProps.topMargin} required>
+				</label>
+			</div>
+			<div class="w-1/4">
+				<label class="label">
+					<span>Bottom margin [mm]</span>
+					<input class="input" id="bottom_m" type="number" bind:value={$barcodeProps.bottomMargin} required>
+				</label>
+			</div>
+		</div>
+		{/if}
+	</form>
+</Step>

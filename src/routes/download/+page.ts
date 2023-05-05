@@ -12,12 +12,11 @@ export const load = (async () => {
     //     }
         throw redirect(302, '/preparation');
     }
-    console.log("on load:", get(barcodeDataArray));
-    if (get(barcodeDataArray) === undefined || get(barcodeDataArray).length == 0 || get(captionArray) === undefined || get(captionArray).length == 0) {
+    //if (get(barcodeDataArray) === undefined || get(barcodeDataArray).length == 0 || get(captionArray) === undefined || get(captionArray).length == 0) {
         // if(browser && sessionStorage){
         //     sessionStorage.setItem("download_redirect", "1");
         // }
-        throw redirect(302, '/preparation');
-    }
+    //    throw redirect(302, '/preparation');
+    //}
     return {};
 }) satisfies PageLoad;

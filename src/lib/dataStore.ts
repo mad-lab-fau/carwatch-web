@@ -9,15 +9,10 @@ if (browser) {
   // Fetch the data from the local storage
   storedBarcodeDataArray = localStorage.storedBarcodeDataArray;
   storedCaptionArray = localStorage.storedCaptionArray;
-  console.log(storedBarcodeDataArray);
 }
 
-export const barcodeDataArray = storedBarcodeDataArray ? writable<string[]>(JSON.parse(storedBarcodeDataArray)) : writable<string[]>();
-export const captionArray = storedCaptionArray ? writable<string[]>(JSON.parse(storedCaptionArray)) : writable<string[]>();
-
-
-console.log(get(barcodeDataArray));
-console.log(get(captionArray));
+export const barcodeDataArray = storedBarcodeDataArray ? writable<string[]>(JSON.parse(storedBarcodeDataArray)) : writable<string[]>([]);
+export const captionArray = storedCaptionArray ? writable<string[]>(JSON.parse(storedCaptionArray)) : writable<string[]>([]);
 
 if(browser){
   barcodeDataArray.subscribe((value) => localStorage.storedBarcodeDataArray = JSON.stringify(value));

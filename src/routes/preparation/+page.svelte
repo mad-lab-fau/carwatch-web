@@ -5,30 +5,23 @@
 	import StudyForm from "$lib/forms/StudyForm.svelte";
 	import { barcodePropsValid, studyPropsValid } from "$lib/configStore";
 	import { goto } from "$app/navigation";
+	import { get } from "svelte/store";
 
 	function onCompleteHandler(e: CustomEvent<any>): void {
 		goto("download");
 	}
+
+
 </script>
 
-<div class="p-6">
- <h1>Study Configurator</h1>
- <br>
-
- <Stepper on:complete={onCompleteHandler}>
-	<Step locked={!$studyPropsValid} type=submit>
-		<svelte:fragment slot="header">Study Details</svelte:fragment>
-        <StudyForm/>
-	</Step>
-	<Step locked={!$barcodePropsValid}>
-		<svelte:fragment slot="header">Barcode Details</svelte:fragment>
-		<BarcodeForm/>
-	</Step>
-    <Step locked={!$barcodePropsValid}>
-		<svelte:fragment slot="header">Qr Code Details</svelte:fragment>
-        <QrCodeForm/>
-	</Step>
-</Stepper>
+<div class="p-6 h-full">
+	<div class="flex items-center justify-center h-full">
+		<Stepper on:complete={onCompleteHandler} class="w-5/6">
+			<StudyForm/>
+			<BarcodeForm/>
+  		  	<QrCodeForm/>
+		</Stepper>
+	</div>
 </div>
 
   

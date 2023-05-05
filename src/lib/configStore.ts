@@ -1,5 +1,6 @@
 import { browser } from "$app/environment";
-import { get, writable } from "svelte/store";
+import { writable } from "svelte/store";
+import { STUDY_TYPES } from "./constants";
 
 interface StudyProperties {
   studyName: string;
@@ -20,12 +21,19 @@ interface BarcodeProperties {
   generateBarcodes: boolean;
   hasBarcode: boolean;
   addName: boolean;
-  layout: { numCols: number, numRows: number, leftMargin: number, rightMargin: number, topMargin: number, bottomMargin: number, colDist: number, rowDist: number };
+  numCols: number, 
+  numRows: number, 
+  leftMargin: number, 
+  rightMargin: number, 
+  topMargin: number, 
+  bottomMargin: number, 
+  colDist: number, 
+  rowDist: number
 }
 
 interface QrCodeProperties {
   generateQrCodes: boolean;
-  salivaDistances: string;
+  salivaDistances: number[];
   contact: string;
   checkDuplicates: boolean;
   enableManualScan: boolean;
@@ -43,9 +51,9 @@ if (browser) {
 }
 
 // Create the base stores for each data type
-const defaultStudyProps: StudyProperties = { studyName: 'Test', numDays: 0, numSamples: 0, samplePrefix: "S", readSubjectsFromFile: false, numSubjects: 0, subjectList: [], subjectColumn: 'subject', subjectPrefix: 'VP_', hasEveningSample: false, startSampleFromZero: false, studyType: 0 }
-const defaultBarcodeProps: BarcodeProperties = { generateBarcodes: false, hasBarcode: false, addName: false, layout: { numCols: 4, numRows: 4, leftMargin: 3, rightMargin: 3, topMargin: 3, bottomMargin: 3, colDist: 3, rowDist: 3 } }
-const defaultQrCodeProps: QrCodeProperties = { generateQrCodes: false, salivaDistances: '', contact: '', checkDuplicates: false, enableManualScan: false }
+const defaultStudyProps: StudyProperties = { studyName: 'Test', numDays: 0, numSamples: 0, samplePrefix: "S", readSubjectsFromFile: false, numSubjects: 0, subjectList: [], subjectColumn: 'subject', subjectPrefix: 'VP_', hasEveningSample: false, startSampleFromZero: false, studyType: STUDY_TYPES[0] }
+const defaultBarcodeProps: BarcodeProperties = { generateBarcodes: true, hasBarcode: false, addName: false, numCols: 4, numRows: 4, leftMargin: 3, rightMargin: 3, topMargin: 3, bottomMargin: 3, colDist: 3, rowDist: 3 }
+const defaultQrCodeProps: QrCodeProperties = { generateQrCodes: true, salivaDistances: [], contact: '', checkDuplicates: false, enableManualScan: false }
 
 // Create the stores
 export const studyProps = storedStudyProps ? writable<StudyProperties>(JSON.parse(storedStudyProps)) : writable<StudyProperties>(defaultStudyProps);
@@ -58,12 +66,19 @@ export const qrCodePropsValid = writable(Boolean(storedQrCodeProps));
 
 if (browser) {
   // Update the local storage when the store changes
-  studyProps.subscribe((value) => localStorage.storedStudyProps = JSON.stringify(value));
-  barcodeProps.subscribe((value) => localStorage.storedBarcodeProps = JSON.stringify(value));
-  qrCodeProps.subscribe((value) => localStorage.storedQrCodeProps = JSON.stringify(value));
+  studyProps.subscribe((value) => {
+    if (studyPropsValid) {
+      localStorage.storedStudyProps = JSON.stringify(value);
+    }
+  });
+  barcodeProps.subscribe((value) => {
+    if (barcodePropsValid) {
+      localStorage.storedBarcodeProps = JSON.stringify(value);
+    }
+  });
+  qrCodeProps.subscribe((value) => {
+    if (qrCodePropsValid) {
+      localStorage.storedQrCodeProps = JSON.stringify(value)
+    }
+  });
 }
-
-console.log(get(studyProps));
-console.log(get(barcodeProps));
-console.log(get(qrCodeProps));
-
