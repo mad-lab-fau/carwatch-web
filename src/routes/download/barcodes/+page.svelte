@@ -5,6 +5,7 @@
     * {
         box-sizing: border-box;
         -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
     }
     .page {
         /*A4 format*/
@@ -18,6 +19,8 @@
         padding-top: 21.2mm;
         padding-bottom: 21.2mm; /*true margin bottom - row dist*/
         background: white;
+        outline: 3px #bb1010 solid;
+
     }
     /*
     .subpage { 
@@ -28,13 +31,15 @@
     }*/
     .label {
             /*padding of label content*/
-            padding: 10px;
+            padding: 2mm;
             margin-right: 2.5mm;
+            margin-left: 0mm;
             margin-bottom: 0mm;
-            /* height = a4_height - top_margin - bottom_margin - inter_row * (num_rows - 1) / num_rows */
-            /* width = a4_width - left_margin - right_margin - inter_col * (num_cols - 1) / num_cols */
-            width: 44.9mm; /*why doesnt it fit??*/
-            height: 21.2mm;
+            margin-top: 0mm;
+            /* height = (a4_height - top_margin - bottom_margin - inter_row * num_rows) / num_rows */
+            /* width = (a4_width - left_margin - right_margin - inter_col * num_cols) / num_cols */
+            width: 44.725mm; /*45.725 why doesnt it fit??*/
+            height: 21.2166mm;
             display: inline-block;
             text-align: left;
             background: #FFFFFF;
@@ -64,7 +69,7 @@
         
     } 
   </style>
-    <div class="h-full overflow-y-auto overflow-x-auto flex flex-col flex-grow px-4">
+    <div class="h-full overflow-y-auto overflow-x-auto">
         <div class="page">
             <div class="label">
                 test
@@ -211,8 +216,9 @@
                 test
             </div>
         </div>
-        <div class="page">
-            <div class="subpage">Page 2/2</div>    
+    
+        <div>
+            next
         </div>
     </div>
 
