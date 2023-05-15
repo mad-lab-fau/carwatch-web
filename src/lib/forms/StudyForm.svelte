@@ -52,49 +52,62 @@
   <form id="study_form">
     
     <div class="flex">
-      <div class="w-1/3">
-      <label class="label">
-        <span>Study Name</span>
-        <input class="input" id="study_name" type="text" bind:value={$studyProps.studyName} maxlength="15" required>
-      </label>
+      <div class="w-1/2">
+        <label class="label">
+          <span>Study Name</span>
+          <input class="input" id="study_name" type="text" bind:value={$studyProps.studyName} maxlength="15" required>
+        </label>
+      </div>
+
+      <div class="w-1/2 mx-6">
+        <label class="label">
+          <span>Number of Days</span>
+          <input class="input" id="num_days" type="number" bind:value={$studyProps.numDays} min="1" max ="99" step="1" required>
+        </label>
+      </div>
     </div>
 
-    <div class="w-1/3 mx-6">
-      <label class="label">
-        <span>Number of Days</span>
-        <input class="input" id="num_days" type="number" bind:value={$studyProps.numDays} min="1" max ="99" step="1" required>
-      </label>
+    <div class="flex">
+      <div class="w-1/2">  
+        <label class="label">
+          <span>Number of Biomarker Samples</span>
+          <input class="input" id="num_samples" type="number" bind:value={$studyProps.numSamples} min="1" max ="99" step="1" required>
+        </label>
+      </div>  
+      <div class="w-1/2 mx-6">  
+        <label class="label">
+          <span>Biomarker Prefix</span>
+          <input class="input" id="prefix_bio" type="text" maxlength="1" bind:value={$studyProps.samplePrefix} required>
+        </label>
+      </div>
     </div>
 
-    <div class="w-1/3">  
-      <label class="label">
-        <span>Number of Biomarker Samples</span>
-        <input class="input" id="num_samples" type="number" bind:value={$studyProps.numSamples} min="1" max ="99" step="1" required>
-      </label>
+    {#if !$studyProps.readSubjectsFromFile}
+    <div class="flex">
+      <div class="w-1/2">  
+        <label class="label">
+          <span>Number of Subjects</span>
+          <input class="input" id="num_subj" disabled={$studyProps.readSubjectsFromFile} type="number" min="1" max="999" step="1" bind:value={$studyProps.numSubjects} required={!$studyProps.readSubjectsFromFile}>
+        </label>
+      </div>
+      <div class="w-1/2 mx-6">  
+        <label class="label">
+          <span>Subject Prefix</span>
+          <input class="input" id="pref_subj" disabled={$studyProps.readSubjectsFromFile} type="text" maxlength="5" bind:value={$studyProps.subjectPrefix}>
+        </label>
+      </div>
     </div>
-  </div>
+    {/if}
 
-      <label class="label">
-        <span>Prefix of Biomarker</span>
-        <input class="input" id="prefix_bio" type="text" maxlength="1" bind:value={$studyProps.samplePrefix} required>
-      </label>
+    
 
       <!-- <label class="label">
           <span>Read Subjects from File</span>
           <input class="input" id="from_file" type="checkbox" bind:checked={$studyProps.readSubjectsFromFile}>
       </label> -->
     
-      {#if !$studyProps.readSubjectsFromFile}
-      <label class="label">
-        <span>Number of Subjects</span>
-        <input class="input" id="num_subj" disabled={$studyProps.readSubjectsFromFile} type="number" min="1" max="999" step="1" bind:value={$studyProps.numSubjects} required={!$studyProps.readSubjectsFromFile}>
-      </label>
       
-      <label class="label">
-        <span>Subject Prefix</span>
-        <input class="input" id="pref_subj" disabled={$studyProps.readSubjectsFromFile} type="text" maxlength="5" bind:value={$studyProps.subjectPrefix}>
-      </label>
-      {/if}
+      
     
       <!-- {#if $studyProps.readSubjectsFromFile}
       <label class="label">
@@ -107,17 +120,19 @@
         <input class="input" id="subj_col" disabled={!$studyProps.readSubjectsFromFile} type="text" bind:value={$studyProps.subjectColumn}>
       </label>
       {/if} -->
-   
-      <div class="row">
-      <label class="label">
-          <span>Study Type</span>
-          <br>
-      <select class="select" name="studyType" bind:value={$studyProps.studyType}>
-          <option value={CAR_STUDY}>CAR Study</option>
-          <option value={LAB_STUDY}>Lab-based study</option>
-          <option value={OTHER_STUDY}>Other</option>
-      </select>
-      </label>
+      
+      <div class="w-fit">  
+        <div class="row">
+        <label class="label">
+            <span>Study Type</span>
+            <br>
+        <select class="select" name="studyType" bind:value={$studyProps.studyType}>
+            <option value={CAR_STUDY}>CAR Study</option>
+            <option value={LAB_STUDY}>Lab-based study</option>
+            <option value={OTHER_STUDY}>Other</option>
+        </select>
+        </label>
+        </div>
       </div>
       
       <div class="space-y-2">

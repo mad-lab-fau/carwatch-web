@@ -56,7 +56,7 @@
       		<div class="w-1/4">
 				<label class="label">
 					<span>Number of columns</span>
-					<input class="input" id="num_col" type="number" bind:value={$barcodeProps.numCols} min="1" step="1" required>
+					<input class="input col-span-2" id="num_col" type="number" bind:value={$barcodeProps.numCols} min="1" step="1" required>
 				</label> 
 			</div>
    	 		<div class="w-1/4 mx-6">
@@ -67,40 +67,58 @@
 			</div>
 			<div class="w-1/4 mr-6">
 				<label class="label">
-					<span>Distance between columns [mm]</span>
-					<input class="input" id="col_dist" type="number" bind:value={$barcodeProps.colDist} required>
+					<span>Distance between columns</span>
+						<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+							<input class="input col-span-2" id="col_dist" type="number" bind:value={$barcodeProps.colDist} required>
+							<div class="input-group-shim col-span-1">mm</div>
+						</div>
 				</label>
 			</div>
       		<div class="w-1/4">
 				<label class="label">
-					<span>Distance between rows [mm]</span>
-					<input class="input" id="row_dist" type="number" bind:value={$barcodeProps.rowDist} required>
+					<span>Distance between rows</span>
+						<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+							<input class="input col-span-2" id="row_dist" type="number" bind:value={$barcodeProps.rowDist} required>
+							<div class="input-group-shim col-span-1">mm</div>
+						</div>
 				</label>
 			</div>   		
 		</div>
 		<div class="flex">
 			<div class="w-1/4">
 				<label class="label">
-					<span>Left margin [mm]</span>
-					<input class="input" id="left_m" type="number" bind:value={$barcodeProps.leftMargin} required>
+					<span>Left margin</span>
+						<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+							<input class="input col-span-2" id="left_m" type="number" bind:value={$barcodeProps.leftMargin} required>
+							<div class="input-group-shim col-span-1">mm</div>
+						</div>
 				</label>
 			</div>
 			<div class="w-1/4 mx-6">
 				<label class="label">
-					<span>Right margin [mm]</span>
-					<input class="input" id="right_m" type="number" bind:value={$barcodeProps.rightMargin} required>
+					<span>Right margin</span>
+						<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+							<input class="input col-span-2" id="right_m" type="number" bind:value={$barcodeProps.rightMargin} required>
+							<div class="input-group-shim col-span-1">mm</div>
+						</div>
 				</label>
 			</div>
 			<div class="w-1/4 mr-6">
 				<label class="label">
-					<span>Top margin [mm]</span>
-					<input class="input" id="top_m" type="number" bind:value={$barcodeProps.topMargin} required>
+					<span>Top margin</span>
+						<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+							<input class="input col-span-2" id="top_m" type="number" bind:value={$barcodeProps.topMargin} required>
+							<div class="input-group-shim col-span-1">mm</div>
+						</div>
 				</label>
 			</div>
 			<div class="w-1/4">
 				<label class="label">
-					<span>Bottom margin [mm]</span>
-					<input class="input" id="bottom_m" type="number" bind:value={$barcodeProps.bottomMargin} required>
+					<span>Bottom margin</span>
+						<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+							<input class="input col-span-2" id="bottom_m" type="number" bind:value={$barcodeProps.bottomMargin} required>
+							<div class="input-group-shim col-span-1">mm</div>
+						</div>
 				</label>
 			</div>
 		</div>

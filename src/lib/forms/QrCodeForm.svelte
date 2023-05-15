@@ -3,7 +3,6 @@
 	import { studyProps, qrCodeProps, qrCodePropsValid } from '$lib/configStore';
 	import { Step } from '@skeletonlabs/skeleton';
 	import { onMount, afterUpdate } from 'svelte';
-	import { get } from 'svelte/store';
 
 	let uniformSalivaDistances = true;
 	let salivaDistance = DEFAULT_SALIVA_DISTANCE;
@@ -139,7 +138,7 @@
 				{/if}
 
 				{#if !uniformSalivaDistances}
-					<h4>Distance between biomarker samples (in minutes)</h4>
+					<h4>Distance between biomarker samples</h4>
 					<div
 						class="h-full max-h-72 md:w-1/6 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4"
 					>
@@ -150,17 +149,20 @@
 								{:else}
 									<p>{$studyProps.samplePrefix}{i} and {$studyProps.samplePrefix}{i + 1}:</p>
 								{/if}
-								<input
-									class="input"
-									id="distance{i}"
-									type="number"
-									value={dist}
-									on:input={salivaListChanged}
-									min="1"
-									max="999"
-									step="1"
-									required
-								/>
+								<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+									<input
+										class="input col-span-2"
+										id="distance{i}"
+										type="number"
+										value={dist}
+										on:input={salivaListChanged}
+										min="1"
+										max="999"
+										step="1"
+										required
+									/>
+									<div class="input-group-shim col-span-1">min</div>
+								</div>
 							{/each}
 						</label>
 					</div>
