@@ -3,9 +3,7 @@
 	import BarcodeForm from "$lib/forms/BarcodeForm.svelte";
 	import QrCodeForm from "$lib/forms/QrCodeForm.svelte";
 	import StudyForm from "$lib/forms/StudyForm.svelte";
-	import { barcodePropsValid, studyPropsValid } from "$lib/configStore";
 	import { goto } from "$app/navigation";
-	import { get } from "svelte/store";
 
 	function onCompleteHandler(e: CustomEvent<any>): void {
 		goto("download");

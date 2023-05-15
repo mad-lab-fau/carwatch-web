@@ -7,7 +7,7 @@
 	import { MENU_PREPARE, MENU_HOME, MENU_POSTPROCESS } from '$lib/constants';
 </script>
 
-<div class="flex h-full">
+<div class="flex h-full overflow-x-hidden">
 	<div class="print:hidden">
 	<AppRail width="w-30">
 		<AppRailTile tag="a" href="/" label="Home" value={MENU_HOME}>
