@@ -64,7 +64,7 @@
         
     } 
   </style>
-    <div class="overflow-visible">
+    <div class="h-full overflow-y-auto overflow-x-auto flex flex-col flex-grow px-4">
         <div class="page">
             <div class="label">
                 test
