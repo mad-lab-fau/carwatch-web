@@ -1,4 +1,6 @@
 <script lang="ts">
+
+
 </script>
 
 <style>
@@ -38,7 +40,7 @@
             margin-top: 0mm;
             /* height = (a4_height - top_margin - bottom_margin - inter_row * num_rows) / num_rows */
             /* width = (a4_width - left_margin - right_margin - inter_col * num_cols) / num_cols */
-            width: 44.725mm; /*45.725 why doesnt it fit??*/
+            width: 45.725mm; /*45.725 why doesnt it fit??*/
             height: 21.2166mm;
             display: inline-block;
             text-align: left;
@@ -71,150 +73,12 @@
   </style>
     <div class="h-full overflow-y-auto overflow-x-auto">
         <div class="page">
+            {#each {length: 48} as _}
             <div class="label">
                 test
             </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
-            <div class="label">
-                test
-            </div>
+
+            {/each}
         </div>
     
         <div>
