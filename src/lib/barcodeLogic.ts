@@ -3,6 +3,7 @@ import { barcodeProps, studyProps } from "./configStore";
 import { barcodeDataArray, captionArray } from "./dataStore";
 
 export function createBarcodes() {
+    console.log("creating barcodes for " + get(studyProps).subjectList);
     let barcodeData = [];
     let captions = [];
     let startSample = get(studyProps).startSampleFromZero ? 0 : 1;
@@ -21,9 +22,9 @@ export function createBarcodes() {
                 // special case: evening sample referred to a "A"
                 let sampleCaption = sample.toString();
                 if (sample == get(studyProps).numSamples && get(studyProps).hasEveningSample){
-                    sampleCaption = "A";
+                    sampleCaption = "E";
                 }
-                caption += get(studyProps).subjectList[subject - 1] + "_T" + day + "_S" + sampleCaption;
+                caption += get(studyProps).subjectList[subject - 1] + "_D" + day + "_S" + sampleCaption;
                 captions.push(caption);
                 let data = subjectString + dayString + sampleString;
                 barcodeData.push(data);

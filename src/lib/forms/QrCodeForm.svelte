@@ -93,7 +93,7 @@
 </script>
 
 {#if $studyProps.studyType == CAR_STUDY || $studyProps.studyType == OTHER_STUDY}
-	<Step locked={!$qrCodePropsValid} on:next={submitQrCodeProps}>
+	<Step locked={!$qrCodePropsValid}>
 		<svelte:fragment slot="header">Qr Code Details</svelte:fragment>
 		<form id="qr_code_form">
 			<label class="label">

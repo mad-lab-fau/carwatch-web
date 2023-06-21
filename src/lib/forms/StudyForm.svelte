@@ -22,10 +22,24 @@
             }
           }
         }
+        submitStudyProps();
         return true;
     }    
+   
+    function createSubjectList(){
+      // TODO handle subject path
+        let subjectList = [];
+        let padding = 2;
+        if (get(studyProps).numSubjects > 99){
+          padding = 3;
+        }
+        for (let i = 1; i <= get(studyProps).numSubjects; i++){
+            subjectList.push(get(studyProps).subjectPrefix + i.toString().padStart(padding, '0'));
+        }
+        return subjectList;
+    }
 
-    export const submitStudyProps = () => {
+    const submitStudyProps = () => {
         let subjectList = createSubjectList();
         studyProps.update((props) => {
             return {
@@ -33,20 +47,11 @@
                 subjectList: subjectList,
             };
           });
-    }
-    
-    function createSubjectList(){
-      // TODO handle subject path
-        let subjectList = [];
-        for (let i = 1; i <= get(studyProps).numSubjects; i++){
-            subjectList.push(get(studyProps).subjectPrefix + i.toString().padStart(3, '0'));
-        }
-        return subjectList;
-    }
-
+    };
+ 
 </script>
 
-<Step locked={!$studyPropsValid} type=submit on:next={submitStudyProps}>
+<Step locked={!$studyPropsValid}>
   <svelte:fragment slot="header">Study Details</svelte:fragment>
 
   <form id="study_form">
