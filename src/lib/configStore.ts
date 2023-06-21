@@ -52,7 +52,7 @@ if (browser) {
 
 // Create the base stores for each data type
 const defaultStudyProps: StudyProperties = { studyName: 'Test', numDays: 0, numSamples: 0, samplePrefix: "S", readSubjectsFromFile: false, numSubjects: 0, subjectList: [], subjectColumn: 'subject', subjectPrefix: 'VP_', hasEveningSample: false, startSampleFromZero: false, studyType: STUDY_TYPES[0] }
-const defaultBarcodeProps: BarcodeProperties = { generateBarcodes: true, hasBarcode: false, addName: false, numCols: 4, numRows: 4, leftMargin: 3, rightMargin: 3, topMargin: 3, bottomMargin: 3, colDist: 3, rowDist: 3 }
+const defaultBarcodeProps: BarcodeProperties = { generateBarcodes: true, hasBarcode: false, addName: false, numCols: 4, numRows: 4, leftMargin: 6, rightMargin: 6, topMargin: 4, bottomMargin: 4, colDist: 3, rowDist: 3 }
 const defaultQrCodeProps: QrCodeProperties = { generateQrCodes: true, salivaDistances: [], contact: '', checkDuplicates: false, enableManualScan: false }
 
 // Create the stores
