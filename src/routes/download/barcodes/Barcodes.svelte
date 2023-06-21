@@ -23,18 +23,27 @@
         }
     });
     let cellsPerPage = $barcodeProps.numRows * $barcodeProps.numCols;
-    let numPages: number = Math.ceil(get(barcodeDataArray).length / cellsPerPage);
+    let numBarcodes = get(barcodeDataArray).length 
+    let numPages: number = Math.ceil(numBarcodes / cellsPerPage);
 </script>
     <div class="h-full overflow-y-auto overflow-x-auto">
     {#each Array(numPages) as _, page}
         <div class="page grid grid-cols-4 bg-white" style:gap={`${$barcodeProps.rowDist}mm ${$barcodeProps.colDist}mm`}>
             {#each Array(cellsPerPage) as _, i}
+                {#if !(page*cellsPerPage + i >= numBarcodes)}
                 <div class="label p-2 overflow-hidden" >
                     {#if $barcodeProps.hasBarcode}
                         <svg class="barcode" id="barcode{page*cellsPerPage + i}"></svg>
                     {/if}
                     <p class="text-black">{$captionArray[page*cellsPerPage + i]}</p>
                 </div>
+                {:else}
+                <!-- display empty labels to last page to preserve format -->
+                <div class="label p-2 overflow-hidden">
+                    <svg class="barcode"></svg>
+                    <p class="text-black print:hidden"></p>
+                </div>
+                {/if}
             {/each}
         </div>
     {/each}
