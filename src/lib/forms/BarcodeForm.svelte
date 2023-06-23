@@ -44,7 +44,7 @@
 		{#if $barcodeProps.generateBarcodes}
 		<label class="flex items-center space-x-2">
 			<input class="checkbox" id="add_details" type="checkbox" bind:checked={$barcodeProps.addName}>
-			<p>Add study name and participant ID to label<p>
+			<p>Add study name to label<p>
 		</label>
 		<label class="flex items-center space-x-2">
 			<input class="checkbox" id="addr_barcodes" type="checkbox" bind:checked={$barcodeProps.hasBarcode}>
