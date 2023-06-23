@@ -2,7 +2,6 @@
     import { studyProps, studyPropsValid } from '$lib/configStore';
     import { CAR_STUDY, LAB_STUDY, OTHER_STUDY } from '$lib/constants';
 	  import { Step } from '@skeletonlabs/skeleton';
-	  import { get } from 'svelte/store';
 	  import { onMount } from 'svelte';
 
     onMount(() => {
@@ -30,11 +29,11 @@
       // TODO handle subject path
         let subjectList = [];
         let padding = 2;
-        if (get(studyProps).numSubjects > 99){
+        if ($studyProps.numSubjects > 99){
           padding = 3;
         }
-        for (let i = 1; i <= get(studyProps).numSubjects; i++){
-            subjectList.push(get(studyProps).subjectPrefix + i.toString().padStart(padding, '0'));
+        for (let i = 1; i <= $studyProps.numSubjects; i++){
+            subjectList.push($studyProps.subjectPrefix + i.toString().padStart(padding, '0'));
         }
         return subjectList;
     }
