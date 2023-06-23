@@ -1,9 +1,20 @@
 <script lang="ts">
-	import { Step, Stepper } from "@skeletonlabs/skeleton";
-	import BarcodeForm from "$lib/forms/BarcodeForm.svelte";
-	import QrCodeForm from "$lib/forms/QrCodeForm.svelte";
-	import StudyForm from "$lib/forms/StudyForm.svelte";
+// @ts-nocheck
+
+	import { Stepper } from "@skeletonlabs/skeleton";
 	import { goto } from "$app/navigation";
+	import { onMount } from "svelte";
+
+	let StudyForm;
+	let BarcodeForm;
+	let QrCodeForm;
+
+	onMount(async () => {
+		StudyForm = (await import('$lib/forms/StudyForm.svelte')).default;
+		BarcodeForm = (await import('$lib/forms/BarcodeForm.svelte')).default;
+		QrCodeForm = (await import('$lib/forms/QrCodeForm.svelte')).default;
+	});
+
 
 	function onCompleteHandler(e: CustomEvent<any>): void {
 		goto("download");
@@ -15,9 +26,9 @@
 <div class="p-6 h-full">
 	<div class="flex items-center justify-center h-full">
 		<Stepper on:complete={onCompleteHandler} class="w-5/6">
-			<StudyForm/>
-			<BarcodeForm/>
-  		  	<QrCodeForm/>
+			<svelte:component this={StudyForm}/>
+			<svelte:component this={BarcodeForm}/>
+			<svelte:component this={QrCodeForm}/>
 		</Stepper>
 	</div>
 </div>
