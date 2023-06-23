@@ -39,7 +39,7 @@
 
     <div class="h-full overflow-y-auto overflow-x-auto">
     {#each Array(numPages) as _, page}
-        <div class="page grid grid-cols-4 bg-white" style:gap={`${rowDist} ${colDist}`} style:padding-top={paddingTop} style:padding-bottom={paddingBottom} style:padding-left={paddingLeft} style:padding-right={paddingRight}>
+        <div class="page grid grid-cols-{`${$barcodeProps.numCols}`} bg-white" style:gap={`${rowDist} ${colDist}`} style:padding-top={paddingTop} style:padding-bottom={paddingBottom} style:padding-left={paddingLeft} style:padding-right={paddingRight}>
             {#each Array(cellsPerPage) as _, i}
                 {#if !(page*cellsPerPage + i >= numBarcodes)}
                 <div class="label p-2 overflow-hidden" >
