@@ -86,7 +86,7 @@
         .label p {
             max-width: 100%;
             max-height: 100%;
-            position: relative;
+            position: absolute;
             font-family: monospace, monospace;
             font-size: xx-small;
         }
