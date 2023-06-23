@@ -1,17 +1,20 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { barcodeProps, qrCodeProps, studyProps } from "$lib/configStore";
-	import { barcodeDataArray, captionArray } from "$lib/dataStore";
-  import { onMount } from 'svelte';
+	import { FORBIDDEN_CHARACTERS, QR_PARSER_APP_ID, QR_PARSER_PROPERTY_CONTACT, QR_PARSER_PROPERTY_DUPLICATES, QR_PARSER_PROPERTY_EVENING, QR_PARSER_PROPERTY_MANUAL_SCAN, QR_PARSER_PROPERTY_PARTICIPANTS, QR_PARSER_PROPERTY_SALIVA_TIMES, QR_PARSER_PROPERTY_START_SAMPLE, QR_PARSER_PROPERTY_STUDY_DAYS, QR_PARSER_PROPERTY_STUDY_NAME, QR_PARSER_SEPARATOR, QR_PARSER_SPECIFIER } from "$lib/constants";
+	import { barcodeDataArray, captionArray, qrData } from "$lib/dataStore";
 
     function downloadBarcodes() {
       createBarcodes();
       goto("download/barcodes")
     }
 
+    function downloadQrCode() {
+      createQrCodeData();
+      goto("download/qrcode")
+    }
 
     function createBarcodes() {
-      console.log("creating barcodes for " + $studyProps.subjectList);
       let barcodeData = [];
       let captions = [];
       let startSample = $studyProps.startSampleFromZero ? 0 : 1;
@@ -38,44 +41,84 @@
                   barcodeData.push(data);
               }
           }
-    }
-
+    }   
     barcodeDataArray.set(barcodeData);
     captionArray.set(captions);
-}
-    
+    }
+
+    function createQrCodeData(){
+      // sanitize inputs to prevent decoding issues
+      let studyName = sanitizeStringForQr($studyProps.studyName);
+      let subjectList = "";
+      $studyProps.subjectList.forEach(subj => {
+        subjectList += `${sanitizeStringForQr(subj)},`
+      })
+      let distanceList = "";
+      $qrCodeProps.salivaDistances.forEach(dist => {
+        distanceList += `${dist},`;          
+      });
+
+      let startSample = `${$studyProps.samplePrefix}${$studyProps.startSampleFromZero? 0 : 1}`;
+
+      // create encoding
+      let qrDataString =  
+              `${QR_PARSER_APP_ID}${QR_PARSER_SEPARATOR}`+
+              `${QR_PARSER_PROPERTY_STUDY_NAME}${QR_PARSER_SPECIFIER}${studyName}${QR_PARSER_SEPARATOR}` +
+              `${QR_PARSER_PROPERTY_STUDY_DAYS}${QR_PARSER_SPECIFIER}${$studyProps.numDays}${QR_PARSER_SEPARATOR}` +
+              `${QR_PARSER_PROPERTY_PARTICIPANTS}${QR_PARSER_SPECIFIER}${subjectList}${QR_PARSER_SEPARATOR}` +
+              `${QR_PARSER_PROPERTY_START_SAMPLE}${QR_PARSER_SPECIFIER}${startSample}${QR_PARSER_SEPARATOR}` +
+              `${QR_PARSER_PROPERTY_SALIVA_TIMES}${QR_PARSER_SPECIFIER}${distanceList}${QR_PARSER_SEPARATOR}` +
+              `${QR_PARSER_PROPERTY_EVENING}${QR_PARSER_SPECIFIER}${+$studyProps.hasEveningSample}${QR_PARSER_SEPARATOR}` +
+              `${QR_PARSER_PROPERTY_CONTACT}${QR_PARSER_SPECIFIER}${$qrCodeProps.contact}${QR_PARSER_SEPARATOR}` +
+              `${QR_PARSER_PROPERTY_DUPLICATES}${QR_PARSER_SPECIFIER}${+$qrCodeProps.checkDuplicates}${QR_PARSER_SEPARATOR}` +
+              `${QR_PARSER_PROPERTY_MANUAL_SCAN}${QR_PARSER_SPECIFIER}${+$qrCodeProps.enableManualScan}`; 
+      
+
+
+      qrData.set(qrDataString);
+      console.log(qrDataString);
+    }
+
+    function sanitizeStringForQr(input: string) {
+      console.log(input + " to be sanitized");
+      var sanitizedInput = input;
+      FORBIDDEN_CHARACTERS.forEach(c =>{ 
+        sanitizedInput = sanitizedInput.replace(new RegExp(c,'g'),"")});
+      return sanitizedInput;
+    }
+
 
 
 </script>
     
 <div class="p-6">
-<h1>Study Material</h1>
-{#if $barcodeProps.generateBarcodes}
-<div>
-<button on:click={downloadBarcodes} type="button" class="btn variant-filled-primary p-6 my-6">
-  <span class="material-symbols-outlined">qr_code_2</span>
-	<span>Get Printable Barcodes</span>
-</button>
-</div>
-{/if}
-{#if $qrCodeProps.generateQrCodes}
-<div>
-<button type="button" class="btn variant-filled-primary p-6">
-  <span class="material-symbols-outlined">qr_code_2</span>
-	<span>Get Printable QR-Code</span>
-</button>
-</div>
-{/if}
-{#if (!$barcodeProps.generateBarcodes && !$qrCodeProps.generateQrCodes)}
-<br>
-<aside class="alert variant-filled-error w-fit">
-    <span class="material-symbols-outlined">
-    warning
-    </span>
-  <div class="alert-message">
-      <h3>No Material Generated!</h3>
-      <p>Make sure you select materials to generate in your study configuration.</p>
+  <h1>Study Material</h1>
+  {#if $barcodeProps.generateBarcodes}
+  <div>
+  <button on:click={downloadBarcodes} type="button" class="btn variant-filled-primary p-6 mt-6">
+    <span class="material-symbols-outlined">barcode_scanner</span>
+    <span>Get Printable Barcodes</span>
+  </button>
   </div>
-</aside>
-{/if}
+  {/if}
+  {#if $qrCodeProps.generateQrCodes}
+  <div>
+  <button on:click={downloadQrCode} type="button" class="btn variant-filled-primary p-6 mt-6">
+    <span class="material-symbols-outlined">qr_code_2</span>
+    <span>Get Printable QR-Code</span>
+  </button>
+  </div>
+  {/if}
+  {#if (!$barcodeProps.generateBarcodes && !$qrCodeProps.generateQrCodes)}
+  <br>
+  <aside class="alert variant-filled-error w-fit">
+      <span class="material-symbols-outlined">
+      warning
+      </span>
+    <div class="alert-message">
+        <h3>No Material Generated!</h3>
+        <p>Make sure you select materials to generate in your study configuration.</p>
+    </div>
+  </aside>
+  {/if}
 </div>
