@@ -122,7 +122,7 @@
 				</div>
 
 				{#if uniformSalivaDistances}
-					<label class="label md:w-1/6">
+					<label class="label">
 						<span>Distance between saliva samples</span>
 						<input
 							class="input"
