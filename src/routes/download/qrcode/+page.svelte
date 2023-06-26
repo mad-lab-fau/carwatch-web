@@ -5,28 +5,23 @@
 	import { onMount } from "svelte";
     import QRCode from 'qrcode'; 
 
-    let dataUrl: string;
-
     onMount(async() => {
-        dataUrl = QRCode.toDataURL($qrData, function(_:any,url: string) {
-            Array.from(document.getElementsByClassName("myqr")).forEach(img => {
-                if (img instanceof HTMLImageElement){
-                    img.src = url;
-                }
-            });
+        Array.from(document.getElementsByClassName("myqr")).forEach(canvas => {
+            QRCode.toCanvas(canvas, $qrData,function(error:any){
+                if (error) console.error(error);
+            })
         });
       });
     
     let numPages: number = Math.ceil($studyProps.numSubjects/QR_PER_PAGE);
-    let cellsPerPage = 12;
 </script>
 
 <div class="h-full overflow-y-auto overflow-x-auto">
     {#each Array(numPages) as _, page}
-        <div class="page grid grid-cols-3 bg-white" style:gap="5mm 5mm" style:padding="20mm">
-            {#each Array(cellsPerPage) as _, i}
-                <div class="label p-2 overflow-hidden" >
-                    <img class="myqr object-contain" alt="QR Code"/>
+        <div class="page grid grid-cols-3 bg-white" style:padding="25mm">
+            {#each Array(QR_PER_PAGE) as _, i}
+                <div class="label p-4 overflow-hidden" >
+                    <canvas class="myqr object-contain"/>
                 </div>
             {/each}
         </div>
@@ -41,8 +36,6 @@
     }
 
     .label {
-        position: relative;
-        overflow: hidden;
         display: flex;
         justify-content: center;
         outline: 2px #000000 dotted;
