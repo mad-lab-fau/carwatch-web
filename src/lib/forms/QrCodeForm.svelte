@@ -149,20 +149,39 @@
 								{:else}
 									<p>{$studyProps.samplePrefix}{i} and {$studyProps.samplePrefix}{i + 1}:</p>
 								{/if}
-								<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-									<input
-										class="input col-span-2"
-										id="distance{i}"
-										type="number"
-										value={dist}
-										on:input={salivaListChanged}
-										min="1"
-										max="999"
-										step="1"
-										required
-									/>
-									<div class="input-group-shim col-span-1">min</div>
-								</div>
+								{#if i == salivaDistances.length - 1}
+                					<!-- last field: validate without the need to change focus -->
+									<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+										<input
+											class="input col-span-2"
+											id="distance{i}"
+											type="number"
+											value={dist}
+											on:input={salivaListChanged}
+											min="1"
+											max="999"
+											step="1"
+											required
+										/>
+										<div class="input-group-shim col-span-1">min</div>
+									</div>
+								{:else}
+                					<!-- only validate after full number was entered -->
+									<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+										<input
+											class="input col-span-2"
+											id="distance{i}"
+											type="number"
+											value={dist}
+											on:focusout={salivaListChanged}
+											min="1"
+											max="999"
+											step="1"
+											required
+										/>
+										<div class="input-group-shim col-span-1">min</div>
+									</div>
+								{/if}
 							{/each}
 						</label>
 					</div>
