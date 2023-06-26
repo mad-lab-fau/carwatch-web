@@ -39,7 +39,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"headless-qr": "^1.0.3",
-		"jsbarcode": "^3.11.5"
+		"jsbarcode": "^3.11.5",
+		"qrcode": "^1.5.3"
 	}
 }
