@@ -47,7 +47,6 @@
         overflow: hidden;
         display: flex;
         justify-content: center;
-        outline: 2px #000000 dotted;
     }
    
     .page {
