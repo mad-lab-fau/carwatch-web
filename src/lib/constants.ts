@@ -6,11 +6,6 @@ export const STUDY_TYPES = [CAR_STUDY, LAB_STUDY, OTHER_STUDY];
 export const APP_OPTION = {CAR_STUDY: true, LAB_STUDY: false, OTHER_STUDY: true};
 export const DEFAULT_SALIVA_DISTANCE = 15; 
 
-/* constants for side menu bar */
-export const MENU_HOME = 0
-export const MENU_PREPARE = 1
-export const MENU_POSTPROCESS = 2
-
 /* constants to create QR code data */
 export const QR_PARSER_APP_ID = "CARWATCH";
 export const QR_PARSER_SEPARATOR = ";";

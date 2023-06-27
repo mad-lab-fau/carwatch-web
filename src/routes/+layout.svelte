@@ -3,29 +3,33 @@
 	import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.postcss';
 
-	import { AppRail, AppRailTile, LightSwitch } from '@skeletonlabs/skeleton';
-	import { MENU_PREPARE, MENU_HOME, MENU_POSTPROCESS } from '$lib/constants';
+	import { AppRail, AppRailAnchor, AppShell, LightSwitch } from '@skeletonlabs/skeleton';
+	import { page } from '$app/stores';
 </script>
-
-<div class="flex h-full overflow-x-hidden">
-	<div class="print:hidden">
-	<AppRail width="w-30">
-		<AppRailTile tag="a" href="/" label="Home" value={MENU_HOME}>
-			<span class="material-symbols-outlined">home</span>
-		</AppRailTile>
-		<AppRailTile tag="a" href="/preparation" label="Study Preparation" value={MENU_PREPARE}>
-			<span class="material-symbols-outlined">groups</span>
-		</AppRailTile>
-		<AppRailTile tag="a" href="/postprocessing" label="Postprocessing" value={MENU_POSTPROCESS}>
-			<span class="material-symbols-outlined">insert_chart</span>
-		</AppRailTile>
-		<svelte:fragment slot="trail">
-			<LightSwitch class="mb-6 ml-6"/>
-		</svelte:fragment>
-	</AppRail>
-	</div>
-	<div class="w-full">
-		<slot/>
-	</div>
+ 
+<AppShell>
 	
-</div>
+	<svelte:fragment slot="sidebarLeft">
+		<div class="print:hidden h-full">
+		<AppRail width="w-28">
+			<AppRailAnchor  href="/" selected={$page.url.pathname === '/'}>
+				<svelte:fragment slot="lead"><span class="material-symbols-outlined">home</span></svelte:fragment>
+				<span>Home</span>
+			</AppRailAnchor>
+			<AppRailAnchor href="/preparation" selected={$page.url.pathname === '/preparation'}>
+				<svelte:fragment slot="lead"><span class="material-symbols-outlined">groups</span></svelte:fragment>
+				<span>Study Configurator</span>
+			</AppRailAnchor>
+			<AppRailAnchor href="/postprocessing" selected={$page.url.pathname === '/postprocessing'}>
+				<svelte:fragment slot="lead"><span class="material-symbols-outlined">insert_chart</span></svelte:fragment>
+				<span>Postprocessing</span>
+			</AppRailAnchor>
+			<svelte:fragment slot="trail">
+				<LightSwitch class="mb-8 ml-8"/>
+			</svelte:fragment>
+		</AppRail>
+		</div>
+	</svelte:fragment>
+	<slot/>
+	
+</AppShell>
