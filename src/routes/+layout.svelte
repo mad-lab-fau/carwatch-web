@@ -5,6 +5,7 @@
 
 	import { AppRail, AppRailAnchor, AppShell, LightSwitch } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
+	import  Footer  from '$lib/components/Footer.svelte'
 </script>
  
 <AppShell>
@@ -29,6 +30,9 @@
 			</svelte:fragment>
 		</AppRail>
 		</div>
+	</svelte:fragment>
+	<svelte:fragment slot="pageFooter">
+		<Footer />
 	</svelte:fragment>
 	<slot/>
 	
