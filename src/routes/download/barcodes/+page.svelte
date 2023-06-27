@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { barcodeProps } from "$lib/configStore";
+	import PrintInstruction from "$lib/components/PrintInstruction.svelte";
+import { barcodeProps } from "$lib/configStore";
     import { barcodeDataArray, captionArray} from "$lib/dataStore";
     import JsBarcode from 'jsbarcode';
 	import { onMount } from "svelte";
@@ -37,7 +38,11 @@
 
 </script>
 
-    <div class="h-full overflow-y-auto overflow-x-auto">
+
+
+<div class="h-full">
+
+    <PrintInstruction fileType={"barcodes"}/>
     {#each Array(numPages) as _, page}
         <div class="page grid grid-cols-{`${$barcodeProps.numCols}`} bg-white" style:gap={`${rowDist} ${colDist}`} style:padding-top={paddingTop} style:padding-bottom={paddingBottom} style:padding-left={paddingLeft} style:padding-right={paddingRight}>
             {#each Array(cellsPerPage) as _, i}
@@ -96,7 +101,8 @@
             width: 210mm;
             height: 297mm;
             /*distance between pages*/
-            margin: 20mm;
+            margin-left: 20mm;
+            margin-top: 10mm;
             background: white;
             outline: 3px #000000 solid;
         }

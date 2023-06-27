@@ -4,29 +4,36 @@
 	import { qrData } from "$lib/dataStore";
 	import { onMount } from "svelte";
     import QRCode from 'qrcode'; 
+	import PrintInstruction from "$lib/components/PrintInstruction.svelte";
 
     onMount(async() => {
-        Array.from(document.getElementsByClassName("myqr")).forEach(canvas => {
-            QRCode.toCanvas(canvas, $qrData,function(error:any){
-                if (error) console.error(error);
-            })
+        Array.from(document.getElementsByClassName("qr-code")).forEach(canvas => {
+            if (canvas instanceof HTMLCanvasElement){
+                QRCode.toCanvas(canvas, $qrData, {scale:2},function(error:any){
+                    if (error) console.error(error);
+                })
+            }
         });
       });
     
     let numPages: number = Math.ceil($studyProps.numSubjects/QR_PER_PAGE);
 </script>
 
-<div class="h-full overflow-y-auto overflow-x-auto">
+<div class="h-full">
+
+    <PrintInstruction fileType={"QR codes"}/>
+
     {#each Array(numPages) as _, page}
         <div class="page grid grid-cols-3 bg-white" style:padding="25mm">
             {#each Array(QR_PER_PAGE) as _, i}
                 <div class="label p-4 overflow-hidden" >
-                    <canvas class="myqr object-contain"/>
+                    <canvas class="qr-code object-contain justify-center"/>
                 </div>
             {/each}
         </div>
     {/each}
-    </div>
+
+</div>
   
 <style>
     * {
@@ -36,6 +43,8 @@
     }
 
     .label {
+        position: relative;
+        overflow: hidden;
         display: flex;
         justify-content: center;
         outline: 2px #000000 dotted;
@@ -46,7 +55,8 @@
         width: 210mm;
         height: 297mm;
         /*distance between pages*/
-        margin: 20mm;
+        margin-left: 20mm;
+        margin-top: 10mm;
         background: white;
         outline: 3px #000000 solid;
     }
