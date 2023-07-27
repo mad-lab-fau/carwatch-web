@@ -35,7 +35,6 @@ import { barcodeProps } from "$lib/configStore";
     let cellsPerPage = $barcodeProps.numRows * $barcodeProps.numCols;
     let numBarcodes = $barcodeDataArray.length 
     let numPages: number = Math.ceil(numBarcodes / cellsPerPage);
-
 </script>
 
 
