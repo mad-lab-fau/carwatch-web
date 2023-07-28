@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { barcodeProps, qrCodeProps, studyProps } from "$lib/configStore";
-	import { FORBIDDEN_CHARACTERS, QR_PARSER_APP_ID, QR_PARSER_PROPERTY_CONTACT, QR_PARSER_PROPERTY_DUPLICATES, QR_PARSER_PROPERTY_EVENING, QR_PARSER_PROPERTY_MANUAL_SCAN, QR_PARSER_PROPERTY_PARTICIPANTS, QR_PARSER_PROPERTY_SALIVA_TIMES, QR_PARSER_PROPERTY_START_SAMPLE, QR_PARSER_PROPERTY_STUDY_DAYS, QR_PARSER_PROPERTY_STUDY_NAME, QR_PARSER_SEPARATOR, QR_PARSER_SPECIFIER } from "$lib/constants";
+	import { FORBIDDEN_CHARACTERS, QR_PARSER_APP_ID, QR_PARSER_PROPERTY_CONTACT, QR_PARSER_PROPERTY_DUPLICATES, QR_PARSER_PROPERTY_EVENING, QR_PARSER_PROPERTY_MANUAL_SCAN, QR_PARSER_PROPERTY_NUM_PARTICIPANTS, QR_PARSER_PROPERTY_SALIVA_TIMES, QR_PARSER_PROPERTY_START_SAMPLE, QR_PARSER_PROPERTY_STUDY_DAYS, QR_PARSER_PROPERTY_STUDY_NAME, QR_PARSER_SEPARATOR, QR_PARSER_SPECIFIER } from "$lib/constants";
 	import { barcodeDataArray, captionArray, qrData } from "$lib/dataStore";
 
     function downloadBarcodes() {
@@ -49,10 +49,6 @@
     function createQrCodeData(){
       // sanitize inputs to prevent decoding issues
       let studyName = sanitizeStringForQr($studyProps.studyName);
-      let subjectList = "";
-      $studyProps.subjectList.forEach(subj => {
-        subjectList += `${sanitizeStringForQr(subj)},`
-      })
       let distanceList = "";
       $qrCodeProps.salivaDistances.forEach(dist => {
         distanceList += `${dist},`;          
@@ -65,7 +61,7 @@
               `${QR_PARSER_APP_ID}${QR_PARSER_SEPARATOR}`+
               `${QR_PARSER_PROPERTY_STUDY_NAME}${QR_PARSER_SPECIFIER}${studyName}${QR_PARSER_SEPARATOR}` +
               `${QR_PARSER_PROPERTY_STUDY_DAYS}${QR_PARSER_SPECIFIER}${$studyProps.numDays}${QR_PARSER_SEPARATOR}` +
-              `${QR_PARSER_PROPERTY_PARTICIPANTS}${QR_PARSER_SPECIFIER}${subjectList}${QR_PARSER_SEPARATOR}` +
+              `${QR_PARSER_PROPERTY_NUM_PARTICIPANTS}${QR_PARSER_SPECIFIER}${$studyProps.numSubjects}${QR_PARSER_SEPARATOR}` +
               `${QR_PARSER_PROPERTY_START_SAMPLE}${QR_PARSER_SPECIFIER}${startSample}${QR_PARSER_SEPARATOR}` +
               `${QR_PARSER_PROPERTY_SALIVA_TIMES}${QR_PARSER_SPECIFIER}${distanceList}${QR_PARSER_SEPARATOR}` +
               `${QR_PARSER_PROPERTY_EVENING}${QR_PARSER_SPECIFIER}${+$studyProps.hasEveningSample}${QR_PARSER_SEPARATOR}` +
