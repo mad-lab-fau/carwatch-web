@@ -9,7 +9,7 @@
     onMount(async() => {
         Array.from(document.getElementsByClassName("qr-code")).forEach(canvas => {
             if (canvas instanceof HTMLCanvasElement){
-                QRCode.toCanvas(canvas, $qrData, {scale:2},function(error:any){
+                QRCode.toCanvas(canvas, $qrData, {scale:3}, function(error:any){
                     if (error) console.error(error);
                 })
             }
@@ -24,7 +24,7 @@
     <PrintInstruction fileType={"QR codes"}/>
 
     {#each Array(numPages) as _, page}
-        <div class="page grid grid-cols-3 bg-white" style:padding="25mm">
+        <div class="page grid grid-cols-3 bg-white px" style:padding="20mm">
             {#each Array(QR_PER_PAGE) as _, i}
                 <div class="label p-4 overflow-hidden" >
                     <canvas class="qr-code object-contain justify-center"/>
@@ -56,6 +56,7 @@
         /*distance between pages*/
         margin-left: 20mm;
         margin-top: 10mm;
+        margin-bottom: 10mm;
         background: white;
         outline: 3px #000000 solid;
     }
