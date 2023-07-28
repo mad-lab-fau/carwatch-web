@@ -20,6 +20,11 @@
 </script>
 
 <div class="h-full">
+    
+    <a href="/download" type="button" class="btn variant-filled-secondary print:hidden ml-[10mm] mt-[10mm]">
+        <span class="material-symbols-outlined">arrow_back</span>
+        <span>Go Back</span>
+    </a>
 
     <PrintInstruction fileType={"QR codes"}/>
 
@@ -54,7 +59,7 @@
         width: 210mm;
         height: 297mm;
         /*distance between pages*/
-        margin-left: 20mm;
+        margin-left: 10mm;
         margin-top: 10mm;
         margin-bottom: 10mm;
         background: white;

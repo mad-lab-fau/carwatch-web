@@ -2,7 +2,7 @@
     export let fileType: String;
 </script>
 
-<aside class="alert variant-filled-success w-[210mm] ml-[20mm] mt-[10mm] print:hidden py-6">
+<aside class="alert variant-filled-success w-[210mm] ml-[10mm] mt-[10mm] print:hidden py-6">
     <div class="alert-message">
         <p><span class="m-6">&#128190;</span>To get the {fileType} in printable format, use the <b>print feature </b> of your browser.</p>
         <p><span class="m-6">&#9000;&#65039;</span>Press <b>Ctrl+P</b>, or right click and select 'Print'.</p>

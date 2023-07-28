@@ -87,7 +87,11 @@
 
 </script>
     
-<div class="p-6">
+<div class="p-10">
+  <a href="/preparation" type="button" class="btn variant-filled-secondary mb-6">
+    <span class="material-symbols-outlined">arrow_back</span>
+    <span>Go Back</span>
+  </a>
   <h1>Study Material</h1>
   {#if $barcodeProps.generateBarcodes}
   <div>
@@ -117,4 +121,5 @@
     </div>
   </aside>
   {/if}
+ 
 </div>
