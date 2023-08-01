@@ -1,4 +1,4 @@
-<div class="page-footer border-t border-surface-500/10 text-xs md:text-base">
+<div class="page-footer border-t border-surface-500/10 text-xs md:text-base print:hidden">
     <div class="w-full p-4 gap-x-4 py-4 md:py-8" style="display: flex; justify-content: flex-end">
 			<div>
 				<a class="btn variant-soft" href="https://github.com/mad-lab-fau/carwatch" target="_blank" rel="noreferrer">
