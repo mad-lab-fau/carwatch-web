@@ -140,14 +140,14 @@
 				{#if !uniformSalivaDistances}
 					<h4>Distance between biomarker samples</h4>
 					<div
-						class="h-full max-h-72 md:w-1/6 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4"
+						class="h-full max-h-72 md:w-1/4 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4"
 					>
 						<label class="label">
 							{#each salivaDistances as dist, i}
 								{#if $studyProps.startSampleFromZero}
-									<p>{$studyProps.samplePrefix}{i + 1} and {$studyProps.samplePrefix}{i + 2}:</p>
-								{:else}
 									<p>{$studyProps.samplePrefix}{i} and {$studyProps.samplePrefix}{i + 1}:</p>
+								{:else}
+									<p>{$studyProps.samplePrefix}{i + 1} and {$studyProps.samplePrefix}{i + 2}:</p>
 								{/if}
 								{#if i == salivaDistances.length - 1}
                 					<!-- last field: validate without the need to change focus -->
