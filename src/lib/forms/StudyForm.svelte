@@ -89,7 +89,6 @@
         if(el.files && el.files.length > 0){
           let file: File = el.files[0];
           parseFile(file).then((subjectList) => {
-            console.log("result: " +subjectList);
             parsingError = "";
             studyProps.update((props) => {
               return {
@@ -170,7 +169,7 @@
     <div class="flex">
       <div class="w-1/2">  
         <label class="label">
-          <span>Number of Biomarker Samples</span>
+          <span>Number of Biomarker Samples during the day</span>
           <input class="input" id="num_samples" type="number" bind:value={$studyProps.numSamples} min="1" max ="99" step="1" required>
         </label>
       </div>  
@@ -272,7 +271,7 @@
     <div class="space-y-2">
       <label class="flex items-center space-x-2">
         <input class="checkbox" id="has_evening" type="checkbox" bind:checked={$studyProps.hasEveningSample}>
-        <p>Has Evening Sample</p>
+        <p>Has additional Evening Sample</p>
       </label>
     
       <label class="flex items-center space-x-2">

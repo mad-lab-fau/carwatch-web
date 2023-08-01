@@ -21,7 +21,7 @@
       let studyName = $studyProps.studyName;
       for (let subject = 1; subject <= $studyProps.numSubjects; subject++) {
           for (let day = 1; day <= $studyProps.numDays; day++) {
-              for (let sample = startSample; sample < $studyProps.numSamples + startSample; sample++) {
+              for (let sample = startSample; sample < $studyProps.numSamples + startSample + Number($studyProps.hasEveningSample); sample++) {
                   // convert sample to zero padded string with length 2
                   let sampleString = sample.toString().padStart(2, '0');
                   let dayString = day.toString().padStart(2, '0');
