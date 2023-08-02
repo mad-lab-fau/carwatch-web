@@ -33,9 +33,7 @@
 				<svelte:fragment slot="meta">Select all participant ZIP-files to evaluate.</svelte:fragment>
 			</FileDropzone>
 			<section class="w-full text-token card p-4 space-y-4">
-				{#if !files}
-					<p class="font-bold text-center">No files selected.</p>
-				{:else}
+				{#if files.length > 0}
 					<p class="font-bold">Selected files</p>
 					<ul class="list">
 						{#each { length: files.length } as _, i}
@@ -47,6 +45,8 @@
 							</li>
 						{/each}
 					</ul>
+				{:else}
+					<p class="font-bold text-center">No files selected.</p>
 				{/if}
 			</section>
 			<section class="w-full flex justify-end items-end">
