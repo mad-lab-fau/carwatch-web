@@ -5,6 +5,7 @@
 	import { onMount } from "svelte";
     import QRCode from 'qrcode'; 
 	import PrintInstruction from "$lib/components/PrintInstruction.svelte";
+	import { base } from "$app/paths";
 
     onMount(async() => {
         Array.from(document.getElementsByClassName("qr-code")).forEach(canvas => {
