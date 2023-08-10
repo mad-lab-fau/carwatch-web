@@ -21,7 +21,7 @@
 
 <div class="h-full">
     
-    <a href="/download" type="button" class="btn variant-filled-secondary print:hidden ml-[10mm] mt-[10mm]">
+    <a href="{base}/download" type="button" class="btn variant-filled-secondary print:hidden ml-[10mm] mt-[10mm]">
         <span class="material-symbols-outlined">arrow_back</span>
         <span>Go Back</span>
     </a>

@@ -6,6 +6,7 @@
 	import setup from "$lib/assets/setup.png";
 	import app from "$lib/assets/app.png";
 	import { Accordion, AccordionItem } from "@skeletonlabs/skeleton";
+	import { base } from "$app/paths";
 
 	function scrollToNextPage(event: any) {
 		console.log(event.target.hash);
@@ -58,11 +59,11 @@
 			<span class="mr-6">&#9989;</span>Supports study preparation, data collection & postprocessing
 		</p>
 		<div class="flex gap-8">
-			<a href="/preparation" class="btn variant-filled-primary">
+			<a href="{base}/preparation" class="btn variant-filled-primary">
 				<span class="text-xl">Configure Your Study</span>
 				<i class="fa-solid fa-arrow-right-long" />
 			</a>
-			<a href="/postprocessing" class="btn variant-filled-primary">
+			<a href="{base}/postprocessing" class="btn variant-filled-primary">
 				<span class="text-xl">Analyze your Data</span>
 				<i class="fa-solid fa-arrow-right-long" />
 			</a>

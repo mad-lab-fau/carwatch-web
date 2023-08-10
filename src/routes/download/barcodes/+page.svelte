@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from "$app/paths";
 	import PrintInstruction from "$lib/components/PrintInstruction.svelte";
 import { barcodeProps } from "$lib/configStore";
 	import { A4_HEIGHT, A4_WIDTH } from "$lib/constants";
@@ -45,7 +46,7 @@ import { barcodeProps } from "$lib/configStore";
 
 <div class="h-full">
 
-    <a href="/download" type="button" class="btn variant-filled-secondary  print:hidden ml-[10mm] mt-[10mm]">
+    <a href="{base}/download" type="button" class="btn variant-filled-secondary  print:hidden ml-[10mm] mt-[10mm]">
         <span class="material-symbols-outlined">arrow_back</span>
         <span>Go Back</span>
     </a>
