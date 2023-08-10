@@ -14,7 +14,7 @@ const config = {
       strict: true
     }),
     paths: {
-      base: dev ? '' : '/mad-lab-fau/carwatch-web',
+      base: dev ? '' : process.env.BASE_PATH,
     }
   },
   preprocess: [vitePreprocess()]
