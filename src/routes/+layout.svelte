@@ -1,7 +1,7 @@
 <script lang='ts'>
-	import '@skeletonlabs/skeleton/themes/theme-rocket.css';
 	import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.postcss';
+	import '../theme.postcss';
 
 	import { AppRail, AppRailAnchor, AppShell, LightSwitch } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
