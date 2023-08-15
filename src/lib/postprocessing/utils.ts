@@ -1,13 +1,16 @@
 import JSZip from 'jszip';
 import Papa from 'papaparse';
+import { load } from '../../routes/+page';
 
 
 export async function extractZip(files: FileList): Promise<[]> {
     return new Promise<[]>(async (resolve, reject) => {
         const zip = new JSZip();
         let zipData: any = [];
+        let loadedFiles: string[] = [];
         for (let i = 0; i < files.length; i++) {
             let file = files[i];
+            console.log("file: " + file.name);
             // Read the file content as an ArrayBuffer
             const arrayBuffer = await readFileAsArrayBuffer(file);
 
@@ -16,18 +19,22 @@ export async function extractZip(files: FileList): Promise<[]> {
 
             let fileNames: string[] = [];
             loadedZip.forEach((relativePath, zipEntry) => {
-                if (!zipEntry.dir) {
+                if (!zipEntry.dir && !loadedFiles.includes(zipEntry.name)) {
                     // todo: sanity check of file name
                     fileNames.push(zipEntry.name);
                     // sort file names alphabetically => participant names and dates are ordered
-                    fileNames.sort();
                 }
             });
+            // sort file names alphabetically => participant names and dates are ordered
+            fileNames.sort();
+            console.log("fileNames: " + fileNames);
+        
 
             await Promise.allSettled(
                 fileNames.map(async (fileName) => {
                     const file = loadedZip.file(fileName);
                     if (file) {
+                        loadedFiles.push(fileName);
                         const fileContent = await file.async('string');
                         let zipEntryContent = { name: "", data: [] };
                         zipEntryContent.name = fileName;
@@ -39,10 +46,11 @@ export async function extractZip(files: FileList): Promise<[]> {
                     }
                 })
             );
-        }
+            }
         // todo: reject if zipData is empty or other error occurs
         resolve(zipData);
     });
+
 }
 
 // Helper function to read a File as an ArrayBuffer
@@ -65,7 +73,6 @@ function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
 
 
 export function objectIsEmpty(obj: any): boolean {
-    console.log(obj);
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 

@@ -54,7 +54,7 @@ export function extractSamplingTimes(dayData: Array<any>) {
                 saliva_id = json.sample_expected;
             } else if (json.hasOwnProperty("saliva_id")) {
                 // logs from older app versions
-                saliva_id = json.saliva_id;
+                saliva_id = "S" + json.saliva_id;
                 // check whether current sample is evening sample
                 if (json.id === PROP_EVENING_ID) {
                     saliva_id = "SE";
@@ -71,7 +71,9 @@ export function dataToWideFormat(data: Array<any>): Array<any> {
 
     // create header of csv file
     let dayCount = getMaxNumberOfDays(data);
+    console.log("day count: " + dayCount);
     let sampleCount = getMaxNumberOfSamples(data);
+    console.log("sample count: " + sampleCount.maxCount);
     csvArray.push(createHeader(dayCount, sampleCount.saliva_ids));
 
     // extract unique subjects -> one row per subject
@@ -81,7 +83,6 @@ export function dataToWideFormat(data: Array<any>): Array<any> {
     subjectArray.forEach(subject => {
         csvArray.push(createSubjectRow(subject, data, sampleCount.saliva_ids));
     });
-    console.log(csvArray);
     return csvArray;
 }
 
@@ -106,6 +107,7 @@ function getMaxNumberOfDays(data: Array<any>): number {
             subjectCount[subject] = 1;
         }
     });
+    console.log(subjectCount);
     // get maximum number of days
     let maxCount = 0;
     for (const subject in subjectCount) {
@@ -173,7 +175,6 @@ function createSubjectRow(subject: string, data: Array<any>, saliva_ids: Array<a
         // add sampling times
         if (entry.info.hasOwnProperty(SAMPLING_INFO)) {
             const sampling_info = entry.info.sampling_info;
-            console.log(sampling_info);
             saliva_ids.forEach(saliva_id => {
                 //console.log(sampling_info.some((e: { saliva_id: any; }) => e.saliva_id === "SE"));
                 const sample = sampling_info.find((e: { saliva_id: any; }) => e.saliva_id === saliva_id);
