@@ -71,9 +71,7 @@ export function dataToWideFormat(data: Array<any>): Array<any> {
 
     // create header of csv file
     let dayCount = getMaxNumberOfDays(data);
-    console.log("day count: " + dayCount);
     let sampleCount = getMaxNumberOfSamples(data);
-    console.log("sample count: " + sampleCount.maxCount);
     csvArray.push(createHeader(dayCount, sampleCount.saliva_ids));
 
     // extract unique subjects -> one row per subject
@@ -107,7 +105,6 @@ function getMaxNumberOfDays(data: Array<any>): number {
             subjectCount[subject] = 1;
         }
     });
-    console.log(subjectCount);
     // get maximum number of days
     let maxCount = 0;
     for (const subject in subjectCount) {
@@ -176,7 +173,6 @@ function createSubjectRow(subject: string, data: Array<any>, saliva_ids: Array<a
         if (entry.info.hasOwnProperty(SAMPLING_INFO)) {
             const sampling_info = entry.info.sampling_info;
             saliva_ids.forEach(saliva_id => {
-                //console.log(sampling_info.some((e: { saliva_id: any; }) => e.saliva_id === "SE"));
                 const sample = sampling_info.find((e: { saliva_id: any; }) => e.saliva_id === saliva_id);
                 if (sample) {
                     row.push(sample.sampling_time);

@@ -117,9 +117,7 @@
           header: true,
           skipEmptyLines: true,
           complete: function(parsed: any) {
-            console.log(parsed.data);
             let col = $studyProps.subjectColumn;
-            console.log(col);
             if (col){
               let result: string[] = [];
               for (const obj of parsed.data) {
@@ -133,7 +131,6 @@
               subjectList = parsed.data.map((obj: any) => obj.subject);
             }
             if(parsed.errors.length > 0){
-              console.log(parsed.errors);
               err = parsed.errors[0].message;
               reject(err);
             } else {

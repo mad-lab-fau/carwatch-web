@@ -18,19 +18,17 @@
 	function handleSubmit() {
 		filesSubmitted = true;
 		extractZip(files).then((data) => {
+			console.log(data);
 			// TODO: filename sanity check
 			let result = data.map((file: { name: string, data: any[] }) => {
+				console.log(file.name);
 				let date = getDateFromFileName(file.name);
 				let subject = getSubjectFromFileName(file.name);
 				let info = collectData(file.data);
 				return {subject: subject, date: date, info: info} 
 			})
 			.filter((entry) => !objectIsEmpty(entry.info));
-			result.forEach((entry, index) => {
-				console.log(`Entry ${index + 1}:`, entry);
-			});
 			let csvArray = dataToWideFormat(result);
-			console.log("csv array: " + csvArray);
 			csvData = Papa.unparse(csvArray);
 			console.log("unparsed: " + csvData);
 			downloadEnabled = true;

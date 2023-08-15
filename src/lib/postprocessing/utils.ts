@@ -1,6 +1,5 @@
 import JSZip from 'jszip';
 import Papa from 'papaparse';
-import { load } from '../../routes/+page';
 
 
 export async function extractZip(files: FileList): Promise<[]> {
@@ -10,7 +9,6 @@ export async function extractZip(files: FileList): Promise<[]> {
         let loadedFiles: string[] = [];
         for (let i = 0; i < files.length; i++) {
             let file = files[i];
-            console.log("file: " + file.name);
             // Read the file content as an ArrayBuffer
             const arrayBuffer = await readFileAsArrayBuffer(file);
 
@@ -27,7 +25,6 @@ export async function extractZip(files: FileList): Promise<[]> {
             });
             // sort file names alphabetically => participant names and dates are ordered
             fileNames.sort();
-            console.log("fileNames: " + fileNames);
         
 
             await Promise.allSettled(

@@ -9,7 +9,6 @@
 	import { base } from "$app/paths";
 
 	function scrollToNextPage(event: any) {
-		console.log(event.target.hash);
 		const el = document.querySelector(event.target.hash);
 		if (!el) return;
 		el.scrollIntoView({
