@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { extractZip } from '$lib/postprocessing/utils';
+	import { collectData, dataToWideFormat } from '$lib/postprocessing/logCleaning';
+	import { extractZip, getDateFromFileName, getSubjectFromFileName, objectIsEmpty } from '$lib/postprocessing/utils';
 	import { FileDropzone } from '@skeletonlabs/skeleton';
 
 	export let files: FileList = <FileList>{};
 	export let filesUploaded: boolean = false;
 	export let filesSubmitted: boolean = false;
-	console.log(filesSubmitted);
 
 	function handleUpload(e: Event) {
 		filesUploaded = true;
@@ -14,10 +14,20 @@
 	function handleSubmit() {
 		filesSubmitted = true;
 		extractZip(files).then((data) => {
-			data.forEach((file) => {
-				console.log(file);
-				// TODO: continue processing of csv data
+			console.log(data);
+			// TODO: filename sanity check
+			let result = data.map((file: { name: string, data: any[] }) => {
+				let date = getDateFromFileName(file.name);
+				let subject = getSubjectFromFileName(file.name);
+				let info = collectData(file.data);
+				return {subject: subject, date: date, info: info} 
+				// do something with the data
+			})
+			.filter((entry) => !objectIsEmpty(entry.info));
+			result.forEach((entry, index) => {
+				console.log(`Entry ${index + 1}:`, entry);
 			});
+			dataToWideFormat(result);
 		}).catch((err) => {
 			console.log(err);
 		});
