@@ -2,16 +2,7 @@ import { objectIsEmpty, unixTimeToLocalTime } from "./utils";
 
 const PROP_AWAKENING_TYPES: { [key: string]: string } = { "spontaneous_awakening": "self-report", "alarm_stop": "alarm" }
 const PROP_SAMPLING_TIME = "barcode_scanned";
-const PROP_SAMPLING_TIME_ATTRIBUTES = [
-    "alarm_id",
-    "saliva_id",
-    "barcode_value",
-    "day_scanned",
-    "day_expected",
-    "sample_scanned",
-    "sample_expected",
-];
-const PROP_EVENING_SAMPLE = "evening_salivette";
+
 const PROP_EVENING_ID = 815;
 
 const AWAKENING_TIME = "awakening_time";
@@ -91,7 +82,7 @@ export function dataToWideFormat(data: Array<any>): Array<any> {
         csvArray.push(createSubjectRow(subject, data, sampleCount.saliva_ids));
     });
     console.log(csvArray);
-    return [];
+    return csvArray;
 }
 
 function extractData(dayData: Array<any>, key: (string | string[])): Array<any> {
@@ -171,9 +162,6 @@ function createSubjectRow(subject: string, data: Array<any>, saliva_ids: Array<a
         // add day
         row.push(entry.date);
         // add awakening time and type
-        console.log("entry info: " + entry.info);
-        console.log("entry info awakening info: " + entry.info.awakening_info);
-        console.log("entry info sampling info: " + entry.info.sampling_info);
         if (entry.info.hasOwnProperty(AWAKENING_INFO)) {
             const awakening_info = entry.info.awakening_info;
             row.push(awakening_info.awakening_time);
@@ -183,9 +171,11 @@ function createSubjectRow(subject: string, data: Array<any>, saliva_ids: Array<a
             row.push("");
         }
         // add sampling times
-        if (entry.info) {
+        if (entry.info.hasOwnProperty(SAMPLING_INFO)) {
             const sampling_info = entry.info.sampling_info;
+            console.log(sampling_info);
             saliva_ids.forEach(saliva_id => {
+                //console.log(sampling_info.some((e: { saliva_id: any; }) => e.saliva_id === "SE"));
                 const sample = sampling_info.find((e: { saliva_id: any; }) => e.saliva_id === saliva_id);
                 if (sample) {
                     row.push(sample.sampling_time);

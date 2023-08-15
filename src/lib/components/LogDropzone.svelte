@@ -2,10 +2,14 @@
 	import { collectData, dataToWideFormat } from '$lib/postprocessing/logCleaning';
 	import { extractZip, getDateFromFileName, getSubjectFromFileName, objectIsEmpty } from '$lib/postprocessing/utils';
 	import { FileDropzone } from '@skeletonlabs/skeleton';
+    import Papa from 'papaparse';
 
 	export let files: FileList = <FileList>{};
 	export let filesUploaded: boolean = false;
 	export let filesSubmitted: boolean = false;
+
+	export let downloadEnabled: boolean = false;
+	export let csvData: string = "";
 
 	function handleUpload(e: Event) {
 		filesUploaded = true;
@@ -14,24 +18,27 @@
 	function handleSubmit() {
 		filesSubmitted = true;
 		extractZip(files).then((data) => {
-			console.log(data);
 			// TODO: filename sanity check
 			let result = data.map((file: { name: string, data: any[] }) => {
 				let date = getDateFromFileName(file.name);
 				let subject = getSubjectFromFileName(file.name);
 				let info = collectData(file.data);
 				return {subject: subject, date: date, info: info} 
-				// do something with the data
 			})
 			.filter((entry) => !objectIsEmpty(entry.info));
 			result.forEach((entry, index) => {
 				console.log(`Entry ${index + 1}:`, entry);
 			});
-			dataToWideFormat(result);
+			let csvArray = dataToWideFormat(result);
+			console.log("csv array: " + csvArray);
+			csvData = Papa.unparse(csvArray);
+			console.log("unparsed: " + csvData);
+			downloadEnabled = true;
 		}).catch((err) => {
 			console.log(err);
 		});
 	}
+
 </script>
 
 <form class="container h-full mx-auto flex justify-center items-center" on:submit|preventDefault={handleSubmit}>
