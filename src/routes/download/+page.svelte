@@ -73,11 +73,9 @@
 
 
       qrData.set(qrDataString);
-      console.log(qrDataString);
     }
 
     function sanitizeStringForQr(input: string) {
-      console.log(input + " to be sanitized");
       var sanitizedInput = input;
       FORBIDDEN_CHARACTERS.forEach(c =>{ 
         sanitizedInput = sanitizedInput.replace(new RegExp(c,'g'),"")});
