@@ -63,7 +63,7 @@ import { barcodeProps } from "$lib/configStore";
                         <p class="text-black px-2" style:bottom=0>{$captionArray[page*cellsPerPage + i]}</p>
                     {:else}
                         <svg class="barcode"></svg>
-                        <p class="text-black px-2" style:top=0 style:font-size=small>{$captionArray[page*cellsPerPage + i]}</p>
+                        <p class="text-black px-2" style:top=0 style:font-size=large>{$captionArray[page*cellsPerPage + i]}</p>
                     {/if}
 
                 </div>
@@ -105,6 +105,8 @@ import { barcodeProps } from "$lib/configStore";
             position: absolute;
             font-family: monospace, monospace;
             font-size: small;
+            overflow-wrap: break-word; 
+            word-wrap: break-word;
         }
      
         .page {
