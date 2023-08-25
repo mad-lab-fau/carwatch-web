@@ -164,40 +164,43 @@
     <div class="flex">
       <div class="w-1/2">
         <label class="label">
-          <span>Study Name</span>
+          <span>Study name</span>
           <input class="input" id="study_name" type="text" on:keydown={sanitizeStudyName} bind:value={$studyProps.studyName} maxlength="15" required>
-        </label>
-      </div>
-
-      <div class="w-1/2 mx-6">
-        <label class="label">
-          <span>Number of Days</span>
-          <input class="input" id="num_days" type="number" bind:value={$studyProps.numDays} min="1" max ="99" step="1" required>
         </label>
       </div>
     </div>
 
+    <hr class="my-4">
+    
     <div class="flex">
-      <div class="w-1/2">  
+      <div class="w-1/2">
         <label class="label">
-          <span>Number of Biomarker Samples during the day</span>
-          <input class="input" id="num_samples" type="number" bind:value={$studyProps.numSamples} min="1" max ="99" step="1" required>
+          <span>Number of sampling days</span>
+          <input class="input" id="num_days" type="number" bind:value={$studyProps.numDays} min="1" max ="99" step="1" required>
         </label>
-      </div>  
+      </div>
       <div class="w-1/2 mx-6">  
         <label class="label">
-          <span>Biomarker Prefix</span>
+          <span>Number of biomarker samples per day</span>
+          <input class="input" id="num_samples" type="number" bind:value={$studyProps.numSamples} min="1" max ="99" step="1" required>
+        </label>
+      </div>
+      <div class="w-1/2 mx-6">  
+        <label class="label">
+          <span>Prefix for biomarker IDs (e.g. 'S' for saliva)</span>
           <input class="input" id="prefix_bio" type="text" maxlength="1" bind:value={$studyProps.samplePrefix} required>
         </label>
       </div>
     </div>
+
+    <hr class="my-4">
 
     <div class="flex">
       <div class="w-1/2">  
         <div class="my-2">
           <label class="flex items-center space-x-2">
             <input class="checkbox" id="subjects_from_file" type="checkbox" bind:checked={$studyProps.readSubjectsFromFile}>
-            <p>Read Subject IDs from File</p>
+            <p>Read subject IDs from file</p>
           </label>
         </div> 
       </div>
@@ -207,14 +210,14 @@
     <div class="flex">
       <div class="w-1/2">
         <label class="label">
-          <span>Subject Column</span>
+          <span>Name of column with subject IDs</span>
           <input class="input" id="subj_col" type="text" bind:value={$studyProps.subjectColumn}>
         </label>
       </div>
       <div class="w-1/2 mx-6">
-        
       </div>
     </div>
+
     <div class="flex">
       <div class="w-1/2">
         <div class="my-6">
@@ -240,7 +243,7 @@
           {:else}
           <div class="w-1/2 mx-6">
             <label class="label">
-              <span>Current Subject List</span>
+              <span>Current subject list</span>
               <textarea readonly class="textarea" rows="4" placeholder="No file specified yet.">{$studyProps.subjectList}</textarea>
             </label>
           </div>
@@ -252,19 +255,35 @@
     <div class="flex">
       <div class="w-1/2">  
         <label class="label">
-          <span>Number of Subjects</span>
+          <span>Number of subjects</span>
           <input class="input" id="num_subj" disabled={$studyProps.readSubjectsFromFile} type="number" min="1" max="999" step="1" bind:value={$studyProps.numSubjects} required={!$studyProps.readSubjectsFromFile}>
         </label>
       </div>
       <div class="w-1/2 mx-6">  
         <label class="label">
-          <span>Subject Prefix</span>
+          <span>Subject ID prefix (displayed on labels)</span>
           <input class="input" id="pref_subj" disabled={$studyProps.readSubjectsFromFile} type="text" maxlength="5" bind:value={$studyProps.subjectPrefix}>
         </label>
       </div>
     </div>
     {/if}    
-      
+    
+    <hr class="my-4">
+
+    <div class="space-y-2">
+      <label class="flex items-center space-x-2">
+        <input class="checkbox" id="has_evening" type="checkbox" bind:checked={$studyProps.hasEveningSample}>
+        <p>Add additional evening sample (SE)</p>
+      </label>
+    
+      <label class="flex items-center space-x-2">
+        <input class="checkbox" id="from_zero" type="checkbox" bind:checked={$studyProps.startSampleFromZero}>
+        <p>Start sample counter from zero (S0 instead of S1)</p>
+      </label>
+    </div>
+
+    <hr class="my-4">
+
     <div class="w-fit">  
       <div class="row">
         <label class="label">
@@ -277,18 +296,6 @@
           </select>
         </label>
       </div>
-    </div>
-      
-    <div class="space-y-2">
-      <label class="flex items-center space-x-2">
-        <input class="checkbox" id="has_evening" type="checkbox" bind:checked={$studyProps.hasEveningSample}>
-        <p>Has additional Evening Sample</p>
-      </label>
-    
-      <label class="flex items-center space-x-2">
-        <input class="checkbox" id="from_zero" type="checkbox" bind:checked={$studyProps.startSampleFromZero}>
-        <p>Start Sample from Zero</p>
-      </label>
     </div>
   </form>
 

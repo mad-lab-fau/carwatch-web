@@ -98,47 +98,66 @@
 		<form id="qr_code_form">
 			<label class="label">
 				<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.generateQrCodes} />
-				Generate QR codes for {$studyProps.studyName}
+				Generate QR codes for study
 			</label>
+
+			<hr class="my-4">
+			
 			{#if $qrCodeProps.generateQrCodes}
 				<label class="label md:w-1/3">
 					<span>Contact Email</span>
 					<input class="input" id="mail" type="email" bind:value={$qrCodeProps.contact} required />
 				</label>
 
+				<hr class="my-4">
+
 				<div class="space-y-2">
 					<label class="flex items-center space-x-2">
 						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.checkDuplicates} />
-						<p>Check for Duplicates</p>
+						<p>Enable check for duplicate barcode scanning (scanning the same barcode twice will result in error message)</p>
 					</label>
 					<label class="flex items-center space-x-2">
 						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.enableManualScan} />
-						<p>Enable Manual Scanning Mode</p>
+						<p>Enable manual scanning mode (allows to manually scan barcodes apart from being prompted by the <i>CARWatch</i> application)</p>
 					</label>
+
+					<hr class="my-4">
+					<h4>Specify biomarker sampling times</h4>
+
 					<label class="flex items-center space-x-2">
 						<input class="checkbox" type="checkbox" bind:checked={uniformSalivaDistances} />
-						<p>Equal Distances between biomarker samples</p>
+						<p>Equidistant sampling times</p>
 					</label>
 				</div>
 
+				<hr class="my-4">
+
+				<p><b>Time between biomarker samples</b></p>
+
 				{#if uniformSalivaDistances}
-					<label class="label">
-						<span>Distance between saliva samples</span>
-						<input
-							class="input"
-							id="distances"
-							type="number"
-							bind:value={salivaDistance}
-							min="1"
-							max="99"
-							step="1"
-							required
-						/>
-					</label>
+				<div
+				class="h-full max-h-72 md:w-1/4 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4"
+				>
+				<label class="label">
+							<p><b>All samples</b></p>
+							<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+							<input
+								class="input col-span-2"
+								id="distances"
+								type="number"
+								bind:value={salivaDistance}
+								min="1"
+								max="99"
+								step="1"
+								required
+							/>
+							<div class="input-group-shim col-span-1">min</div>
+							</div>
+						</label>
+					</div>
 				{/if}
 
 				{#if !uniformSalivaDistances}
-					<h4>Distance between biomarker samples</h4>
 					<div
 						class="h-full max-h-72 md:w-1/4 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4"
 					>

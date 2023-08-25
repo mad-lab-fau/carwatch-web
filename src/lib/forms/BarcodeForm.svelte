@@ -4,7 +4,7 @@
 	import { onMount, afterUpdate } from "svelte";
 
 	onMount(() => {
-		// to prevent contunuing with invalid settings
+		// to prevent continuing with invalid settings
 		barcodeProps.update((props) => {
 				return {
 					...props,
@@ -39,16 +39,17 @@
 	<form id="barcode_form">
 		<label class="flex items-center space-x-2">
 			<input class="checkbox" id="generate_labels" type="checkbox" bind:checked={$barcodeProps.generateBarcodes}>
-			<p>Generate labels for {$studyProps.studyName}</p>
-		</label>
+			<p>Generate labels for study</p>
+		</label>		
 		{#if $barcodeProps.generateBarcodes}
+		<hr class="my-4">
 		<label class="flex items-center space-x-2">
 			<input class="checkbox" id="add_details" type="checkbox" bind:checked={$barcodeProps.addName}>
-			<p>Add study name to label<p>
+			<p>Add study name to labels<p>
 		</label>
 		<label class="flex items-center space-x-2">
 			<input class="checkbox" id="addr_barcodes" type="checkbox" bind:checked={$barcodeProps.hasBarcode}>
-			<p>Add barcode to label<p>
+			<p>Add barcodes to labels<p>
 		</label>
 		<br>
 		<h4>Print label layout:</h4>
