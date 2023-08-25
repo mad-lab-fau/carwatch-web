@@ -19,7 +19,8 @@ import { barcodeProps } from "$lib/configStore";
                     width: 3, 
                     height: 80, 
                     flat:true,
-                    margin: 10
+                    margin: 10,
+                    textPosition: "top",
                 });  
             }); 
         }
@@ -62,7 +63,7 @@ import { barcodeProps } from "$lib/configStore";
                         <p class="text-black px-2" style:bottom=0>{$captionArray[page*cellsPerPage + i]}</p>
                     {:else}
                         <svg class="barcode"></svg>
-                        <p class="text-black px-2" style:top=0 style:font-size=small>{$captionArray[page*cellsPerPage + i]}</p>
+                        <p class="text-black px-2" style:top=0 style:font-size=large>{$captionArray[page*cellsPerPage + i]}</p>
                     {/if}
 
                 </div>
@@ -96,14 +97,16 @@ import { barcodeProps } from "$lib/configStore";
 
         .label svg {
             max-width: 100%;
-            max-height: 90%;
+            max-height: 80%;
         }
         .label p {
             max-width: 100%;
             max-height: 100%;
             position: absolute;
             font-family: monospace, monospace;
-            font-size: xx-small;
+            font-size: small;
+            overflow-wrap: break-word; 
+            word-wrap: break-word;
         }
      
         .page {
