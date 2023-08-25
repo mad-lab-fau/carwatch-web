@@ -41,18 +41,18 @@
 
 <div class="grid grid-cols-3 gap-4 md:gap-10 items-center justify-items-center h-screen">
 	<div class="flex flex-col col-span-2 row-span-3 items-center xl:items-start text-center xl:text-left space-y-4">
-		<h1 class="!text-5xl md:!text-6xl max-w-[800px]">Welcome to the <br> CARWatch Project!</h1>
+		<h1 class="!text-5xl md:!text-6xl max-w-[800px]">Welcome to <br> CARWatch!</h1>
 		<p class="!text-xl max-w-[675px]">
-			<b>CARWatch is a free open-source framework to support objective and low-cost assessment of biomarker samples in real-world environments.</b>
+			<b>CARWatch is a free open-source framework to support the objective and low-cost assessment of biomarker samples in real-world environments.</b>
 		</p>
 		<p class="!text-xl max-w-[675px]">
-			<span class="mr-6">&#9200;</span>Developed for Cortisol Awakening Response (CAR) studies
+			<span class="mr-6">&#9200;</span>Specifically developed for Cortisol Awakening Response (CAR) studies
 		</p>
 		<p class="!text-xl max-w-[675px]">
-			<span class="mr-6">&#129404;</span>Suitable for lab-based biomarker collection studies
+			<span class="mr-6">&#127968;</span>Suitable for supporting diurnal biomarker collection at home
 		</p>
 		<p class="!text-xl max-w-[675px]">
-			<span class="mr-6">&#127968;</span>Suitable for biomarker-based studies at home
+			<span class="mr-6">&#129404;</span>Suitable for lab-based biomarker collection
 		</p>
 		<p class="!text-xl max-w-[675px]">
 			<span class="mr-6">&#9989;</span>Supports study preparation, data collection & postprocessing
@@ -82,7 +82,7 @@
 
 <div class="grid xl:grid-cols-2 grid-cols-1 gap-4 md:gap-10 items-center justify-items-center h-screen" id="page-2">
 	<div class="flex flex-col items-center xl:items-start text-center xl:text-left space-y-4">
-		<div class="md:w-[700px] w-full xl:h-[400px] h-1/2 card p-8 variant-glass-primary">
+		<div class="md:w-[700px] w-full xl:h-[450px] h-1/2 card p-8 variant-glass-primary">
 			<Accordion autocollapse>
 				<AccordionItem id="setup" open on:toggle={toggleAccordion}>
 					<svelte:fragment slot="lead">
@@ -106,7 +106,7 @@
 									<span class="flex-auto">Set up your desired sampling schedule</span>
 								</li>
 								<li><span>&#8226;</span>
-									<span class="flex-auto">Generata a QR-Code for the CARWatch app to automatically set up the study in the app</span>
+									<span class="flex-auto">Generate a QR-Code for the CARWatch smartphone app to automatically configure the study</span>
 								</li>
 							</ul>
 						</div>
@@ -124,13 +124,13 @@
 					<svelte:fragment slot="content"><div>
 						<ul class="list">
 							<li><span>&#8226;</span>
-								<span class="flex-auto">Objective sampling time assessment</span>
+								<span class="flex-auto">Barcodes are placed on the saliva tubes and scanned by the smartphone when they are taken</span>
 							</li>
 							<li><span>&#8226;</span>
-								<span class="flex-auto">Customize the number of saliva samples per day, the number of days, and the number of study participants</span>
+								<span class="flex-auto">Scan times are used to objectively determine saliva sampling times</span>
 							</li>
 							<li><span>&#8226;</span>
-								<span class="flex-auto">Add an optional evening saliva sample</span>
+								<span class="flex-auto">Customize the number of saliva samples per day, the number of sampling days, and the number of study participants. You can also choose to add an optional, additional evening saliva sample.</span>
 							</li>
 							<li><span>&#8226;</span>
 								<span class="flex-auto">Customize barcodes to fit your printable label templates</span>
@@ -150,13 +150,16 @@
 					<svelte:fragment slot="content">
 						<ul class="list">
 							<li><span>&#8226;</span>
-								<span class="flex-auto">Download App from <a href="https://play.google.com/store/apps/details?id=de.fau.cs.mad.carwatch">Google Playstore</a></span>
+								<span class="flex-auto">Download App from <a href="https://play.google.com/store/apps/details?id=de.fau.cs.mad.carwatch">Google Play Store</a></span>
 							</li>
 							<li><span>&#8226;</span>
-								<span class="flex-auto">Scan QR-Code to configure app for your study</span>
+								<span class="flex-auto">Easy setup: Just scan the generated QR-Code to configure the app for your study</span>
 							</li>
 							<li><span>&#8226;</span>
 								<span class="flex-auto">Schedule and track sampling times in the app</span>
+							</li>
+							<li><span>&#8226;</span>
+								<span class="flex-auto">Export the app logs and share via email</span>
 							</li>
 						</ul>
 					</svelte:fragment>
@@ -184,7 +187,7 @@
 			</Accordion>
 		</div>
 	</div>
-	<div class="md:w-[700px] w-full xl:h-[400px] h-1/2 hidden md:inline-block mx-auto card p-8 variant-glass-primary">
+	<div class="md:w-[700px] w-full xl:h-[450px] h-1/2 hidden md:inline-block mx-auto card p-8 variant-glass-primary">
 		<img src={setup} alt="CARWatch Features" id="demo-img" class="h-full m-auto object-contain">
 	</div>
 </div>
