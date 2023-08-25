@@ -19,7 +19,8 @@ import { barcodeProps } from "$lib/configStore";
                     width: 3, 
                     height: 80, 
                     flat:true,
-                    margin: 10
+                    margin: 10,
+                    textPosition: "top",
                 });  
             }); 
         }
@@ -96,14 +97,14 @@ import { barcodeProps } from "$lib/configStore";
 
         .label svg {
             max-width: 100%;
-            max-height: 90%;
+            max-height: 80%;
         }
         .label p {
             max-width: 100%;
             max-height: 100%;
             position: absolute;
             font-family: monospace, monospace;
-            font-size: xx-small;
+            font-size: small;
         }
      
         .page {
