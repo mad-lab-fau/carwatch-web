@@ -1,9 +1,11 @@
 <script lang="ts">
     import { studyProps, studyPropsValid } from '$lib/configStore';
     import { CAR_STUDY, LAB_STUDY, OTHER_STUDY } from '$lib/constants';
-	  import { FileDropzone, Step } from '@skeletonlabs/skeleton';
+	  import { FileDropzone, Step, Toast, type ToastSettings } from '@skeletonlabs/skeleton';
 	  import { onMount } from 'svelte';
     import Papa from 'papaparse';
+    import { toastStore } from '@skeletonlabs/skeleton';
+			
 
     onMount(() => {
       studyPropsValid.set(isValid());
@@ -140,8 +142,20 @@
         });
       });
     }
-</script>
 
+    function sanitizeStudyName(e: KeyboardEvent) {
+      // prevent underscore in study name
+      if (e.key == "_") {
+        e.preventDefault();
+        const t: ToastSettings = {
+          message: 'Symbol "' + e.key + '" not allowed in study name.',
+          timeout: 4000
+        };
+        toastStore.trigger(t);
+      }
+    }
+</script>
+<Toast />
 <Step locked={!$studyPropsValid}>
   <svelte:fragment slot="header">Study Details</svelte:fragment>
 
@@ -151,7 +165,7 @@
       <div class="w-1/2">
         <label class="label">
           <span>Study Name</span>
-          <input class="input" id="study_name" type="text" bind:value={$studyProps.studyName} maxlength="15" required>
+          <input class="input" id="study_name" type="text" on:keydown={sanitizeStudyName} bind:value={$studyProps.studyName} maxlength="15" required>
         </label>
       </div>
 
