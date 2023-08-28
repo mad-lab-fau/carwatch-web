@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { collectData, dataToWideFormat } from '$lib/postprocessing/logCleaning';
 	import { extractZip, getDateFromFileName, getSubjectFromFileName, objectIsEmpty } from '$lib/postprocessing/utils';
-	import { FileDropzone } from '@skeletonlabs/skeleton';
+	import { FileDropzone, toastStore, type ToastSettings, Toast } from '@skeletonlabs/skeleton';
     import Papa from 'papaparse';
 
 	export let files: FileList = <FileList>{};
@@ -18,10 +18,7 @@
 	function handleSubmit() {
 		filesSubmitted = true;
 		extractZip(files).then((data) => {
-			console.log(data);
-			// TODO: filename sanity check
 			let result = data.map((file: { name: string, data: any[] }) => {
-				console.log(file.name);
 				let date = getDateFromFileName(file.name);
 				let subject = getSubjectFromFileName(file.name);
 				let info = collectData(file.data);
@@ -30,15 +27,21 @@
 			.filter((entry) => !objectIsEmpty(entry.info));
 			let csvArray = dataToWideFormat(result);
 			csvData = Papa.unparse(csvArray);
-			console.log("unparsed: " + csvData);
 			downloadEnabled = true;
 		}).catch((err) => {
-			console.log(err);
+			const t: ToastSettings = {
+				message: 'An error occurred while processing your data:<br>' + err + '<br>Please make sure you uploaded the correct file(s) and try again.',
+				autohide: false, 
+			};
+			toastStore.trigger(t);
+			filesSubmitted = false;
+			filesUploaded = false;
 		});
 	}
 
 </script>
 
+<Toast />
 <form class="container h-full mx-auto flex justify-center items-center" on:submit|preventDefault={handleSubmit}>
 		<div class="w-1/2 space-y-6 my-6">
 			<FileDropzone
