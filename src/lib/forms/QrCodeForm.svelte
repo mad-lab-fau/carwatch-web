@@ -121,89 +121,92 @@
 						<p>Enable manual scanning mode (allows to manually scan barcodes apart from being prompted by the <i>CARWatch</i> application)</p>
 					</label>
 
-					<hr class="my-4">
-					<h4>Specify biomarker sampling times</h4>
+					{#if $studyProps.numSamples > 1}
+						<hr class="my-4">
+						<h4>Specify biomarker sampling times</h4>
 
-					<label class="flex items-center space-x-2">
-						<input class="checkbox" type="checkbox" bind:checked={uniformSalivaDistances} />
-						<p>Equidistant sampling times</p>
-					</label>
+						<label class="flex items-center space-x-2">
+							<input class="checkbox" type="checkbox" bind:checked={uniformSalivaDistances} />
+							<p>Equidistant sampling times</p>
+						</label>
+					{/if}
 				</div>
 
 				<hr class="my-4">
 
+				{#if $studyProps.numSamples > 1}
 				<p><b>Time between biomarker samples</b></p>
-
-				{#if uniformSalivaDistances}
-				<div
-				class="h-full max-h-72 md:w-1/4 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4"
-				>
-				<label class="label">
-							<p><b>All samples</b></p>
-							<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-							<input
-								class="input col-span-2"
-								id="distances"
-								type="number"
-								bind:value={salivaDistance}
-								min="1"
-								max="99"
-								step="1"
-								required
-							/>
-							<div class="input-group-shim col-span-1">min</div>
-							</div>
-						</label>
-					</div>
-				{/if}
-
-				{#if !uniformSalivaDistances}
+					{#if uniformSalivaDistances}
 					<div
-						class="h-full max-h-72 md:w-1/4 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4"
+					class="h-full max-h-72 md:w-1/4 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4"
 					>
-						<label class="label">
-							{#each salivaDistances as dist, i}
-								{#if $studyProps.startSampleFromZero}
-									<p>{$studyProps.samplePrefix}{i} and {$studyProps.samplePrefix}{i + 1}:</p>
-								{:else}
-									<p>{$studyProps.samplePrefix}{i + 1} and {$studyProps.samplePrefix}{i + 2}:</p>
-								{/if}
-								{#if i == salivaDistances.length - 1}
-                					<!-- last field: validate without the need to change focus -->
-									<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-										<input
-											class="input col-span-2"
-											id="distance{i}"
-											type="number"
-											value={dist}
-											on:input={salivaListChanged}
-											min="1"
-											max="999"
-											step="1"
-											required
-										/>
-										<div class="input-group-shim col-span-1">min</div>
-									</div>
-								{:else}
-                					<!-- only validate after full number was entered -->
-									<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-										<input
-											class="input col-span-2"
-											id="distance{i}"
-											type="number"
-											value={dist}
-											on:focusout={salivaListChanged}
-											min="1"
-											max="999"
-											step="1"
-											required
-										/>
-										<div class="input-group-shim col-span-1">min</div>
-									</div>
-								{/if}
-							{/each}
-						</label>
-					</div>
+					<label class="label">
+								<p><b>All samples</b></p>
+								<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+								<input
+									class="input col-span-2"
+									id="distances"
+									type="number"
+									bind:value={salivaDistance}
+									min="1"
+									max="99"
+									step="1"
+									required
+								/>
+								<div class="input-group-shim col-span-1">min</div>
+								</div>
+							</label>
+						</div>
+					{/if}
+
+					{#if !uniformSalivaDistances}
+						<div
+							class="h-full max-h-72 md:w-1/4 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4"
+						>
+							<label class="label">
+								{#each salivaDistances as dist, i}
+									{#if $studyProps.startSampleFromZero}
+										<p>{$studyProps.samplePrefix}{i} and {$studyProps.samplePrefix}{i + 1}:</p>
+									{:else}
+										<p>{$studyProps.samplePrefix}{i + 1} and {$studyProps.samplePrefix}{i + 2}:</p>
+									{/if}
+									{#if i == salivaDistances.length - 1}
+										<!-- last field: validate without the need to change focus -->
+										<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+											<input
+												class="input col-span-2"
+												id="distance{i}"
+												type="number"
+												value={dist}
+												on:input={salivaListChanged}
+												min="1"
+												max="999"
+												step="1"
+												required
+											/>
+											<div class="input-group-shim col-span-1">min</div>
+										</div>
+									{:else}
+										<!-- only validate after full number was entered -->
+										<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+											<input
+												class="input col-span-2"
+												id="distance{i}"
+												type="number"
+												value={dist}
+												on:focusout={salivaListChanged}
+												min="1"
+												max="999"
+												step="1"
+												required
+											/>
+											<div class="input-group-shim col-span-1">min</div>
+										</div>
+									{/if}
+								{/each}
+							</label>
+						</div>
+					{/if}
 				{/if}
 			{/if}
 		</form>
