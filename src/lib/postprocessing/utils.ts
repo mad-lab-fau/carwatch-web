@@ -1,4 +1,4 @@
-import JSZip from 'jszip';
+import JSZip, { type JSZipObject } from 'jszip';
 import Papa from 'papaparse';
 
 
@@ -7,34 +7,26 @@ export async function extractZip(files: FileList): Promise<[]> {
         const zip = new JSZip();
         let zipData: any = [];
         let loadedFiles: string[] = [];
+        // iterate over individual zip files
         for (let i = 0; i < files.length; i++) {
             let file = files[i];
-            // Read the file content as an ArrayBuffer
             try {
+                // load the zip file
                 const arrayBuffer = await readFileAsArrayBuffer(file);
-                // Load the zip file
                 const loadedZip = await zip.loadAsync(arrayBuffer);
                 
-                let fileNames: string[] = [];
-                loadedZip.forEach((relativePath, zipEntry) => {
-                    if (!zipEntry.dir && !loadedFiles.includes(zipEntry.name) && nameIsValid(zipEntry.name)) {
-                        fileNames.push(zipEntry.name);
-                    }
-                });
+                // read filenames contained in archive
+                let fileNames = readContentFileNames(loadedZip, loadedFiles);
                 // sort file names alphabetically => participant names and dates are ordered
                 fileNames.sort();
+
+                // collect content from all files
                 await Promise.allSettled(
                     fileNames.map(async (fileName) => {
                         const file = loadedZip.file(fileName);
                         if (file) {
                             loadedFiles.push(fileName);
-                            const fileContent = await file.async('string');
-                            let zipEntryContent = { name: "", data: [] };
-                            zipEntryContent.name = fileName;
-                            zipEntryContent.data = Papa.parse(
-                                fileContent,
-                                { delimiter: ";", newline: "\n", skipEmptyLines: true }
-                            ).data;
+                            let zipEntryContent = await loadIndividualFileContent(file, fileName);
                             zipData.push(zipEntryContent);
                         }
                     })
@@ -49,6 +41,17 @@ export async function extractZip(files: FileList): Promise<[]> {
         resolve(zipData);
     });
 
+}
+
+function readContentFileNames(loadedZip: JSZip, loadedFileNames: string[]): string[] {
+    // read filenames contained in archive
+    let fileNames: string[] = [];
+    loadedZip.forEach((_, zipEntry) => {
+        if (!zipEntry.dir && !loadedFileNames.includes(zipEntry.name) && nameIsValid(zipEntry.name)) {
+            fileNames.push(zipEntry.name);
+        }
+    });
+    return fileNames;
 }
 
 function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
@@ -67,6 +70,18 @@ function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
 
         reader.readAsArrayBuffer(file);
     });
+}
+
+async function loadIndividualFileContent(file: JSZipObject, fileName: string) {
+    // parse csv file content
+    const fileContent = await file.async('string');
+    let zipEntryContent = { name: "", data: [] };
+    zipEntryContent.name = fileName;
+    zipEntryContent.data = Papa.parse(
+        fileContent,
+        { delimiter: ";", newline: "\n", skipEmptyLines: true }
+    ).data;
+    return zipEntryContent;
 }
 
 function nameIsValid(fileName: string): boolean {
