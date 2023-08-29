@@ -10,9 +10,9 @@
 	let QrCodeForm;
 
 	onMount(async () => {
-		StudyForm = (await import('$lib/forms/StudyForm.svelte')).default;
-		BarcodeForm = (await import('$lib/forms/BarcodeForm.svelte')).default;
-		QrCodeForm = (await import('$lib/forms/QrCodeForm.svelte')).default;
+		StudyForm = (await import('$lib/components/preparation/StudyForm.svelte')).default;
+		BarcodeForm = (await import('$lib/components/preparation/BarcodeForm.svelte')).default;
+		QrCodeForm = (await import('$lib/components/preparation/QrCodeForm.svelte')).default;
 	});
 
 

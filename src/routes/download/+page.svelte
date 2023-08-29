@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { base } from "$app/paths";
-	import { barcodeProps, qrCodeProps, studyProps } from "$lib/configStore";
+	import { barcodeProps, qrCodeProps, studyProps } from "$lib/stores/configStore";
 	import { FORBIDDEN_CHARACTERS, QR_PARSER_APP_ID, QR_PARSER_PROPERTY_CONTACT, QR_PARSER_PROPERTY_DUPLICATES, QR_PARSER_PROPERTY_EVENING, QR_PARSER_PROPERTY_MANUAL_SCAN, QR_PARSER_PROPERTY_NUM_PARTICIPANTS, QR_PARSER_PROPERTY_SALIVA_TIMES, QR_PARSER_PROPERTY_START_SAMPLE, QR_PARSER_PROPERTY_STUDY_DAYS, QR_PARSER_PROPERTY_STUDY_NAME, QR_PARSER_SEPARATOR, QR_PARSER_SPECIFIER } from "$lib/constants";
-	import { barcodeDataArray, captionArray, qrData } from "$lib/dataStore";
+	import { barcodeDataArray, captionArray, qrData } from "$lib/stores/dataStore";
 
     function downloadBarcodes() {
       createBarcodes();

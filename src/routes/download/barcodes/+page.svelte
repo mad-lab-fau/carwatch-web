@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { base } from "$app/paths";
-	import PrintInstruction from "$lib/components/PrintInstruction.svelte";
-import { barcodeProps } from "$lib/configStore";
+	import PrintInstruction from "$lib/components/download/PrintInstruction.svelte";
+import { barcodeProps } from "$lib/stores/configStore";
 	import { A4_HEIGHT, A4_WIDTH } from "$lib/constants";
-    import { barcodeDataArray, captionArray} from "$lib/dataStore";
+    import { barcodeDataArray, captionArray} from "$lib/stores/dataStore";
     import JsBarcode from 'jsbarcode';
 	import { onMount } from "svelte";
 	import { tick } from "svelte";

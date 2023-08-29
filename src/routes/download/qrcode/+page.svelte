@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { studyProps } from "$lib/configStore";
+	import { studyProps } from "$lib/stores/configStore";
 	import { QR_PER_PAGE } from "$lib/constants";
-	import { qrData } from "$lib/dataStore";
+	import { qrData } from "$lib/stores/dataStore";
 	import { onMount } from "svelte";
     import QRCode from 'qrcode'; 
-	import PrintInstruction from "$lib/components/PrintInstruction.svelte";
+	import PrintInstruction from "$lib/components/download/PrintInstruction.svelte";
 	import { base } from "$app/paths";
 
     onMount(async() => {
