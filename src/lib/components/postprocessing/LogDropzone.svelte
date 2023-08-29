@@ -3,6 +3,7 @@
 	import { extractZip, getDateFromFileName, getSubjectFromFileName, objectIsEmpty } from '$lib/postprocessing/utils';
 	import { FileDropzone, toastStore, type ToastSettings, Toast } from '@skeletonlabs/skeleton';
     import Papa from 'papaparse';
+	import SelectedFileList from './SelectedFileList.svelte';
 
 	export let files: FileList = <FileList>{};
 	export let filesUploaded: boolean = false;
@@ -58,23 +59,8 @@
 				<svelte:fragment slot="message"><b>Upload files</b> or drag and drop.</svelte:fragment>
 				<svelte:fragment slot="meta">Select all participant ZIP-files to evaluate.</svelte:fragment>
 			</FileDropzone>
-			<section class="w-full text-token card p-4 space-y-4">
-				{#if files.length > 0}
-                    <p class="font-bold">Selected files</p>
-                        <ul class="list">
-                            {#each { length: files.length } as _, i}
-                                <li>
-                                    <span class="badge-icon p-4 variant-soft-tertiary">
-                                    <span class="material-symbols-outlined"> contact_page </span>
-                                    </span>
-                                    <span class="flex-auto">{files[i].name}</span>
-                                </li>
-                            {/each}
-                        </ul>
-				{:else}
-					<p class="font-bold text-center">No files selected.</p>
-				{/if}
-			</section>
+
+			<SelectedFileList bind:files={files} />
 			<section class="w-full flex justify-end items-end">
 				<button type="submit" class="btn variant-filled-primary p-2" disabled={!filesUploaded}>
 					<span>Start Processing</span>
