@@ -7,6 +7,7 @@ import { barcodeProps } from "$lib/stores/configStore";
     import JsBarcode from 'jsbarcode';
 	import { onMount } from "svelte";
 	import { tick } from "svelte";
+	import BackButton from "$lib/components/general/BackButton.svelte";
 
     onMount(async() => {
         await tick();
@@ -46,11 +47,7 @@ import { barcodeProps } from "$lib/stores/configStore";
 
 
 <div class="h-full">
-
-    <a href="{base}/download" type="button" class="btn variant-filled-secondary  print:hidden ml-[10mm] mt-[10mm]">
-        <span class="material-symbols-outlined">arrow_back</span>
-        <span>Go Back</span>
-    </a>
+    <BackButton parentRoute="download" />
 
     <PrintInstruction fileType={"barcodes"}/>
     {#each Array(numPages) as _, page}
