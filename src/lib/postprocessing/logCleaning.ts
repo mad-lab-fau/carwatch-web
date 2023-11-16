@@ -14,6 +14,8 @@ const SAMPLING_COUNT = "sample_count";
 const SALIVA_ID = "saliva_id";
 
 export function collectData(dayData: Array<any>): { [key: string]: any } {
+    // collect awakening and sampling info
+    // scan dayData for awakening and sampling info and return object containing of the extracted respective info
     let result: { [key: string]: any } = {};
     let awakening = extractAwakeningInfo(dayData);
     let sampling = extractSamplingTimes(dayData);
@@ -28,6 +30,8 @@ export function collectData(dayData: Array<any>): { [key: string]: any } {
 }
 
 export function extractAwakeningInfo(dayData: Array<any>) {
+    // return object with properties awakening time and type
+    // returns empty object if no suitable information contained in dayData
     let data = extractData(dayData, Object.keys(PROP_AWAKENING_TYPES));
     let result: { [key: string]: any } = {};
     if (data.length > 0) {
@@ -42,6 +46,8 @@ export function extractAwakeningInfo(dayData: Array<any>) {
 }
 
 export function extractSamplingTimes(dayData: Array<any>) {
+    // return result object with properties sampling time and sample id and total number of samples in dayData
+    // returns empty object if no suitable information contained in dayData
     let samples = extractData(dayData, PROP_SAMPLING_TIME);
     let result: { [key: string]: any } = {};
     if (samples.length > 0) {
@@ -67,6 +73,8 @@ export function extractSamplingTimes(dayData: Array<any>) {
 }
 
 export function dataToWideFormat(data: Array<any>): Array<any> {
+    // transform collected data to pandas-style wide format
+    // contains all days and samples per day in columns and all subjects in rows
     let csvArray = [];
 
     // create header of csv file
@@ -85,6 +93,7 @@ export function dataToWideFormat(data: Array<any>): Array<any> {
 }
 
 function extractData(dayData: Array<any>, key: (string | string[])): Array<any> {
+    // extract data from dayData that matches key
     let result = [];
     if (typeof key === "string") {
         result = dayData.filter(entry => entry[1] === key);
@@ -117,6 +126,8 @@ function getMaxNumberOfDays(data: Array<any>): number {
 }
 
 function getMaxNumberOfSamples(data: Array<any>): { maxCount: number, saliva_ids: Array<any> } {
+    // get maximum number of samples per day from all subjects
+    // extract the corresponding saliva ids and use them as a reference
     let maxCount = 0;
     let saliva_ids: Array<any> = []
     data.forEach(entry => {
@@ -130,6 +141,7 @@ function getMaxNumberOfSamples(data: Array<any>): { maxCount: number, saliva_ids
 }
 
 function createHeader(dayCount: number, samples: Array<any>): Array<string> {
+    // create header for csv file
     let header: Array<string> = [];
     header.push("subject");
     for (let i = 1; i <= dayCount; i++) {
@@ -144,6 +156,7 @@ function createHeader(dayCount: number, samples: Array<any>): Array<string> {
 }
 
 function extractUniqueSubjects(data: Array<any>) {
+    // extract unique subject ids from data
     let subjectArray: Array<string> = [];
     data.forEach(entry => {
         if (!subjectArray.includes(entry.subject)) {
@@ -154,6 +167,7 @@ function extractUniqueSubjects(data: Array<any>) {
 }
 
 function createSubjectRow(subject: string, data: Array<any>, saliva_ids: Array<any>) {
+    // concatenate all data for one subject in one row for the final csv array
     let row: Array<string> = [];
     row.push(subject);
     const relevantEntries = data.filter(entry => entry.subject === subject);

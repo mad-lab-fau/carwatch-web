@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { barcodeProps, barcodePropsValid, studyProps} from "$lib/configStore";
+	import { barcodeProps, barcodePropsValid, studyProps} from "$lib/stores/configStore";
 	import { Step } from "@skeletonlabs/skeleton";
 	import { onMount, afterUpdate } from "svelte";
 

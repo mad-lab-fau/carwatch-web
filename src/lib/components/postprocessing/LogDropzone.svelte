@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { collectData, dataToWideFormat } from '$lib/postprocessing/logCleaning';
 	import { extractZip, getDateFromFileName, getSubjectFromFileName, objectIsEmpty } from '$lib/postprocessing/utils';
-	import { FileDropzone } from '@skeletonlabs/skeleton';
+	import { FileDropzone, toastStore, type ToastSettings, Toast } from '@skeletonlabs/skeleton';
     import Papa from 'papaparse';
+	import SelectedFileList from './SelectedFileList.svelte';
 
 	export let files: FileList = <FileList>{};
 	export let filesUploaded: boolean = false;
@@ -18,10 +19,7 @@
 	function handleSubmit() {
 		filesSubmitted = true;
 		extractZip(files).then((data) => {
-			console.log(data);
-			// TODO: filename sanity check
 			let result = data.map((file: { name: string, data: any[] }) => {
-				console.log(file.name);
 				let date = getDateFromFileName(file.name);
 				let subject = getSubjectFromFileName(file.name);
 				let info = collectData(file.data);
@@ -30,15 +28,21 @@
 			.filter((entry) => !objectIsEmpty(entry.info));
 			let csvArray = dataToWideFormat(result);
 			csvData = Papa.unparse(csvArray);
-			console.log("unparsed: " + csvData);
 			downloadEnabled = true;
 		}).catch((err) => {
-			console.log(err);
+			const t: ToastSettings = {
+				message: 'An error occurred while processing your data:<br>' + err + '<br>Please make sure you uploaded the correct file(s) and try again.',
+				autohide: false, 
+			};
+			toastStore.trigger(t);
+			filesSubmitted = false;
+			filesUploaded = false;
 		});
 	}
 
 </script>
 
+<Toast />
 <form class="container h-full mx-auto flex justify-center items-center" on:submit|preventDefault={handleSubmit}>
 		<div class="w-1/2 space-y-6 my-6">
 			<FileDropzone
@@ -55,23 +59,8 @@
 				<svelte:fragment slot="message"><b>Upload files</b> or drag and drop.</svelte:fragment>
 				<svelte:fragment slot="meta">Select all participant ZIP-files to evaluate.</svelte:fragment>
 			</FileDropzone>
-			<section class="w-full text-token card p-4 space-y-4">
-				{#if files.length > 0}
-                    <p class="font-bold">Selected files</p>
-                        <ul class="list">
-                            {#each { length: files.length } as _, i}
-                                <li>
-                                    <span class="badge-icon p-4 variant-soft-tertiary">
-                                    <span class="material-symbols-outlined"> contact_page </span>
-                                    </span>
-                                    <span class="flex-auto">{files[i].name}</span>
-                                </li>
-                            {/each}
-                        </ul>
-				{:else}
-					<p class="font-bold text-center">No files selected.</p>
-				{/if}
-			</section>
+
+			<SelectedFileList bind:files={files} />
 			<section class="w-full flex justify-end items-end">
 				<button type="submit" class="btn variant-filled-primary p-2" disabled={!filesUploaded}>
 					<span>Start Processing</span>
