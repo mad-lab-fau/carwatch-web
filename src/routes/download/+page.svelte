@@ -54,7 +54,7 @@
 					if (sample == $studyProps.numSamples && $studyProps.hasEveningSample) {
 						sampleCaption = 'E';
 					}
-					caption += $studyProps.subjectList[subject - 1] + '_D' + day + '_S' + sampleCaption;
+					caption += $studyProps.subjectList[subject - 1] + '_D' + day + '_' + $studyProps.samplePrefix + sampleCaption;
 					captions.push(caption);
 					let data = subjectString + dayString + sampleString;
 					barcodeData.push(data);
