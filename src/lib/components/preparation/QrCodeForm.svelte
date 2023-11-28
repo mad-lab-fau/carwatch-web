@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { CAR_STUDY, DEFAULT_SALIVA_DISTANCE, OTHER_STUDY } from '$lib/constants';
+	import { CAR_STUDY, DEFAULT_SALIVA_DISTANCE, DEFAULT_SALIVA_TIME, OTHER_STUDY } from '$lib/constants';
 	import { studyProps, qrCodeProps, qrCodePropsValid } from '$lib/stores/configStore';
-	import { Step } from '@skeletonlabs/skeleton';
+	import { Step, RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
 	import { onMount, afterUpdate } from 'svelte';
+	import type { SampleTime } from '$lib/stores/configStore';
 
 	let uniformSalivaDistances = true;
 	let salivaDistance = DEFAULT_SALIVA_DISTANCE;
-	let salivaDistances: number[];
+	let salivaTimes: SampleTime[];
 
 	onMount(() => {
 		// to prevent contunuing with invalid settings
@@ -32,16 +33,11 @@
 
 	function initializeSalivaTimes() {
 		uniformSalivaDistances = false;
-		if ($studyProps.numSamples > 1) {
-			// first initialization
-			if ($qrCodeProps.salivaDistances.length != $studyProps.numSamples - 1) {
-				salivaDistances = [...Array(Math.floor(Number($studyProps.numSamples)) - 1)];
-				// use values from storage
-			} else {
-				salivaDistances = $qrCodeProps.salivaDistances;
-			}
+		if (!$qrCodeProps.salivaTimes || $qrCodeProps.salivaTimes.length != $studyProps.numSamples) {
+			salivaTimes = [...Array(Math.floor(Number($studyProps.numSamples)))].map(_ => Object.assign({}, DEFAULT_SALIVA_TIME));
+			// use values from storage
 		} else {
-			salivaDistances = [];
+			salivaTimes = $qrCodeProps.salivaTimes;
 		}
 	}
 
@@ -50,19 +46,17 @@
 		if (uniformSalivaDistances) {
 			idList = [...idList, 'distances'];
 		} else {
-			for (let i = 0; i < salivaDistances.length; i++) {
-				idList = [...idList, 'distance' + i];
+			for (let i = 0; i < salivaTimes.length; i++) {
+				idList = [...idList, 'timeValue' + i];
 			}
 		}
 		for (let id of idList) {
 			let element = document.getElementById(id);
-			if (element instanceof HTMLInputElement) {
-				if (!element.reportValidity()) {
-					return false;
-				}
+			if (element instanceof HTMLInputElement && !element.reportValidity()) {
+				return false;
 			}
 		}
-		if(salivaDistances){
+		if (salivaTimes){
 			submitQrCodeProps();
 		}
 		return true;
@@ -74,19 +68,19 @@
 
 	const submitQrCodeProps = () => {
 		if (uniformSalivaDistances) {
-			salivaDistances = salivaDistances.fill(salivaDistance);
+			salivaTimes = salivaTimes.fill({isRelative: true, value: salivaDistance.toString()})
 		} else {
-			for (let i = 0; i < salivaDistances.length; i++) {
-				let inputField = document.getElementById('distance' + i);
+			for (let i = 0; i < salivaTimes.length; i++) {
+				let inputField = document.getElementById('timeValue' + i);
 				if (inputField instanceof HTMLInputElement) {
-					salivaDistances[i] = +inputField.value;
+					salivaTimes[i].value = (+inputField.value).toString();
 				}
 			}
 		}
 		qrCodeProps.update((props) => {
 			return {
 				...props,
-				salivaDistances: salivaDistances
+				salivaTimes: salivaTimes
 			};
 		});
 	};
@@ -143,68 +137,61 @@
 					<label class="label">
 								<p><b>All samples</b></p>
 								<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-								<input
-									class="input col-span-2"
-									id="distances"
-									type="number"
-									bind:value={salivaDistance}
-									min="1"
-									max="99"
-									step="1"
-									required
-								/>
-								<div class="input-group-shim col-span-1">min</div>
+									<input
+										class="input col-span-2"
+										id="distances"
+										type="number"
+										bind:value={salivaDistance}
+										min="1"
+										max="99"
+										step="1"
+										required
+									/>
+									<div class="input-group-shim col-span-1">min</div>
 								</div>
 							</label>
 						</div>
-					{/if}
-
-					{#if !uniformSalivaDistances}
-						<div
-							class="h-full max-h-72 md:w-1/4 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4"
-						>
-							<label class="label">
-								{#each salivaDistances as dist, i}
-									{#if $studyProps.startSampleFromZero}
-										<p>{$studyProps.samplePrefix}{i} and {$studyProps.samplePrefix}{i + 1}:</p>
-									{:else}
-										<p>{$studyProps.samplePrefix}{i + 1} and {$studyProps.samplePrefix}{i + 2}:</p>
-									{/if}
-									{#if i == salivaDistances.length - 1}
-										<!-- last field: validate without the need to change focus -->
-										<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-											<input
-												class="input col-span-2"
-												id="distance{i}"
-												type="number"
-												value={dist}
-												on:input={salivaListChanged}
-												min="1"
-												max="999"
-												step="1"
-												required
-											/>
-											<div class="input-group-shim col-span-1">min</div>
+					{:else}
+						<div class="h-full md:w-1/3 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
+							{#each salivaTimes as sampleTime, i}
+								<fieldset>
+									<legend>
+										<p>Sample {i + 1}</p>
+									</legend>
+									<div class="flex space-x-4">
+										<div class="h-full">
+											<RadioGroup class="align-middle">
+												<RadioItem bind:group={sampleTime.isRelative} name="justify" value={true}>rel</RadioItem>
+												<RadioItem bind:group={sampleTime.isRelative} name="justify" value={false}>abs</RadioItem>
+											</RadioGroup>
 										</div>
-									{:else}
-										<!-- only validate after full number was entered -->
-										<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-											<input
-												class="input col-span-2"
-												id="distance{i}"
-												type="number"
-												value={dist}
-												on:focusout={salivaListChanged}
-												min="1"
-												max="999"
-												step="1"
-												required
-											/>
-											<div class="input-group-shim col-span-1">min</div>
+										<div class="input-group input-group-divider grid-cols-[auto_2fr_auto] flex">
+											<label for="timeValue{i}" class="hidden">Time</label>
+											{#if sampleTime.isRelative}
+												<input
+													class="input col-span-2"
+													id="timeValue{i}"
+													type="number"
+													bind:value={sampleTime.value}
+													on:input={salivaListChanged}
+													min="1"
+													max="999"
+													step="1"
+													required/>
+												<div class="input-group-shim col-span-1">min</div>
+											{:else}
+												<input
+													class="input col-span-2"
+													id="timeValue{i}"
+													type="time"
+													bind:value={sampleTime.value}
+													on:input={salivaListChanged}/>
+											{/if}
 										</div>
-									{/if}
-								{/each}
-							</label>
+									</div>
+								</fieldset>
+								<div></div>
+							{/each}
 						</div>
 					{/if}
 				{/if}
