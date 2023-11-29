@@ -186,16 +186,25 @@
 														on:input={salivaListChanged}/>
 											{:else}
 												<label for="distance{i}" class="hidden">Distance to previous sample</label>
-												<input
-														class="input col-span-2"
-														id="distance{i}"
-														type="number"
-														bind:value={salivaDistance}
-														on:input={salivaListChanged}
-														min="1"
-														max="999"
-														step="1"
-														required/>
+												{#if i === 0}
+													<input
+															title="User has to appoint the first sample."
+															class="input col-span-2"
+															id="distance{i}"
+															type="number"
+															disabled/>
+												{:else}
+													<input
+															class="input col-span-2"
+															id="distance{i}"
+															type="number"
+															bind:value={salivaDistance}
+															on:input={salivaListChanged}
+															min="1"
+															max="999"
+															step="1"
+															required/>
+												{/if}
 												<div class="input-group-shim col-span-1">min</div>
 											{/if}
 										</div>
