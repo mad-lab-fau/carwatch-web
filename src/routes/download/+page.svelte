@@ -69,9 +69,9 @@
 		// sanitize inputs to prevent decoding issues
 		let studyName = sanitizeStringForQr($studyProps.studyName);
 		let distanceList = '';
-		$qrCodeProps.salivaDistances.forEach((dist) => {
-			distanceList += `${dist},`;
-		});
+		$qrCodeProps.isTimeOfDay.forEach((isTimeOfDay, i) => {
+			distanceList += isTimeOfDay ? `a${$qrCodeProps.salivaTimes[i].replace(":", "")}` : `r${$qrCodeProps.salivaDistances[i]}`
+		})
 
 		let startSample = `${$studyProps.samplePrefix}${$studyProps.startSampleFromZero ? 0 : 1}`;
 
