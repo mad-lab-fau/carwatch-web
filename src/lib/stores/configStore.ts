@@ -34,15 +34,11 @@ interface BarcodeProperties {
 interface QrCodeProperties {
   generateQrCodes: boolean;
   salivaDistances: number[];
-  salivaTimes: SampleTime[];
+  salivaTimes: string[];
+  isTimeOfDay: boolean[];
   contact: string;
   checkDuplicates: boolean;
   enableManualScan: boolean;
-}
-
-export interface SampleTime {
-  isRelative: boolean;
-  value: string;
 }
 
 let storedStudyProps;
@@ -59,7 +55,7 @@ if (browser) {
 // Create the base stores for each data type
 const defaultStudyProps: StudyProperties = { studyName: 'Test', numDays: 1, numSamples: 2, samplePrefix: "S", readSubjectsFromFile: false, numSubjects: 1, subjectList: [], subjectColumn: 'subject', subjectPrefix: 'VP_', hasEveningSample: false, startSampleFromZero: false, studyType: STUDY_TYPES[0] }
 const defaultBarcodeProps: BarcodeProperties = { generateBarcodes: true, hasBarcode: false, addName: false, numCols: 4, numRows: 12, leftMargin: 9.8, rightMargin: 9.8, topMargin: 21.2, bottomMargin: 21.2, colDist: 2.5, rowDist: 0 }
-const defaultQrCodeProps: QrCodeProperties = { generateQrCodes: true, salivaDistances: [], salivaTimes: [], contact: '', checkDuplicates: false, enableManualScan: false }
+const defaultQrCodeProps: QrCodeProperties = { generateQrCodes: true, salivaDistances: [], salivaTimes: [], isTimeOfDay: [], contact: '', checkDuplicates: false, enableManualScan: false }
 
 // Create the stores
 export const studyProps = storedStudyProps ? writable<StudyProperties>(JSON.parse(storedStudyProps)) : writable<StudyProperties>(defaultStudyProps);
