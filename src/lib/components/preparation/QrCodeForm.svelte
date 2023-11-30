@@ -11,7 +11,7 @@
 	let isTimeOfDay: boolean[];
 
 	onMount(() => {
-		// to prevent contunuing with invalid settings
+		// to prevent continuing with invalid settings
 		qrCodeProps.update((props) => {
 			return {
 				...props,
@@ -29,7 +29,7 @@
 	// every time saliva distance is modified, check if input is valid
 	$: uniformSalivaDistance, qrCodePropsValid.set(isValid());
 
-	// every time the number of samples changes, regenererate saliva times array
+	// every time the number of samples changes, regenerate saliva times array
 	$: $studyProps.numSamples, initializeSalivaTimes();
 
 	function initializeSalivaTimes() {
@@ -96,7 +96,7 @@
 	};
 </script>
 
-{#if $studyProps.studyType == CAR_STUDY || $studyProps.studyType == OTHER_STUDY}
+{#if $studyProps.studyType === CAR_STUDY || $studyProps.studyType === OTHER_STUDY}
 	<Step locked={!$qrCodePropsValid}>
 		<svelte:fragment slot="header">Qr Code Details</svelte:fragment>
 		<form id="qr_code_form">
