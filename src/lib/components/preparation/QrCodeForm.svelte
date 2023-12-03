@@ -189,11 +189,24 @@
 								<div class="input-group input-group-divider grid-cols-[auto_2fr_auto]">
 									<input
 										class="input col-span-2"
-										id="distance"
+										id="distance{i}"
 										type="number"
 										bind:value={salivaDistances[i]}
 										on:input={salivaListChanged}/>
 									<div class="input-group-shim">min</div>
+								</div>
+							{/each}
+							{#each Array(samplesAbsTime) as _, i}
+								<label class="label pt-2 pb-1" for="time{i}">
+									<span>Sample {$studyProps.numSamples - samplesAbsTime + i + 1}</span>
+								</label>
+								<div class="input-group input-group-divider grid-cols-[auto_2fr_auto]">
+									<input
+										class="input col-span-2"
+										id="time{i}"
+										type="time"
+										bind:value={salivaTimes[i]}
+										on:input={salivaListChanged}/>
 								</div>
 							{/each}
 						</div>
