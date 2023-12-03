@@ -6,6 +6,7 @@ export const OTHER_STUDY = 3;
 export const STUDY_TYPES = [CAR_STUDY, LAB_STUDY, OTHER_STUDY];
 export const APP_OPTION = {CAR_STUDY: true, LAB_STUDY: false, OTHER_STUDY: true};
 export const DEFAULT_SALIVA_DISTANCE = 15; 
+export const DEFAULT_SAMPLES_ABS_TIME = 0;
 export const DEFAULT_SALIVA_TIME = "12:00"
 export const DEFAULT_IS_TIME_OF_DAY = false;
 /* constants to create QR code data */

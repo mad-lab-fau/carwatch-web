@@ -1,11 +1,19 @@
 <script lang="ts">
-	import { CAR_STUDY, DEFAULT_IS_TIME_OF_DAY, DEFAULT_SALIVA_DISTANCE, DEFAULT_SALIVA_TIME, OTHER_STUDY } from '$lib/constants';
+	import {
+		CAR_STUDY,
+		DEFAULT_IS_TIME_OF_DAY,
+		DEFAULT_SALIVA_DISTANCE,
+		DEFAULT_SALIVA_TIME,
+		DEFAULT_SAMPLES_ABS_TIME,
+		OTHER_STUDY
+	} from "$lib/constants";
 	import { studyProps, qrCodeProps, qrCodePropsValid } from '$lib/stores/configStore';
 	import { Step, RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
 	import { onMount, afterUpdate } from 'svelte';
 
 	let uniformSalivaDistances = true;
 	let uniformSalivaDistance = DEFAULT_SALIVA_DISTANCE;
+	let samplesAbsTime = DEFAULT_SAMPLES_ABS_TIME;
 	let salivaDistances: number[];
 	let salivaTimes: string[];
 	let isTimeOfDay: boolean[];
@@ -138,14 +146,27 @@
 
 				<hr class="my-4">
 
+				{#if !uniformSalivaDistances}
+					<label class="label md:w-1/3">
+						<span>Number of samples that have to be taken at a specific time</span>
+						<input
+							class="input md:w-1/4"
+							id="samplesAbsTime"
+							type="number"
+							bind:value={samplesAbsTime}
+							min="0"
+							max="{$studyProps.numSamples}"
+							required />
+					</label>
+					<hr class="my-4">
+				{/if}
+
 				{#if $studyProps.numSamples > 1}
 				<p><b>Time between biomarker samples</b></p>
 					{#if uniformSalivaDistances}
-					<div
-					class="h-full max-h-72 md:w-1/4 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4"
-					>
-					<label class="label">
-								<p><b>All samples</b></p>
+						<div class="h-full max-h-72 md:w-1/4 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
+							<label class="label">
+								<span>All samples</span>
 								<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
 									<input
 										class="input col-span-2"
@@ -163,54 +184,17 @@
 						</div>
 					{:else}
 						<div class="h-full md:w-1/3 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
-							{#each salivaDistances as salivaDistance, i}
-								<fieldset>
-									<legend>
-										<p>Sample {i + 1}</p>
-									</legend>
-									<div class="flex space-x-4">
-										<div class="h-full">
-											<RadioGroup class="align-middle" on:input={salivaListChanged}>
-												<RadioItem bind:group={isTimeOfDay[i]} name="justify" value={false}>rel</RadioItem>
-												<RadioItem bind:group={isTimeOfDay[i]} name="justify" value={true}>abs</RadioItem>
-											</RadioGroup>
-										</div>
-										<div class="input-group input-group-divider grid-cols-[auto_2fr_auto] flex">
-											{#if isTimeOfDay[i]}
-												<label for="time{i}" class="hidden">Time</label>
-												<input
-														class="input col-span-2"
-														id="time{i}"
-														type="time"
-														bind:value={salivaTimes[i]}
-														on:input={salivaListChanged}/>
-											{:else}
-												<label for="distance{i}" class="hidden">Distance to previous sample</label>
-												{#if i === 0}
-													<input
-															title="User has to appoint the first sample."
-															class="input col-span-2"
-															id="distance{i}"
-															type="number"
-															disabled/>
-												{:else}
-													<input
-															class="input col-span-2"
-															id="distance{i}"
-															type="number"
-															bind:value={salivaDistance}
-															on:input={salivaListChanged}
-															min="1"
-															max="999"
-															step="1"
-															required/>
-												{/if}
-												<div class="input-group-shim col-span-1">min</div>
-											{/if}
-										</div>
-									</div>
-								</fieldset>
-								<div></div>
+							{#each Array($studyProps.numSamples - samplesAbsTime) as _, i}
+								<label class="label pt-2 pb-1" for="distance{i}"><span>Sample {i + 1}</span></label>
+								<div class="input-group input-group-divider grid-cols-[auto_2fr_auto]">
+									<input
+										class="input col-span-2"
+										id="distance"
+										type="number"
+										bind:value={salivaDistances[i]}
+										on:input={salivaListChanged}/>
+									<div class="input-group-shim">min</div>
+								</div>
 							{/each}
 						</div>
 					{/if}
