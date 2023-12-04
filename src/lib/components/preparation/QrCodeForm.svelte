@@ -1,22 +1,20 @@
 <script lang="ts">
 	import {
 		CAR_STUDY,
-		DEFAULT_IS_TIME_OF_DAY,
 		DEFAULT_SALIVA_DISTANCE,
 		DEFAULT_SALIVA_TIME,
-		DEFAULT_SAMPLES_ABS_TIME,
+		DEFAULT_NUM_SAMPLE_ALARM_TIMES,
 		OTHER_STUDY
 	} from "$lib/constants";
 	import { studyProps, qrCodeProps, qrCodePropsValid } from '$lib/stores/configStore';
-	import { Step, RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
+	import { Step } from '@skeletonlabs/skeleton';
 	import { onMount, afterUpdate } from 'svelte';
 
-	let uniformSalivaDistances = true;
+	let uniformSalivaDistances = false;
 	let uniformSalivaDistance = DEFAULT_SALIVA_DISTANCE;
-	let samplesAbsTime = DEFAULT_SAMPLES_ABS_TIME;
+	let numSampleAlarmTimes = DEFAULT_NUM_SAMPLE_ALARM_TIMES;
 	let salivaDistances: number[];
 	let salivaTimes: string[];
-	let isTimeOfDay: boolean[];
 
 	onMount(() => {
 		// to prevent continuing with invalid settings
@@ -37,39 +35,41 @@
 	// every time saliva distance is modified, check if input is valid
 	$: uniformSalivaDistance, qrCodePropsValid.set(isValid());
 
+	// every time the number of samples with fixed alarm times changes, regenerate saliva times array
+	$: numSampleAlarmTimes, qrCodePropsValid.set(isValid());
+
 	// every time the number of samples changes, regenerate saliva times array
 	$: $studyProps.numSamples, initializeSalivaTimes();
 
 	function initializeSalivaTimes() {
-		uniformSalivaDistances = false;
 		if (!$qrCodeProps.salivaDistances || $qrCodeProps.salivaDistances.length != $studyProps.numSamples) {
 			salivaDistances = [...Array(Math.floor(Number($studyProps.numSamples)))].fill(DEFAULT_SALIVA_DISTANCE);
 			// use values from storage
 		} else {
 			salivaDistances = $qrCodeProps.salivaDistances;
 		}
-		if (!$qrCodeProps.salivaTimes || $qrCodeProps.salivaTimes.length != $studyProps.numSamples) {
+		if (!$qrCodeProps.salivaAlarmTimes || $qrCodeProps.salivaAlarmTimes.length != $studyProps.numSamples) {
 			salivaTimes = [...Array(Math.floor(Number($studyProps.numSamples)))].fill(DEFAULT_SALIVA_TIME);
 			// use values from storage
 		} else {
-			salivaTimes = $qrCodeProps.salivaTimes;
+			salivaTimes = $qrCodeProps.salivaAlarmTimes;
 		}
-		if (!$qrCodeProps.isTimeOfDay || $qrCodeProps.isTimeOfDay.length != $studyProps.numSamples) {
-			isTimeOfDay = [...Array(Math.floor(Number($studyProps.numSamples)))].fill(DEFAULT_IS_TIME_OF_DAY);
-			// use values from storage
-		} else {
-			isTimeOfDay = $qrCodeProps.isTimeOfDay;
+		if ($qrCodeProps.numSampleAlarmTimes && $qrCodeProps.numSampleAlarmTimes <= $studyProps.numSamples) {
+			numSampleAlarmTimes = $qrCodeProps.numSampleAlarmTimes;
 		}
 	}
 
 	function isValid() {
-		let idList = ['mail'];
+		let idList = ["mail"];
 		if (uniformSalivaDistances) {
-			idList = [...idList, 'distances'];
+			idList = [...idList, "distances"];
 		} else {
-			for (let i = 0; i < salivaDistances.length; i++) {
-				idList = [...idList, 'distance' + i];
-				idList = [...idList, 'time' + i];
+			idList = [...idList, "samplesAbsTime"]
+			for (let i = 0; i < $studyProps.numSamples - numSampleAlarmTimes; i++) {
+				idList = [...idList, `distance${i}`];
+			}
+			for (let i = 0; i < numSampleAlarmTimes; i++) {
+				idList = [...idList, `time${i}`];
 			}
 		}
 		for (let id of idList) {
@@ -78,7 +78,7 @@
 				return false;
 			}
 		}
-		if (isTimeOfDay && (salivaDistances || salivaTimes)) {
+		if (salivaDistances || salivaTimes) {
 			submitQrCodeProps();
 		}
 		return true;
@@ -91,14 +91,14 @@
 	const submitQrCodeProps = () => {
 		if (uniformSalivaDistances) {
 			salivaDistances = salivaDistances.fill(uniformSalivaDistance)
-			isTimeOfDay = isTimeOfDay.fill(false)
+			numSampleAlarmTimes = 0;
 		}
 		qrCodeProps.update((props) => {
 			return {
 				...props,
+				numSampleAlarmTimes: numSampleAlarmTimes,
 				salivaDistances: salivaDistances,
-				salivaTimes: salivaTimes,
-				isTimeOfDay: isTimeOfDay,
+				salivaAlarmTimes: salivaTimes,
 			};
 		});
 	};
@@ -148,12 +148,12 @@
 
 				{#if !uniformSalivaDistances}
 					<label class="label md:w-1/3">
-						<span>Number of samples that have to be taken at a specific time</span>
+						<span>Number of samples that have to be taken at a fixed time</span>
 						<input
 							class="input md:w-1/4"
 							id="samplesAbsTime"
 							type="number"
-							bind:value={samplesAbsTime}
+							bind:value={numSampleAlarmTimes}
 							min="0"
 							max="{$studyProps.numSamples}"
 							required />
@@ -162,30 +162,29 @@
 				{/if}
 
 				{#if $studyProps.numSamples > 1}
-				<p><b>Time between biomarker samples</b></p>
+				<h4>Time between biomarker samples</h4>
 					{#if uniformSalivaDistances}
-						<div class="h-full max-h-72 md:w-1/4 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
-							<label class="label">
-								<span>All samples</span>
-								<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-									<input
-										class="input col-span-2"
-										id="distances"
-										type="number"
-										bind:value={uniformSalivaDistance}
-										min="1"
-										max="99"
-										step="1"
-										required
-									/>
-									<div class="input-group-shim col-span-1">min</div>
-								</div>
-							</label>
+						<div class="h-full max-h-72 py-2 md:w-1/4 p overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
+							<label class="label pb-1" for="distances"><span>All samples</span></label>
+							<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+								<input
+									class="input col-span-2"
+									id="distances"
+									type="number"
+									bind:value={uniformSalivaDistance}
+									min="1"
+									max="99"
+									step="1"
+									required/>
+								<div class="input-group-shim col-span-1">min</div>
+							</div>
 						</div>
 					{:else}
-						<div class="h-full md:w-1/3 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
-							{#each Array($studyProps.numSamples - samplesAbsTime) as _, i}
-								<label class="label pt-2 pb-1" for="distance{i}"><span>Sample {i + 1}</span></label>
+						<div class="h-full md:w-1/3 py-2 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
+							{#each Array($studyProps.numSamples - numSampleAlarmTimes) as _, i}
+								<label class="label pt-2 pb-1" for="distance{i}">
+									<span>Sample {i + Number(!$studyProps.startSampleFromZero)}</span>
+								</label>
 								<div class="input-group input-group-divider grid-cols-[auto_2fr_auto]">
 									<input
 										class="input col-span-2"
@@ -196,9 +195,11 @@
 									<div class="input-group-shim">min</div>
 								</div>
 							{/each}
-							{#each Array(samplesAbsTime) as _, i}
+							{#each Array(numSampleAlarmTimes) as _, i}
 								<label class="label pt-2 pb-1" for="time{i}">
-									<span>Sample {$studyProps.numSamples - samplesAbsTime + i + 1}</span>
+									<span>
+										Sample {$studyProps.numSamples - numSampleAlarmTimes + i + Number(!$studyProps.startSampleFromZero)}
+									</span>
 								</label>
 								<div class="input-group input-group-divider grid-cols-[auto_2fr_auto]">
 									<input

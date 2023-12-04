@@ -9,6 +9,7 @@
 		QR_PARSER_PROPERTY_EVENING,
 		QR_PARSER_PROPERTY_MANUAL_SCAN,
 		QR_PARSER_PROPERTY_NUM_PARTICIPANTS,
+		QR_PARSER_PROPERTY_SALIVA_ALARMS,
 		QR_PARSER_PROPERTY_SALIVA_TIMES,
 		QR_PARSER_PROPERTY_START_SAMPLE,
 		QR_PARSER_PROPERTY_STUDY_DAYS,
@@ -68,11 +69,10 @@
 	function createQrCodeData() {
 		// sanitize inputs to prevent decoding issues
 		let studyName = sanitizeStringForQr($studyProps.studyName);
-		let distanceList = '';
-		$qrCodeProps.isTimeOfDay.forEach((isTimeOfDay, i) => {
-			distanceList += isTimeOfDay ? `a${$qrCodeProps.salivaTimes[i].replace(":", "")}` : `r${$qrCodeProps.salivaDistances[i]}`
-		})
-
+		let distances = $qrCodeProps.salivaDistances.slice(0, $studyProps.numSamples - $qrCodeProps.numSampleAlarmTimes);
+		let distanceList = distances.join("");
+		let fixedAlarms = $qrCodeProps.salivaAlarmTimes.slice(0, $qrCodeProps.numSampleAlarmTimes);
+		let fixedAlarmList = fixedAlarms.join("").replaceAll(":", "");
 		let startSample = `${$studyProps.samplePrefix}${$studyProps.startSampleFromZero ? 0 : 1}`;
 
 		// create encoding
@@ -83,6 +83,7 @@
 			`${QR_PARSER_PROPERTY_NUM_PARTICIPANTS}${QR_PARSER_SPECIFIER}${$studyProps.numSubjects}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_START_SAMPLE}${QR_PARSER_SPECIFIER}${startSample}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_SALIVA_TIMES}${QR_PARSER_SPECIFIER}${distanceList}${QR_PARSER_SEPARATOR}` +
+			`${QR_PARSER_PROPERTY_SALIVA_ALARMS}${QR_PARSER_SPECIFIER}${fixedAlarmList}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_EVENING}${QR_PARSER_SPECIFIER}${+$studyProps.hasEveningSample}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_CONTACT}${QR_PARSER_SPECIFIER}${$qrCodeProps.contact}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_DUPLICATES}${QR_PARSER_SPECIFIER}${+$qrCodeProps.checkDuplicates}${QR_PARSER_SEPARATOR}` +
