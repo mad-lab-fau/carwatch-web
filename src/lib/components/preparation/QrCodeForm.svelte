@@ -162,10 +162,10 @@
 				{/if}
 
 				{#if $studyProps.numSamples > 1}
-				<h4>Time between biomarker samples</h4>
+				<h4>Times for biomarker samples</h4>
 					{#if uniformSalivaDistances}
 						<div class="h-full max-h-72 py-2 md:w-1/4 p overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
-							<label class="label pb-1" for="distances"><span>All samples</span></label>
+							<label class="label pb-1" for="distances"><span>Time between all samples</span></label>
 							<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
 								<input
 									class="input col-span-2"
@@ -183,7 +183,11 @@
 						<div class="h-full md:w-1/3 py-2 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
 							{#each Array($studyProps.numSamples - numSampleAlarmTimes) as _, i}
 								<label class="label pt-2 pb-1" for="distance{i}">
-									<span>Sample {i + Number(!$studyProps.startSampleFromZero)}</span>
+									{#if i === 0}
+										<span>Time span between wake up time and sample {i + Number(!$studyProps.startSampleFromZero)}</span>
+									{:else}
+										<span>Time span between sample {i + Number(!$studyProps.startSampleFromZero) - 1} and sample {i + Number(!$studyProps.startSampleFromZero)}</span>
+									{/if}
 								</label>
 								<div class="input-group input-group-divider grid-cols-[auto_2fr_auto]">
 									<input
@@ -198,7 +202,7 @@
 							{#each Array(numSampleAlarmTimes) as _, i}
 								<label class="label pt-2 pb-1" for="time{i}">
 									<span>
-										Sample {$studyProps.numSamples - numSampleAlarmTimes + i + Number(!$studyProps.startSampleFromZero)}
+										Alarm time for sample {$studyProps.numSamples - numSampleAlarmTimes + i + Number(!$studyProps.startSampleFromZero)}
 									</span>
 								</label>
 								<div class="input-group input-group-divider grid-cols-[auto_2fr_auto]">
