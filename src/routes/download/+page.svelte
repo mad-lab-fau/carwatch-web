@@ -70,9 +70,9 @@
 		// sanitize inputs to prevent decoding issues
 		let studyName = sanitizeStringForQr($studyProps.studyName);
 		let distances = $qrCodeProps.salivaDistances.slice(0, $studyProps.numSamples - $qrCodeProps.numSampleAlarmTimes);
-		let distanceList = distances.join("");
+		let distanceList = distances.join(",");
 		let fixedAlarms = $qrCodeProps.salivaAlarmTimes.slice(0, $qrCodeProps.numSampleAlarmTimes);
-		let fixedAlarmList = fixedAlarms.join("").replaceAll(":", "");
+		let fixedAlarmList = fixedAlarms.join(",").replaceAll(":", "");
 		let startSample = `${$studyProps.samplePrefix}${$studyProps.startSampleFromZero ? 0 : 1}`;
 
 		// create encoding
