@@ -37,11 +37,8 @@
 		let studyName = $studyProps.studyName;
 		for (let subject = 1; subject <= $studyProps.numSubjects; subject++) {
 			for (let day = 1; day <= $studyProps.numDays; day++) {
-				for (
-					let sample = startSample;
-					sample < $studyProps.numSamples + startSample + Number($studyProps.hasEveningSample);
-					sample++
-				) {
+				let lastSampleId = $studyProps.numSamples + startSample + Number($studyProps.hasEveningSample) - 1;
+				for (let sample = startSample; sample <= lastSampleId; sample++) {
 					// convert sample to zero padded string with length 2
 					let sampleString = sample.toString().padStart(2, '0');
 					let dayString = day.toString().padStart(2, '0');
@@ -52,7 +49,7 @@
 					}
 					// special case: evening sample referred to a "A"
 					let sampleCaption = sample.toString();
-					if (sample == $studyProps.numSamples && $studyProps.hasEveningSample) {
+					if (sample == lastSampleId && $studyProps.hasEveningSample) {
 						sampleCaption = 'E';
 					}
 					caption += $studyProps.subjectList[subject - 1] + '_D' + day + '_' + $studyProps.samplePrefix + sampleCaption;
