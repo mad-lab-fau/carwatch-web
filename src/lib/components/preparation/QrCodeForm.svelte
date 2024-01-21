@@ -44,8 +44,9 @@
 	function initializeSalivaTimes() {
 		if (!$qrCodeProps.salivaDistances || $qrCodeProps.salivaDistances.length != $studyProps.numSamples) {
 			salivaDistances = [...Array(Math.floor(Number($studyProps.numSamples)))].fill(DEFAULT_SALIVA_DISTANCE);
-			// use values from storage
+			salivaDistances[0] = 0;
 		} else {
+			// use values from storage
 			salivaDistances = $qrCodeProps.salivaDistances;
 		}
 		if (!$qrCodeProps.salivaAlarmTimes || $qrCodeProps.salivaAlarmTimes.length != $studyProps.numSamples) {
@@ -184,7 +185,7 @@
 							{#each Array($studyProps.numSamples - numSampleAlarmTimes) as _, i}
 								<label class="label pt-2 pb-1" for="distance{i}">
 									{#if i === 0}
-										<span>Time span between wake up time and sample {i + Number(!$studyProps.startSampleFromZero)}</span>
+										<span>Time span between wake-up alarm and sample {i + Number(!$studyProps.startSampleFromZero)}</span>
 									{:else}
 										<span>Time span between sample {i + Number(!$studyProps.startSampleFromZero) - 1} and sample {i + Number(!$studyProps.startSampleFromZero)}</span>
 									{/if}
