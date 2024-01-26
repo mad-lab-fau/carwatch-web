@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { studyProps } from "$lib/configStore";
+	import { studyProps } from "$lib/stores/configStore";
 	import { QR_PER_PAGE } from "$lib/constants";
-	import { qrData } from "$lib/dataStore";
+	import { qrData } from "$lib/stores/dataStore";
 	import { onMount } from "svelte";
     import QRCode from 'qrcode'; 
-	import PrintInstruction from "$lib/components/PrintInstruction.svelte";
-	import { base } from "$app/paths";
+	import PrintInstruction from "$lib/components/download/PrintInstruction.svelte";
+	import BackButton from "$lib/components/general/BackButton.svelte";
 
     onMount(async() => {
         Array.from(document.getElementsByClassName("qr-code")).forEach(canvas => {
@@ -21,11 +21,7 @@
 </script>
 
 <div class="h-full">
-    
-    <a href="{base}/download" type="button" class="btn variant-filled-secondary print:hidden ml-[10mm] mt-[10mm]">
-        <span class="material-symbols-outlined">arrow_back</span>
-        <span>Go Back</span>
-    </a>
+    <BackButton parentRoute="download" /> 
 
     <PrintInstruction fileType={"QR codes"}/>
 

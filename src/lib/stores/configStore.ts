@@ -1,6 +1,6 @@
 import { browser } from "$app/environment";
 import { writable } from "svelte/store";
-import { STUDY_TYPES } from "./constants";
+import { STUDY_TYPES } from "../constants";
 
 interface StudyProperties {
   studyName: string;

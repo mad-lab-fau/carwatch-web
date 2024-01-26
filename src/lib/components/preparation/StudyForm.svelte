@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { studyProps, studyPropsValid } from '$lib/configStore';
+    import { studyProps, studyPropsValid } from '$lib/stores/configStore';
     import { CAR_STUDY, LAB_STUDY, OTHER_STUDY } from '$lib/constants';
 	  import { FileDropzone, Step, Toast, type ToastSettings } from '@skeletonlabs/skeleton';
 	  import { onMount } from 'svelte';
@@ -41,7 +41,6 @@
       for(let id of list) {
           let element = document.getElementById(id);
           if(element instanceof HTMLInputElement){
-            //console.log(id);
             if(!(element.reportValidity())){
               return false;
             }

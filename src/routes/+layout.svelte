@@ -5,7 +5,7 @@
 
 	import { AppRail, AppRailAnchor, AppShell, LightSwitch } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
-	import  Footer  from '$lib/components/Footer.svelte'
+	import  Footer  from '$lib/components/general/Footer.svelte'
 	import { base } from '$app/paths';
 </script>
  

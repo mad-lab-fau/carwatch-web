@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { CAR_STUDY, DEFAULT_SALIVA_DISTANCE, OTHER_STUDY } from '$lib/constants';
-	import { studyProps, qrCodeProps, qrCodePropsValid } from '$lib/configStore';
+	import { studyProps, qrCodeProps, qrCodePropsValid } from '$lib/stores/configStore';
 	import { Step } from '@skeletonlabs/skeleton';
 	import { onMount, afterUpdate } from 'svelte';
 
