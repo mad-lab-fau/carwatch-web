@@ -90,34 +90,38 @@
       if (el instanceof HTMLInputElement) {
         if(el.files && el.files.length > 0){
           let file: File = el.files[0];
-          parseFile(file).then((subjectList) => {
-            parsingError = "";
-            studyProps.update((props) => {
-              return {
+          file.text().then((text) => {
+            let delimiter = text.includes(";") || text.includes(",") ? "" : " ";
+            parseFile(file, delimiter).then((subjectList) => {
+              parsingError = "";
+              studyProps.update((props) => {
+                return {
                   ...props,
                   subjectList: subjectList,
-              };
-            });
-          }).catch((err) => {
-            parsingError = err;
-            studyProps.update((props) => {
-              return {
+                };
+              });
+            }).catch((err) => {
+              parsingError = err;
+              studyProps.update((props) => {
+                return {
                   ...props,
                   subjectList: [],
-              };
+                };
+              });
             });
-          });
+          })
         }
       }
     }
- 
-    function parseFile(file: File): Promise<string[]>{
+
+    function parseFile(file: File, delimiter: String): Promise<string[]>{
       let subjectList: string [] = [];
       let err: string = "";
       return new Promise<string[]>((resolve, reject) => {
         Papa.parse(file, {
           header: true,
           skipEmptyLines: true,
+          delimiter: delimiter,
           complete: function(parsed: any) {
             let col = $studyProps.subjectColumn;
             if (col){
