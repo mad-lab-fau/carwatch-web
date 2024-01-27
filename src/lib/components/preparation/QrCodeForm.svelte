@@ -126,6 +126,10 @@
 
 				<div class="space-y-2">
 					<label class="flex items-center space-x-2">
+						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.includeParticipantId} />
+						<p>Include participant IDs in QR Codes</p>
+					</label>
+					<label class="flex items-center space-x-2">
 						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.checkDuplicates} />
 						<p>Enable check for duplicate barcode scanning (scanning the same barcode twice will result in error message)</p>
 					</label>
