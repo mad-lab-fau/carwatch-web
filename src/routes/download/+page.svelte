@@ -9,6 +9,7 @@
 		QR_PARSER_PROPERTY_EVENING,
 		QR_PARSER_PROPERTY_MANUAL_SCAN,
 		QR_PARSER_PROPERTY_NUM_PARTICIPANTS,
+		QR_PARSER_PROPERTY_PARTICIPANT_ID,
 		QR_PARSER_PROPERTY_SALIVA_ALARMS,
 		QR_PARSER_PROPERTY_SALIVA_TIMES,
 		QR_PARSER_PROPERTY_START_SAMPLE,
@@ -17,7 +18,7 @@
 		QR_PARSER_SEPARATOR,
 		QR_PARSER_SPECIFIER
 	} from '$lib/constants';
-	import { barcodeDataArray, captionArray, qrData } from '$lib/stores/dataStore';
+	import { barcodeDataArray, captionArray, qrDataArray } from '$lib/stores/dataStore';
 	import BackButton from '$lib/components/general/BackButton.svelte';
 
 	function downloadBarcodes() {
@@ -65,6 +66,7 @@
 
 	function createQrCodeData() {
 		// sanitize inputs to prevent decoding issues
+		let qrData = [];
 		let studyName = sanitizeStringForQr($studyProps.studyName);
 		let distances = $qrCodeProps.salivaDistances.slice(0, $studyProps.numSamples - $qrCodeProps.numSampleAlarmTimes);
 		let distanceList = distances.join(",");
@@ -72,8 +74,7 @@
 		let fixedAlarmList = fixedAlarms.join(",").replaceAll(":", "");
 		let startSample = `${$studyProps.samplePrefix}${$studyProps.startSampleFromZero ? 0 : 1}`;
 
-		// create encoding
-		let qrDataString =
+		let qrDataStringGeneral =
 			`${QR_PARSER_APP_ID}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_STUDY_NAME}${QR_PARSER_SPECIFIER}${studyName}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_STUDY_DAYS}${QR_PARSER_SPECIFIER}${$studyProps.numDays}${QR_PARSER_SEPARATOR}` +
@@ -86,7 +87,17 @@
 			`${QR_PARSER_PROPERTY_DUPLICATES}${QR_PARSER_SPECIFIER}${+$qrCodeProps.checkDuplicates}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_MANUAL_SCAN}${QR_PARSER_SPECIFIER}${+$qrCodeProps.enableManualScan}`;
 
-		qrData.set(qrDataString);
+		for (let participant = 0; participant < $studyProps.numSubjects; participant++) {
+			if ($qrCodeProps.includeParticipantId) {
+				let participantId = sanitizeStringForQr($studyProps.subjectList[participant]);
+				let qrDataParticipant = `${QR_PARSER_PROPERTY_PARTICIPANT_ID}${QR_PARSER_SPECIFIER}${participantId}`;
+				qrData.push(`${qrDataStringGeneral}${QR_PARSER_SEPARATOR}${qrDataParticipant}`);
+			} else {
+				qrData.push(qrDataStringGeneral);
+			}
+		}
+
+		qrDataArray.set(qrData);
 	}
 
 	function sanitizeStringForQr(input: string) {

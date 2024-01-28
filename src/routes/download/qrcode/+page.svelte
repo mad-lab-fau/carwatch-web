@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { studyProps } from "$lib/stores/configStore";
+    import { qrCodeProps, studyProps } from "$lib/stores/configStore";
 	import { QR_PER_PAGE } from "$lib/constants";
-	import { qrData } from "$lib/stores/dataStore";
+    import { qrDataArray } from "$lib/stores/dataStore";
 	import { onMount } from "svelte";
     import QRCode from 'qrcode'; 
 	import PrintInstruction from "$lib/components/download/PrintInstruction.svelte";
 	import BackButton from "$lib/components/general/BackButton.svelte";
 
     onMount(async() => {
-        Array.from(document.getElementsByClassName("qr-code")).forEach(canvas => {
-            if (canvas instanceof HTMLCanvasElement){
-                QRCode.toCanvas(canvas, $qrData, {scale:3}, function(error:any){
+        Array.from(document.getElementsByClassName("qr-code")).forEach((canvas, i) => {
+            if (canvas instanceof HTMLCanvasElement && i < $studyProps.numSubjects){
+                QRCode.toCanvas(canvas, $qrDataArray[i], {scale:3}, function(error:any){
                     if (error) console.error(error);
                 })
             }
@@ -22,7 +22,6 @@
 
 <div class="h-full">
     <BackButton parentRoute="download" /> 
-
     <PrintInstruction fileType={"QR codes"}/>
 
     {#each Array(numPages) as _, page}
@@ -30,11 +29,13 @@
             {#each Array(QR_PER_PAGE) as _, i}
                 <div class="label p-4 overflow-hidden" >
                     <canvas class="qr-code object-contain justify-center"/>
+                    {#if page * QR_PER_PAGE + i < $studyProps.numSubjects && $qrCodeProps.includeParticipantId}
+                        <p class="absolute text-black px-2" style:bottom=0>{$studyProps.subjectList[page * QR_PER_PAGE + i]}</p>
+                    {/if}
                 </div>
             {/each}
         </div>
     {/each}
-
 </div>
   
 <style>
