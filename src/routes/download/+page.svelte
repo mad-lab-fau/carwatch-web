@@ -36,14 +36,14 @@
 		let captions = [];
 		let startSample = $studyProps.startSampleFromZero ? 0 : 1;
 		let studyName = $studyProps.studyName;
-		for (let subject = 1; subject <= $studyProps.numSubjects; subject++) {
+		for (let participant = 1; participant <= $studyProps.numParticipants; participant++) {
 			for (let day = 1; day <= $studyProps.numDays; day++) {
 				let lastSampleId = $studyProps.numSamples + startSample + Number($studyProps.hasEveningSample) - 1;
 				for (let sample = startSample; sample <= lastSampleId; sample++) {
 					// convert sample to zero padded string with length 2
 					let sampleString = sample.toString().padStart(2, '0');
 					let dayString = day.toString().padStart(2, '0');
-					let subjectString = subject.toString().padStart(3, '0');
+					let participantString = participant.toString().padStart(3, '0');
 					let caption = '';
 					if ($barcodeProps.addName) {
 						caption += studyName + '_';
@@ -53,9 +53,9 @@
 					if (sample == lastSampleId && $studyProps.hasEveningSample) {
 						sampleCaption = 'E';
 					}
-					caption += $studyProps.subjectList[subject - 1] + '_D' + day + '_' + $studyProps.samplePrefix + sampleCaption;
+					caption += $studyProps.participantList[participant - 1] + '_D' + day + '_' + $studyProps.samplePrefix + sampleCaption;
 					captions.push(caption);
-					let data = subjectString + dayString + sampleString;
+					let data = participantString + dayString + sampleString;
 					barcodeData.push(data);
 				}
 			}
@@ -78,7 +78,7 @@
 			`${QR_PARSER_APP_ID}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_STUDY_NAME}${QR_PARSER_SPECIFIER}${studyName}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_STUDY_DAYS}${QR_PARSER_SPECIFIER}${$studyProps.numDays}${QR_PARSER_SEPARATOR}` +
-			`${QR_PARSER_PROPERTY_NUM_PARTICIPANTS}${QR_PARSER_SPECIFIER}${$studyProps.numSubjects}${QR_PARSER_SEPARATOR}` +
+			`${QR_PARSER_PROPERTY_NUM_PARTICIPANTS}${QR_PARSER_SPECIFIER}${$studyProps.numParticipants}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_START_SAMPLE}${QR_PARSER_SPECIFIER}${startSample}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_SALIVA_TIMES}${QR_PARSER_SPECIFIER}${distanceList}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_SALIVA_ALARMS}${QR_PARSER_SPECIFIER}${fixedAlarmList}${QR_PARSER_SEPARATOR}` +
@@ -87,9 +87,9 @@
 			`${QR_PARSER_PROPERTY_DUPLICATES}${QR_PARSER_SPECIFIER}${+$qrCodeProps.checkDuplicates}${QR_PARSER_SEPARATOR}` +
 			`${QR_PARSER_PROPERTY_MANUAL_SCAN}${QR_PARSER_SPECIFIER}${+$qrCodeProps.enableManualScan}`;
 
-		for (let participant = 0; participant < $studyProps.numSubjects; participant++) {
+		for (let participant = 0; participant < $studyProps.numParticipants; participant++) {
 			if ($qrCodeProps.includeParticipantId) {
-				let participantId = sanitizeStringForQr($studyProps.subjectList[participant]);
+				let participantId = sanitizeStringForQr($studyProps.participantList[participant]);
 				let qrDataParticipant = `${QR_PARSER_PROPERTY_PARTICIPANT_ID}${QR_PARSER_SPECIFIER}${participantId}`;
 				qrData.push(`${qrDataStringGeneral}${QR_PARSER_SEPARATOR}${qrDataParticipant}`);
 			} else {

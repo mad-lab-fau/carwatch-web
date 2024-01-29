@@ -9,7 +9,7 @@
 
     onMount(async() => {
         Array.from(document.getElementsByClassName("qr-code")).forEach((canvas, i) => {
-            if (canvas instanceof HTMLCanvasElement && i < $studyProps.numSubjects){
+            if (canvas instanceof HTMLCanvasElement && i < $studyProps.numParticipants){
                 QRCode.toCanvas(canvas, $qrDataArray[i], {scale:3}, function(error:any){
                     if (error) console.error(error);
                 })
@@ -17,7 +17,7 @@
         });
       });
     
-    let numPages: number = Math.ceil($studyProps.numSubjects/QR_PER_PAGE);
+    let numPages: number = Math.ceil($studyProps.numParticipants/QR_PER_PAGE);
 </script>
 
 <div class="h-full">
@@ -29,8 +29,8 @@
             {#each Array(QR_PER_PAGE) as _, i}
                 <div class="label p-4 overflow-hidden" >
                     <canvas class="qr-code object-contain justify-center"/>
-                    {#if page * QR_PER_PAGE + i < $studyProps.numSubjects && $qrCodeProps.includeParticipantId}
-                        <p class="absolute text-black px-2" style:bottom=0>{$studyProps.subjectList[page * QR_PER_PAGE + i]}</p>
+                    {#if page * QR_PER_PAGE + i < $studyProps.numParticipants && $qrCodeProps.includeParticipantId}
+                        <p class="absolute text-black px-2" style:bottom=0>{$studyProps.participantList[page * QR_PER_PAGE + i]}</p>
                     {/if}
                 </div>
             {/each}
