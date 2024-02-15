@@ -92,6 +92,7 @@
 	const submitQrCodeProps = () => {
 		if (uniformSalivaDistances) {
 			salivaDistances = salivaDistances.fill(uniformSalivaDistance)
+			salivaDistances[0] = 0;  // first sample has to be taken immediately after waking up
 			numSampleAlarmTimes = 0;
 		}
 		qrCodeProps.update((props) => {
