@@ -87,7 +87,7 @@
 			<select class="select" name="studyType" bind:value={layoutPresetId} on:change={insertPresetValues}>
 				<option value="{customPresetId}">Custom</option>
 				{#each PRESETS as preset}
-					<option value={preset.id}>{preset.name}</option>
+					<option value={preset.id}>{preset.name} ({preset.labelsPerPage} labels per page)</option>
 				{/each}
 			</select>
 		</label>

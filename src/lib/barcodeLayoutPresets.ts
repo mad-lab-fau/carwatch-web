@@ -14,7 +14,7 @@ export interface BarcodeLayoutPreset {
 
 const AVERY_J4791: BarcodeLayoutPreset = {
   id: "avery-j4791",
-  name: "Avery Zweckform J4791",
+  name: "Avery Zweckform J4791-25",
   labelsPerPage: 48,
   numCols: 4,
   numRows: 12,
