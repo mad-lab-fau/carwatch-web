@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { qrCodeProps, studyProps } from "$lib/stores/configStore";
+  import { qrCodeProps, studyProps } from "$lib/stores/configStore";
 	import { QR_PER_PAGE } from "$lib/constants";
-    import { qrDataArray } from "$lib/stores/dataStore";
+  import { qrDataArray } from "$lib/stores/dataStore";
 	import { onMount } from "svelte";
-    import QRCode from 'qrcode'; 
+  import QRCode from 'qrcode';
 	import PrintInstruction from "$lib/components/download/PrintInstruction.svelte";
 	import BackButton from "$lib/components/general/BackButton.svelte";
 
@@ -16,17 +16,18 @@
             }
         });
       });
-    
-    let numPages: number = Math.ceil($studyProps.numParticipants/QR_PER_PAGE);
+
+    let qrPerPage: number = $qrCodeProps.numColumns * $qrCodeProps.numRows;
+    let numPages: number = Math.ceil($studyProps.numParticipants/qrPerPage);
 </script>
 
 <div class="h-full">
-    <BackButton parentRoute="download" /> 
+    <BackButton parentRoute="download" />
     <PrintInstruction fileType={"QR codes"}/>
 
     {#each Array(numPages) as _, page}
-        <div class="page grid grid-cols-3 bg-white px" style:padding="20mm">
-            {#each Array(QR_PER_PAGE) as _, i}
+        <div class="page grid grid-cols-{$qrCodeProps.numColumns} bg-white px" style:padding="20mm">
+            {#each Array(qrPerPage) as _, i}
                 <div class="label p-4 overflow-hidden" >
                     <canvas class="qr-code object-contain justify-center"/>
                     {#if page * QR_PER_PAGE + i < $studyProps.numParticipants && $qrCodeProps.includeParticipantId}

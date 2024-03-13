@@ -92,6 +92,7 @@
 	const submitQrCodeProps = () => {
 		if (uniformSalivaDistances) {
 			salivaDistances = salivaDistances.fill(uniformSalivaDistance)
+			salivaDistances[0] = 0;  // first sample has to be taken immediately after waking up
 			numSampleAlarmTimes = 0;
 		}
 		qrCodeProps.update((props) => {
@@ -222,6 +223,18 @@
 						</div>
 					{/if}
 				{/if}
+				<hr class="my-4">
+				<h4>Print layout</h4>
+				<div class="flex">
+					<label class="label w-1/6">
+						<span>Number of columns</span>
+						<input class="input" type="number" min="1" max="5" bind:value={$qrCodeProps.numColumns} />
+					</label>
+					<label class="label w-1/6 mx-6">
+						<span>Number of rows</span>
+						<input class="input" type="number" min="1" max="7" bind:value={$qrCodeProps.numRows} />
+					</label>
+				</div>
 			{/if}
 		</form>
 	</Step>
