@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { studyProps } from "$lib/stores/configStore";
-	import { QR_PER_PAGE } from "$lib/constants";
+	import { studyProps, qrCodeProps } from "$lib/stores/configStore";
 	import { qrData } from "$lib/stores/dataStore";
 	import { onMount } from "svelte";
     import QRCode from 'qrcode'; 
@@ -16,8 +15,9 @@
             }
         });
       });
-    
-    let numPages: number = Math.ceil($studyProps.numSubjects/QR_PER_PAGE);
+
+    let qrPerPage: number = $qrCodeProps.numColumns * $qrCodeProps.numRows;
+    let numPages: number = Math.ceil($studyProps.numSubjects/qrPerPage);
 </script>
 
 <div class="h-full">
@@ -26,8 +26,8 @@
     <PrintInstruction fileType={"QR codes"}/>
 
     {#each Array(numPages) as _, page}
-        <div class="page grid grid-cols-3 bg-white px" style:padding="20mm">
-            {#each Array(QR_PER_PAGE) as _, i}
+        <div class="page grid grid-cols-{$qrCodeProps.numColumns} bg-white px" style:padding="20mm">
+            {#each Array(qrPerPage) as _, i}
                 <div class="label p-4 overflow-hidden" >
                     <canvas class="qr-code object-contain justify-center"/>
                 </div>
