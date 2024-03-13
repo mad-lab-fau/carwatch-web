@@ -74,7 +74,7 @@ export function extractSamplingTimes(dayData: Array<any>) {
 
 export function dataToWideFormat(data: Array<any>): Array<any> {
     // transform collected data to pandas-style wide format
-    // contains all days and samples per day in columns and all subjects in rows
+    // contains all days and samples per day in columns and all participants in rows
     let csvArray = [];
 
     // create header of csv file
@@ -82,12 +82,12 @@ export function dataToWideFormat(data: Array<any>): Array<any> {
     let sampleCount = getMaxNumberOfSamples(data);
     csvArray.push(createHeader(dayCount, sampleCount.saliva_ids));
 
-    // extract unique subjects -> one row per subject
-    let subjectArray = extractUniqueSubjects(data);
+    // extract unique participants -> one row per participant
+    let participantArray = extractUniqueParticipants(data);
 
     // create data rows
-    subjectArray.forEach(subject => {
-        csvArray.push(createSubjectRow(subject, data, sampleCount.saliva_ids));
+    participantArray.forEach(participant => {
+        csvArray.push(createParticipantRow(participant, data, sampleCount.saliva_ids));
     });
     return csvArray;
 }
@@ -104,20 +104,20 @@ function extractData(dayData: Array<any>, key: (string | string[])): Array<any> 
 }
 
 function getMaxNumberOfDays(data: Array<any>): number {
-    const subjectCount: { [subject: string]: number } = {};
-    // count number of days per subject
+    const participantCount: { [participant: string]: number } = {};
+    // count number of days per participant
     data.forEach(entry => {
-        const subject = entry.subject;
-        if (subject in subjectCount) {
-            subjectCount[subject]++;
+        const participant = entry.participant;
+        if (participant in participantCount) {
+            participantCount[participant]++;
         } else {
-            subjectCount[subject] = 1;
+            participantCount[participant] = 1;
         }
     });
     // get maximum number of days
     let maxCount = 0;
-    for (const subject in subjectCount) {
-        const count = subjectCount[subject];
+    for (const participant in participantCount) {
+        const count = participantCount[participant];
         if (count > maxCount) {
             maxCount = count;
         }
@@ -126,7 +126,7 @@ function getMaxNumberOfDays(data: Array<any>): number {
 }
 
 function getMaxNumberOfSamples(data: Array<any>): { maxCount: number, saliva_ids: Array<any> } {
-    // get maximum number of samples per day from all subjects
+    // get maximum number of samples per day from all participants
     // extract the corresponding saliva ids and use them as a reference
     let maxCount = 0;
     let saliva_ids: Array<any> = []
@@ -143,7 +143,7 @@ function getMaxNumberOfSamples(data: Array<any>): { maxCount: number, saliva_ids
 function createHeader(dayCount: number, samples: Array<any>): Array<string> {
     // create header for csv file
     let header: Array<string> = [];
-    header.push("subject");
+    header.push("participant");
     for (let i = 1; i <= dayCount; i++) {
         header.push("date" + "_D" + i);
         header.push(AWAKENING_TIME + "_D" + i);
@@ -155,22 +155,22 @@ function createHeader(dayCount: number, samples: Array<any>): Array<string> {
     return header;
 }
 
-function extractUniqueSubjects(data: Array<any>) {
-    // extract unique subject ids from data
-    let subjectArray: Array<string> = [];
+function extractUniqueParticipants(data: Array<any>) {
+    // extract unique participant ids from data
+    let participantArray: Array<string> = [];
     data.forEach(entry => {
-        if (!subjectArray.includes(entry.subject)) {
-            subjectArray.push(entry.subject);
+        if (!participantArray.includes(entry.participant)) {
+            participantArray.push(entry.participant);
         }
     });
-    return subjectArray.sort();
+    return participantArray.sort();
 }
 
-function createSubjectRow(subject: string, data: Array<any>, saliva_ids: Array<any>) {
-    // concatenate all data for one subject in one row for the final csv array
+function createParticipantRow(participant: string, data: Array<any>, saliva_ids: Array<any>) {
+    // concatenate all data for one participant in one row for the final csv array
     let row: Array<string> = [];
-    row.push(subject);
-    const relevantEntries = data.filter(entry => entry.subject === subject);
+    row.push(participant);
+    const relevantEntries = data.filter(entry => entry.participant === participant);
     relevantEntries.forEach(entry => {
         // add day
         row.push(entry.date);

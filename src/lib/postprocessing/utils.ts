@@ -85,7 +85,7 @@ async function loadIndividualFileContent(file: JSZipObject, fileName: string) {
 }
 
 function nameIsValid(fileName: string): boolean {
-    // check if the current filename has the format "studyName_subjectName_yyyymmdd.csv" 
+    // check if the current filename has the format "studyName_participantName_yyyymmdd.csv"
   
     // check if ending is ".csv"
     let csvSplit = fileName.split(".csv");
@@ -138,7 +138,7 @@ export function unixTimeToLocalTime(unixTime: number): string {
 }
 
 export function getDateFromFileName(fileName: string): string {
-    // extract date from filename, requires filename to be in format "studyName_subjectName_yyyymmdd.csv"
+    // extract date from filename, requires filename to be in format "studyName_participantName_yyyymmdd.csv"
     let basename = fileName.split(".csv")[0]
     let dateString = basename.split("_")[basename.split("_").length - 1];
     let year = dateString.slice(0, 4);
@@ -147,13 +147,13 @@ export function getDateFromFileName(fileName: string): string {
     return year + "-" + month + "-" + day;
 }
 
-export function getSubjectFromFileName(fileName: string): string {
-    // extract subject name from filename, requires filename to be in format "studyName_subjectName_yyyymmdd.csv"
-    let subjectName = "";
+export function getParticipantFromFileName(fileName: string): string {
+    // extract participant name from filename, requires filename to be in format "studyName_participantName_yyyymmdd.csv"
+    let participantName = "";
     let basename = fileName.split(".csv")[0]
     let infoArray = basename.split("_")
     if (infoArray.length > 2) {
-        subjectName = infoArray.slice(1, infoArray.length - 1).join("_");
+        participantName = infoArray.slice(1, infoArray.length - 1).join("_");
     }
-    return subjectName;
+    return participantName;
 }

@@ -7,7 +7,7 @@
 		OTHER_STUDY
 	} from "$lib/constants";
 	import { studyProps, qrCodeProps, qrCodePropsValid } from '$lib/stores/configStore';
-	import { Step } from '@skeletonlabs/skeleton';
+	import { Step, toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 	import { onMount, afterUpdate } from 'svelte';
 
 	let uniformSalivaDistances = false;
@@ -92,6 +92,7 @@
 	const submitQrCodeProps = () => {
 		if (uniformSalivaDistances) {
 			salivaDistances = salivaDistances.fill(uniformSalivaDistance)
+			salivaDistances[0] = 0;  // first sample has to be taken immediately after waking up
 			numSampleAlarmTimes = 0;
 		}
 		qrCodeProps.update((props) => {
@@ -103,6 +104,20 @@
 			};
 		});
 	};
+
+	const checkMaxQrRows = () => {
+		if ($qrCodeProps.includeParticipantId && $qrCodeProps.numRows > 5) {
+			const rows = 5;
+			const durationSec = 7;
+			$qrCodeProps.numRows = rows;
+			const t : ToastSettings = {
+				message: `The number of rows was changed to ${rows} which is the maximum allowed when including participant IDs.`,
+				timeout: durationSec * 1000,
+			};
+			toastStore.trigger(t);
+		}
+	};
+
 </script>
 
 {#if $studyProps.studyType === CAR_STUDY || $studyProps.studyType === OTHER_STUDY}
@@ -125,6 +140,10 @@
 				<hr class="my-4">
 
 				<div class="space-y-2">
+					<label class="flex items-center space-x-2">
+						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.includeParticipantId} on:change={checkMaxQrRows} />
+						<p>Include participant IDs in QR Codes</p>
+					</label>
 					<label class="flex items-center space-x-2">
 						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.checkDuplicates} />
 						<p>Enable check for duplicate barcode scanning (scanning the same barcode twice will result in error message)</p>
@@ -218,6 +237,18 @@
 						</div>
 					{/if}
 				{/if}
+				<hr class="my-4">
+				<h4>Print layout</h4>
+				<div class="flex">
+					<label class="label w-1/6">
+						<span>Number of columns</span>
+						<input class="input" type="number" min="1" max="5" bind:value={$qrCodeProps.numColumns} />
+					</label>
+					<label class="label w-1/6 mx-6">
+						<span>Number of rows</span>
+						<input class="input" type="number" min="1" max="{$qrCodeProps.includeParticipantId ? 5 : 7}" bind:value={$qrCodeProps.numRows} />
+					</label>
+				</div>
 			{/if}
 		</form>
 	</Step>
