@@ -3,12 +3,14 @@
 	import '../app.postcss';
 	import '../theme.postcss';
 
-	import { AppRail, AppRailAnchor, AppShell, LightSwitch } from '@skeletonlabs/skeleton';
+	import { AppRail, AppRailAnchor, AppShell, LightSwitch, Toast } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
 	import  Footer  from '$lib/components/general/Footer.svelte'
 	import { base } from '$app/paths';
 </script>
- 
+
+<Toast />
+
 <AppShell>
 	
 	<svelte:fragment slot="sidebarLeft">

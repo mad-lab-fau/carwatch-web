@@ -1,6 +1,5 @@
 <script lang="ts">
   import { qrCodeProps, studyProps } from "$lib/stores/configStore";
-	import { QR_PER_PAGE } from "$lib/constants";
   import { qrDataArray } from "$lib/stores/dataStore";
 	import { onMount } from "svelte";
   import QRCode from 'qrcode';
@@ -30,8 +29,8 @@
             {#each Array(qrPerPage) as _, i}
                 <div class="label p-4 overflow-hidden" >
                     <canvas class="qr-code object-contain justify-center"/>
-                    {#if page * QR_PER_PAGE + i < $studyProps.numParticipants && $qrCodeProps.includeParticipantId}
-                        <p class="absolute text-black px-2" style:bottom=0>{$studyProps.participantList[page * QR_PER_PAGE + i]}</p>
+                    {#if $qrCodeProps.includeParticipantId && page * qrPerPage + i < $studyProps.numParticipants}
+                        <p class="absolute text-black px-2 pt-135">{$studyProps.participantList[page * qrPerPage + i]}</p>
                     {/if}
                 </div>
             {/each}

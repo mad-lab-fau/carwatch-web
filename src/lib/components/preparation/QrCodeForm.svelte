@@ -7,7 +7,7 @@
 		OTHER_STUDY
 	} from "$lib/constants";
 	import { studyProps, qrCodeProps, qrCodePropsValid } from '$lib/stores/configStore';
-	import { Step } from '@skeletonlabs/skeleton';
+	import { Step, toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 	import { onMount, afterUpdate } from 'svelte';
 
 	let uniformSalivaDistances = false;
@@ -104,6 +104,20 @@
 			};
 		});
 	};
+
+	const checkMaxQrRows = () => {
+		if ($qrCodeProps.includeParticipantId && $qrCodeProps.numRows > 5) {
+			const rows = 5;
+			const durationSec = 7;
+			$qrCodeProps.numRows = rows;
+			const t : ToastSettings = {
+				message: `The number of rows was changed to ${rows} which is the maximum allowed when including participant IDs.`,
+				timeout: durationSec * 1000,
+			};
+			toastStore.trigger(t);
+		}
+	};
+
 </script>
 
 {#if $studyProps.studyType === CAR_STUDY || $studyProps.studyType === OTHER_STUDY}
@@ -127,7 +141,7 @@
 
 				<div class="space-y-2">
 					<label class="flex items-center space-x-2">
-						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.includeParticipantId} />
+						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.includeParticipantId} on:change={checkMaxQrRows} />
 						<p>Include participant IDs in QR Codes</p>
 					</label>
 					<label class="flex items-center space-x-2">
@@ -232,7 +246,7 @@
 					</label>
 					<label class="label w-1/6 mx-6">
 						<span>Number of rows</span>
-						<input class="input" type="number" min="1" max="7" bind:value={$qrCodeProps.numRows} />
+						<input class="input" type="number" min="1" max="{$qrCodeProps.includeParticipantId ? 5 : 7}" bind:value={$qrCodeProps.numRows} />
 					</label>
 				</div>
 			{/if}
