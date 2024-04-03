@@ -148,10 +148,6 @@
 						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.checkDuplicates} />
 						<p>Enable check for duplicate barcode scanning (scanning the same barcode twice will result in error message)</p>
 					</label>
-					<label class="flex items-center space-x-2">
-						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.enableManualScan} />
-						<p>Enable manual scanning mode (allows to manually scan barcodes apart from being prompted by the <i>CARWatch</i> application)</p>
-					</label>
 
 					{#if $studyProps.numSamples > 1}
 						<hr class="my-4">
