@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { base } from "$app/paths";
 	import PrintInstruction from "$lib/components/download/PrintInstruction.svelte";
-  import { barcodeProps, qrCodeProps } from "$lib/stores/configStore";
+  import { barcodeProps } from "$lib/stores/configStore";
 	import { A4_HEIGHT, A4_WIDTH, LETTER_WIDTH, LETTER_HEIGHT } from "$lib/constants";
   import { barcodeDataArray, captionArray} from "$lib/stores/dataStore";
-  import { cssVariables } from "$lib/components/download/util";
   import JsBarcode from 'jsbarcode';
 	import { onMount } from "svelte";
 	import { tick } from "svelte";
@@ -31,8 +30,6 @@
     // page properties
     let width = $barcodeProps.useLetterFormat ? "8.5in" : "210mm";
     let height = $barcodeProps.useLetterFormat ? "11in" : "297mm";
-    let cssFile = $qrCodeProps.useLetterFormat ? "../print_letter.css" : "../print_a4.css";
-    import(cssFile);
     let colDist = $barcodeProps.colDist + "mm";
     let rowDist = $barcodeProps.rowDist + "mm";
     let paddingRight= $barcodeProps.rightMargin + "mm"; 
@@ -52,13 +49,12 @@
 </script>
 
 
-
 <div class="h-full">
     <BackButton parentRoute="download" />
 
     <PrintInstruction fileType={"barcodes"}/>
     {#each Array(numPages) as _, page}
-        <div use:cssVariables={{width, height}} class="page grid grid-cols-{`${$barcodeProps.numCols}`} bg-white" style:gap={`${rowDist} ${colDist}`} style:padding-top={paddingTop} style:padding-bottom={paddingBottom} style:padding-left={paddingLeft} style:padding-right={paddingRight}>
+        <div class="page grid grid-cols-{`${$barcodeProps.numCols}`} bg-white" style="--width: {width}; --height: {height}" style:gap={`${rowDist} ${colDist}`} style:padding-top={paddingTop} style:padding-bottom={paddingBottom} style:padding-left={paddingLeft} style:padding-right={paddingRight}>
             {#each Array(cellsPerPage) as _, i}
                 {#if !(page*cellsPerPage + i >= numBarcodes)}
                 <div class="label p-2 overflow-hidden" style="--label-width: {labelWidth}; --label-height: {labelHeight}">
@@ -122,6 +118,11 @@
             margin-top: 10mm;
             background: white;
             outline: 3px #000000 solid;
+        }
+
+        @page {
+            size: auto;
+            margin: 0;
         }
 
         @media print {

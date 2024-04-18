@@ -106,8 +106,10 @@
 	};
 
 	const checkMaxQrRows = () => {
-		if ($qrCodeProps.includeParticipantId && $qrCodeProps.numRows > 5) {
-			const rows = 5;
+		const maxRows = getMaxQrRows();
+
+		if ($qrCodeProps.numRows > maxRows) {
+			const rows = maxRows;
 			const durationSec = 7;
 			$qrCodeProps.numRows = rows;
 			const t : ToastSettings = {
@@ -116,6 +118,10 @@
 			};
 			toastStore.trigger(t);
 		}
+	};
+
+	const getMaxQrRows = () => {
+		return $qrCodeProps.includeParticipantId ? 5 : $qrCodeProps.useLetterFormat ? 6 : 7;
 	};
 
 </script>
@@ -236,7 +242,7 @@
 				<hr class="my-4">
 				<h4>Print layout</h4>
 				<label class="flex items-center space-x-2 my-3">
-					<input class="checkbox" id="use_letter_format" type="checkbox" bind:checked={$qrCodeProps.useLetterFormat}>
+					<input class="checkbox" id="use_letter_format" type="checkbox" bind:checked={$qrCodeProps.useLetterFormat} on:change={checkMaxQrRows}>
 					<p>Use ANSI letter format (11 in &times; 8.5 in) instead of A4 (297 mm &times; 210 mm)</p>
 				</label>
 				<div class="flex">
@@ -246,7 +252,7 @@
 					</label>
 					<label class="label w-1/6 mx-6">
 						<span>Number of rows</span>
-						<input class="input" type="number" min="1" max="{$qrCodeProps.includeParticipantId ? 5 : 7}" bind:value={$qrCodeProps.numRows} />
+						<input class="input" type="number" min="1" max="{$qrCodeProps.includeParticipantId ? 5 : $qrCodeProps.useLetterFormat ? 6 : 7}" bind:value={$qrCodeProps.numRows} />
 					</label>
 				</div>
 			{/if}

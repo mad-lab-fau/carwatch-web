@@ -2,7 +2,6 @@
   import { qrCodeProps, studyProps } from "$lib/stores/configStore";
   import { qrDataArray } from "$lib/stores/dataStore";
 	import { onMount } from "svelte";
-  import { cssVariables } from "$lib/components/download/util";
   import QRCode from 'qrcode';
 	import PrintInstruction from "$lib/components/download/PrintInstruction.svelte";
 	import BackButton from "$lib/components/general/BackButton.svelte";
@@ -21,8 +20,6 @@
     let height = $qrCodeProps.useLetterFormat ? "11in" : "297mm";
     let qrPerPage: number = $qrCodeProps.numColumns * $qrCodeProps.numRows;
     let numPages: number = Math.ceil($studyProps.numParticipants/qrPerPage);
-    let cssFile = $qrCodeProps.useLetterFormat ? "../print_letter.css" : "../print_a4.css";
-    import(cssFile);
 </script>
 
 <div class="h-full">
@@ -30,7 +27,7 @@
     <PrintInstruction fileType={"QR codes"}/>
 
     {#each Array(numPages) as _, page}
-        <div use:cssVariables={{width, height}} class="page grid grid-cols-{$qrCodeProps.numColumns} bg-white px" style:padding="20mm">
+        <div class="page grid grid-cols-{$qrCodeProps.numColumns} bg-white px" style="--width: {width}; --height: {height}" style:padding="20mm">
             {#each Array(qrPerPage) as _, i}
                 <div class="label p-4 overflow-hidden" >
                     <canvas class="qr-code object-contain justify-center"/>
@@ -67,6 +64,11 @@
         margin-bottom: 10mm;
         background: white;
         outline: 3px #000000 solid;
+    }
+
+    @page {
+        size: auto;
+        margin: 0;
     }
    
     @media print {
