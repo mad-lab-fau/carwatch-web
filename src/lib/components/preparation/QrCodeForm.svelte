@@ -235,6 +235,10 @@
 				{/if}
 				<hr class="my-4">
 				<h4>Print layout</h4>
+				<label class="flex items-center space-x-2 my-3">
+					<input class="checkbox" id="use_letter_format" type="checkbox" bind:checked={$qrCodeProps.useLetterFormat}>
+					<p>Use ANSI letter format (11 in &times; 8.5 in) instead of A4 (297 mm &times; 210 mm)</p>
+				</label>
 				<div class="flex">
 					<label class="label w-1/6">
 						<span>Number of columns</span>

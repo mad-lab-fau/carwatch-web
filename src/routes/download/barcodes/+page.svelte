@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { base } from "$app/paths";
 	import PrintInstruction from "$lib/components/download/PrintInstruction.svelte";
-import { barcodeProps } from "$lib/stores/configStore";
-	import { A4_HEIGHT, A4_WIDTH } from "$lib/constants";
-    import { barcodeDataArray, captionArray} from "$lib/stores/dataStore";
-    import JsBarcode from 'jsbarcode';
+  import { barcodeProps, qrCodeProps } from "$lib/stores/configStore";
+	import { A4_HEIGHT, A4_WIDTH, LETTER_WIDTH, LETTER_HEIGHT } from "$lib/constants";
+  import { barcodeDataArray, captionArray} from "$lib/stores/dataStore";
+  import { cssVariables } from "$lib/components/download/util";
+  import JsBarcode from 'jsbarcode';
 	import { onMount } from "svelte";
 	import { tick } from "svelte";
 	import BackButton from "$lib/components/general/BackButton.svelte";
@@ -28,6 +29,10 @@ import { barcodeProps } from "$lib/stores/configStore";
     });
 
     // page properties
+    let width = $barcodeProps.useLetterFormat ? "8.5in" : "210mm";
+    let height = $barcodeProps.useLetterFormat ? "11in" : "297mm";
+    let cssFile = $qrCodeProps.useLetterFormat ? "../print_letter.css" : "../print_a4.css";
+    import(cssFile);
     let colDist = $barcodeProps.colDist + "mm";
     let rowDist = $barcodeProps.rowDist + "mm";
     let paddingRight= $barcodeProps.rightMargin + "mm"; 
@@ -38,9 +43,11 @@ import { barcodeProps } from "$lib/stores/configStore";
     // label properties
     let cellsPerPage = $barcodeProps.numRows * $barcodeProps.numCols;
     let numBarcodes = $barcodeDataArray.length 
-    let numPages: number = Math.ceil(numBarcodes / cellsPerPage);
-    let labelWidth = (A4_WIDTH - $barcodeProps.leftMargin - $barcodeProps.rightMargin - $barcodeProps.colDist * ($barcodeProps.numCols - 1)) / $barcodeProps.numCols + "mm";
-    let labelHeight = (A4_HEIGHT - $barcodeProps.topMargin - $barcodeProps.bottomMargin - $barcodeProps.rowDist * ($barcodeProps.numRows - 1)) / $barcodeProps.numRows + "mm";
+    let numPages: number = Math.ceil(numBarcodes / cellsPerPage)
+    let pageWidth = $barcodeProps.useLetterFormat ? LETTER_WIDTH : A4_WIDTH;
+    let pageHeight = $barcodeProps.useLetterFormat ? LETTER_HEIGHT : A4_HEIGHT;
+    let labelWidth = (pageWidth - $barcodeProps.leftMargin - $barcodeProps.rightMargin - $barcodeProps.colDist * ($barcodeProps.numCols - 1)) / $barcodeProps.numCols + "mm";
+    let labelHeight = (pageHeight - $barcodeProps.topMargin - $barcodeProps.bottomMargin - $barcodeProps.rowDist * ($barcodeProps.numRows - 1)) / $barcodeProps.numRows + "mm";
 
 </script>
 
@@ -51,7 +58,7 @@ import { barcodeProps } from "$lib/stores/configStore";
 
     <PrintInstruction fileType={"barcodes"}/>
     {#each Array(numPages) as _, page}
-        <div class="page grid grid-cols-{`${$barcodeProps.numCols}`} bg-white" style:gap={`${rowDist} ${colDist}`} style:padding-top={paddingTop} style:padding-bottom={paddingBottom} style:padding-left={paddingLeft} style:padding-right={paddingRight}>
+        <div use:cssVariables={{width, height}} class="page grid grid-cols-{`${$barcodeProps.numCols}`} bg-white" style:gap={`${rowDist} ${colDist}`} style:padding-top={paddingTop} style:padding-bottom={paddingBottom} style:padding-left={paddingLeft} style:padding-right={paddingRight}>
             {#each Array(cellsPerPage) as _, i}
                 {#if !(page*cellsPerPage + i >= numBarcodes)}
                 <div class="label p-2 overflow-hidden" style="--label-width: {labelWidth}; --label-height: {labelHeight}">
@@ -108,19 +115,15 @@ import { barcodeProps } from "$lib/stores/configStore";
      
         .page {
             /*A4 format*/
-            width: 210mm;
-            height: 297mm;
+            width: var(--width);
+            height: var(--height);
             /*distance between pages*/
             margin-left: 10mm;
             margin-top: 10mm;
             background: white;
             outline: 3px #000000 solid;
         }
-       
-        @page {
-            size: A4;
-            margin: 0;
-        }
+
         @media print {
             * {
                 overflow: visible !important;
@@ -133,8 +136,8 @@ import { barcodeProps } from "$lib/stores/configStore";
             }
      
             .page {
-                width: 210mm;
-                height: 297mm;
+                width: var(--width);
+                height: var(--height);
                 margin: 0;
                 border: initial;
                 border-radius: initial;

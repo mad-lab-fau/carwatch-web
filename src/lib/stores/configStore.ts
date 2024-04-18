@@ -21,6 +21,7 @@ interface BarcodeProperties {
   generateBarcodes: boolean;
   hasBarcode: boolean;
   addName: boolean;
+  useLetterFormat: boolean;
   numCols: number, 
   numRows: number, 
   leftMargin: number, 
@@ -40,6 +41,7 @@ interface QrCodeProperties {
   includeParticipantId: boolean;
   checkDuplicates: boolean;
   enableManualScan: boolean;
+  useLetterFormat: boolean;
   numColumns: number,
   numRows: number,
 }
@@ -57,8 +59,8 @@ if (browser) {
 
 // Create the base stores for each data type
 const defaultStudyProps: StudyProperties = { studyName: 'Test', numDays: 1, numSamples: 2, samplePrefix: "S", readParticipantsFromFile: false, numParticipants: 1, participantList: [], participantColumn: 'participant', participantPrefix: 'VP_', hasEveningSample: false, startSampleFromZero: false, studyType: STUDY_TYPES[0] }
-const defaultBarcodeProps: BarcodeProperties = { generateBarcodes: true, hasBarcode: false, addName: false, numCols: 4, numRows: 12, leftMargin: 9.8, rightMargin: 9.8, topMargin: 21.2, bottomMargin: 21.2, colDist: 2.5, rowDist: 0 }
-const defaultQrCodeProps: QrCodeProperties = { generateQrCodes: true, numSampleAlarmTimes: 0, salivaDistances: [], salivaAlarmTimes: [], contact: '', includeParticipantId: false, checkDuplicates: false, enableManualScan: false, numColumns: 3, numRows: 6 }
+const defaultBarcodeProps: BarcodeProperties = { generateBarcodes: true, hasBarcode: false, addName: false, useLetterFormat: false, numCols: 4, numRows: 12, leftMargin: 9.8, rightMargin: 9.8, topMargin: 21.2, bottomMargin: 21.2, colDist: 2.5, rowDist: 0 }
+const defaultQrCodeProps: QrCodeProperties = { generateQrCodes: true, numSampleAlarmTimes: 0, salivaDistances: [], salivaAlarmTimes: [], contact: '', includeParticipantId: false, checkDuplicates: false, enableManualScan: false, useLetterFormat: false, numColumns: 3, numRows: 6 }
 
 // Create the stores
 export const studyProps = storedStudyProps ? writable<StudyProperties>(JSON.parse(storedStudyProps)) : writable<StudyProperties>(defaultStudyProps);

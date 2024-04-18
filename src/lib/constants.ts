@@ -30,3 +30,5 @@ export const FORBIDDEN_CHARACTERS = [QR_PARSER_LIST_SEPARATOR, QR_PARSER_SEPARAT
 
 export const A4_WIDTH = 210;
 export const A4_HEIGHT = 297;
+export const LETTER_WIDTH = 215.9;
+export const LETTER_HEIGHT = 279.4;

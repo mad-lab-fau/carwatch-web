@@ -82,6 +82,10 @@
 		</label>
 		<hr class="my-4">
 		<h4>Print label layout:</h4>
+		<label class="flex items-center space-x-2 my-3">
+			<input class="checkbox" id="use_letter_format" type="checkbox" bind:checked={$barcodeProps.useLetterFormat}>
+			<p>Use ANSI letter format (11 in &times; 8.5 in) instead of A4 (297 mm &times; 210 mm)</p>
+		</label>
 		<label class="label md:w-1/3 my-4">
 			<span>Layout preset</span>
 			<select class="select" name="studyType" bind:value={layoutPresetId} on:change={insertPresetValues}>
