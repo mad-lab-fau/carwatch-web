@@ -154,6 +154,10 @@
 						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.checkDuplicates} />
 						<p>Enable check for duplicate barcode scanning (scanning the same barcode twice will result in error message)</p>
 					</label>
+					<label class="flex items-center space-x-2">
+						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.useSleepData} />
+						<p>Collect sleep data from Google Fit</p>
+					</label>
 
 					{#if $studyProps.numSamples > 1}
 						<hr class="my-4">
