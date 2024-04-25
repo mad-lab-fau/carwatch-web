@@ -2,6 +2,7 @@ import { objectIsEmpty, unixTimeToLocalTime } from "./utils";
 
 const PROP_AWAKENING_TYPES: { [key: string]: string } = { "spontaneous_awakening": "self-report", "alarm_stop": "alarm" }
 const PROP_SAMPLING_TIME = "barcode_scanned";
+const PROP_RECORDED_AWAKENING_TIME = "recorded_wake_up_time";
 
 const PROP_EVENING_ID = 815;
 
@@ -12,6 +13,10 @@ const SAMPLING_TIME = "sampling_time";
 const SAMPLING_INFO = "sampling_info";
 const SAMPLING_COUNT = "sample_count";
 const SALIVA_ID = "saliva_id";
+
+const COL_UNIX_TIME = 0;
+const COL_LOG_MSG_KEY = 1;
+const COL_DATA = 2;
 
 export function collectData(dayData: Array<any>): { [key: string]: any } {
     // collect awakening and sampling info
@@ -33,14 +38,16 @@ export function extractAwakeningInfo(dayData: Array<any>) {
     // return object with properties awakening time and type
     // returns empty object if no suitable information contained in dayData
     let data = extractData(dayData, Object.keys(PROP_AWAKENING_TYPES));
+    let googleFitAwakeningData = extractData(dayData, PROP_RECORDED_AWAKENING_TIME);
     let result: { [key: string]: any } = {};
     if (data.length > 0) {
         data = data[0];
     }
-    if (PROP_AWAKENING_TYPES.hasOwnProperty(data[1])) {
-        let type = PROP_AWAKENING_TYPES[data[1]];
-        let time = unixTimeToLocalTime(+data[0]);
-        result = { "awakening_time": time, "awakening_type": type };
+    let googleFitAwakening = googleFitAwakeningData.length > 0 ? unixTimeToLocalTime(+googleFitAwakeningData[0][COL_UNIX_TIME]) : "";
+    if (PROP_AWAKENING_TYPES.hasOwnProperty(data[COL_LOG_MSG_KEY])) {
+        let type = PROP_AWAKENING_TYPES[data[COL_LOG_MSG_KEY]];
+        let time = unixTimeToLocalTime(+data[COL_UNIX_TIME]);
+        result = { "awakening_time": time, "awakening_type": type, "google_fit": googleFitAwakening };
     }
     return result;
 }
@@ -52,9 +59,9 @@ export function extractSamplingTimes(dayData: Array<any>) {
     let result: { [key: string]: any } = {};
     if (samples.length > 0) {
         result = samples.map((entry) => {
-            const timestamp = unixTimeToLocalTime(+entry[0]);
-            const json = JSON.parse(entry[2]);
-            var saliva_id = "";
+            const timestamp = unixTimeToLocalTime(+entry[COL_UNIX_TIME]);
+            const json = JSON.parse(entry[COL_DATA]);
+            let saliva_id = "";
             if (json.hasOwnProperty("sample_expected")) {
                 // logs from newer app versions
                 saliva_id = json.sample_expected;
@@ -80,7 +87,7 @@ export function dataToWideFormat(data: Array<any>): Array<any> {
     // create header of csv file
     let dayCount = getMaxNumberOfDays(data);
     let sampleCount = getMaxNumberOfSamples(data);
-    csvArray.push(createHeader(dayCount, sampleCount.saliva_ids));
+    csvArray.push(createHeader(dayCount, sampleCount.saliva_ids, hasGoogleFitData(data)));
 
     // extract unique participants -> one row per participant
     let participantArray = extractUniqueParticipants(data);
@@ -96,9 +103,9 @@ function extractData(dayData: Array<any>, key: (string | string[])): Array<any> 
     // extract data from dayData that matches key
     let result = [];
     if (typeof key === "string") {
-        result = dayData.filter(entry => entry[1] === key);
+        result = dayData.filter(entry => entry[COL_LOG_MSG_KEY] === key);
     } else if (Array.isArray(key) && key.length > 0) {
-        result = dayData.filter(entry => key.includes(entry[1]));
+        result = dayData.filter(entry => key.includes(entry[COL_LOG_MSG_KEY]));
     }
     return result;
 }
@@ -140,13 +147,21 @@ function getMaxNumberOfSamples(data: Array<any>): { maxCount: number, saliva_ids
     return { maxCount: maxCount, saliva_ids: saliva_ids };
 }
 
-function createHeader(dayCount: number, samples: Array<any>): Array<string> {
+function hasGoogleFitData(data: Array<any>): boolean {
+    return data.filter(entry => entry[AWAKENING_INFO].google_fit !== "").length !== 0;
+}
+
+function createHeader(dayCount: number, samples: Array<any>, withGoogleFit: boolean): Array<string> {
     // create header for csv file
     let header: Array<string> = [];
-    header.push("participant");
+    header.push("Study Name");
+    header.push("Participant ID");
     for (let i = 1; i <= dayCount; i++) {
         header.push("date" + "_D" + i);
-        header.push(AWAKENING_TIME + "_D" + i);
+        if (withGoogleFit) {
+            header.push(AWAKENING_TIME + " D" + i + " (google fit)");
+        }
+        header.push(AWAKENING_TIME + "_D" + i + " (app)");
         header.push(AWAKENING_TYPE + "_D" + i);
         samples.forEach(sample => {
             header.push(SAMPLING_TIME + "_" + sample + "_D" + i);

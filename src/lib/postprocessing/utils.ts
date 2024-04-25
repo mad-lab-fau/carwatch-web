@@ -75,7 +75,7 @@ function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
 async function loadIndividualFileContent(file: JSZipObject, fileName: string) {
     // parse csv file content
     const fileContent = await file.async('string');
-    let zipEntryContent = { name: "", data: [] };
+    let zipEntryContent = { name: "", data: {} };
     zipEntryContent.name = fileName;
     zipEntryContent.data = Papa.parse(
         fileContent,
@@ -139,21 +139,39 @@ export function unixTimeToLocalTime(unixTime: number): string {
 
 export function getDateFromFileName(fileName: string): string {
     // extract date from filename, requires filename to be in format "studyName_participantName_yyyymmdd.csv"
+    return splitLogFileName(fileName).date;
+}
+
+export function getStudyFromFileName(fileName: string): string {
+    return splitLogFileName(fileName).study;
+}
+
+export function getParticipantFromFileName(fileName: string): string {
+    // extract participant name from filename, requires filename to be in format "carwatch_{studyName}_{participantName}_yyyymmdd.csv"
+    return splitLogFileName(fileName).participant;
+}
+
+function splitLogFileName(fileName: string): {date: string, study: string, participant: string} {
+    let date = "";
+    let study = "";
+    let participant = "";
+
     let basename = fileName.split(".csv")[0]
+
+    basename = basename.replace("carwatch_","")
+    basename = basename.split('\\')[basename.split('\\').length - 1];
+    basename = basename.split('/')[basename.split('/').length - 1];
+    let infoArray = basename.split("_")
+    if (infoArray.length > 2) {
+        participant = infoArray.slice(1, infoArray.length - 1).join("_");
+        study = infoArray[0];
+    }
+
     let dateString = basename.split("_")[basename.split("_").length - 1];
     let year = dateString.slice(0, 4);
     let month = dateString.slice(4, 6);
     let day = dateString.slice(6, 8);
-    return year + "-" + month + "-" + day;
-}
+    date = year + "-" + month + "-" + day;
 
-export function getParticipantFromFileName(fileName: string): string {
-    // extract participant name from filename, requires filename to be in format "studyName_participantName_yyyymmdd.csv"
-    let participantName = "";
-    let basename = fileName.split(".csv")[0]
-    let infoArray = basename.split("_")
-    if (infoArray.length > 2) {
-        participantName = infoArray.slice(1, infoArray.length - 1).join("_");
-    }
-    return participantName;
+    return {date, study, participant};
 }
