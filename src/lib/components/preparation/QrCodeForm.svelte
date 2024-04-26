@@ -183,7 +183,6 @@
 					<hr class="my-4">
 				{/if}
 
-				{#if $studyProps.numSamples > 1}
 				<h4>Times for biomarker samples</h4>
 					{#if uniformSalivaDistances}
 						<div class="h-full max-h-72 py-2 md:w-1/4 p overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
@@ -238,7 +237,6 @@
 							{/each}
 						</div>
 					{/if}
-				{/if}
 				<hr class="my-4">
 				<h4>Print layout</h4>
 				<label class="flex items-center space-x-2 my-3">
