@@ -30,7 +30,7 @@
         <div class="page grid grid-cols-{$qrCodeProps.numColumns} bg-white px" style="--width: {width}; --height: {height}" style:padding="20mm">
             {#each Array(qrPerPage) as _, i}
                 <div class="label p-4 overflow-hidden" >
-                    <canvas class="qr-code object-contain justify-center"/>
+                    <canvas class="qr-code object-contain justify-center" style="max-height:  145px; max-width: 145px"/>
                     {#if $qrCodeProps.includeParticipantId && page * qrPerPage + i < $studyProps.numParticipants}
                         <p class="absolute text-black px-2 pt-135">{$studyProps.participantList[page * qrPerPage + i]}</p>
                     {/if}
