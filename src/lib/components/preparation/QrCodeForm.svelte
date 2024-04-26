@@ -7,7 +7,7 @@
 		OTHER_STUDY
 	} from "$lib/constants";
 	import { studyProps, qrCodeProps, qrCodePropsValid } from '$lib/stores/configStore';
-	import { Step } from '@skeletonlabs/skeleton';
+	import { Step, toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 	import { onMount, afterUpdate } from 'svelte';
 
 	let uniformSalivaDistances = false;
@@ -92,6 +92,7 @@
 	const submitQrCodeProps = () => {
 		if (uniformSalivaDistances) {
 			salivaDistances = salivaDistances.fill(uniformSalivaDistance)
+			salivaDistances[0] = 0;  // first sample has to be taken immediately after waking up
 			numSampleAlarmTimes = 0;
 		}
 		qrCodeProps.update((props) => {
@@ -103,6 +104,26 @@
 			};
 		});
 	};
+
+	const checkMaxQrRows = () => {
+		const maxRows = getMaxQrRows();
+
+		if ($qrCodeProps.numRows > maxRows) {
+			const rows = maxRows;
+			const durationSec = 7;
+			$qrCodeProps.numRows = rows;
+			const t : ToastSettings = {
+				message: `The number of rows was changed to ${rows} which is the maximum allowed when including participant IDs.`,
+				timeout: durationSec * 1000,
+			};
+			toastStore.trigger(t);
+		}
+	};
+
+	const getMaxQrRows = () => {
+		return $qrCodeProps.includeParticipantId ? 5 : $qrCodeProps.useLetterFormat ? 6 : 7;
+	};
+
 </script>
 
 {#if $studyProps.studyType === CAR_STUDY || $studyProps.studyType === OTHER_STUDY}
@@ -126,12 +147,12 @@
 
 				<div class="space-y-2">
 					<label class="flex items-center space-x-2">
-						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.checkDuplicates} />
-						<p>Enable check for duplicate barcode scanning (scanning the same barcode twice will result in error message)</p>
+						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.includeParticipantId} on:change={checkMaxQrRows} />
+						<p>Include participant IDs in QR Codes</p>
 					</label>
 					<label class="flex items-center space-x-2">
-						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.enableManualScan} />
-						<p>Enable manual scanning mode (allows to manually scan barcodes apart from being prompted by the <i>CARWatch</i> application)</p>
+						<input class="checkbox" type="checkbox" bind:checked={$qrCodeProps.checkDuplicates} />
+						<p>Enable check for duplicate barcode scanning (scanning the same barcode twice will result in error message)</p>
 					</label>
 
 					{#if $studyProps.numSamples > 1}
@@ -162,7 +183,6 @@
 					<hr class="my-4">
 				{/if}
 
-				{#if $studyProps.numSamples > 1}
 				<h4>Times for biomarker samples</h4>
 					{#if uniformSalivaDistances}
 						<div class="h-full max-h-72 py-2 md:w-1/4 p overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
@@ -217,7 +237,22 @@
 							{/each}
 						</div>
 					{/if}
-				{/if}
+				<hr class="my-4">
+				<h4>Print layout</h4>
+				<label class="flex items-center space-x-2 my-3">
+					<input class="checkbox" id="use_letter_format" type="checkbox" bind:checked={$qrCodeProps.useLetterFormat} on:change={checkMaxQrRows}>
+					<p>Use ANSI letter format (11 in &times; 8.5 in) instead of A4 (297 mm &times; 210 mm)</p>
+				</label>
+				<div class="flex">
+					<label class="label w-1/6">
+						<span>Number of columns</span>
+						<input class="input" type="number" min="1" max="5" bind:value={$qrCodeProps.numColumns} />
+					</label>
+					<label class="label w-1/6 mx-6">
+						<span>Number of rows</span>
+						<input class="input" type="number" min="1" max="{$qrCodeProps.includeParticipantId ? 5 : $qrCodeProps.useLetterFormat ? 6 : 7}" bind:value={$qrCodeProps.numRows} />
+					</label>
+				</div>
 			{/if}
 		</form>
 	</Step>

@@ -1,8 +1,14 @@
 <script lang="ts">
 	import { collectData, dataToWideFormat } from '$lib/postprocessing/logCleaning';
-	import { extractZip, getDateFromFileName, getSubjectFromFileName, objectIsEmpty } from '$lib/postprocessing/utils';
+	import {
+		extractZip,
+		getDateFromFileName,
+		getParticipantFromFileName,
+		getStudyFromFileName,
+		objectIsEmpty
+	} from '$lib/postprocessing/utils';
 	import { FileDropzone, toastStore, type ToastSettings, Toast } from '@skeletonlabs/skeleton';
-    import Papa from 'papaparse';
+	import Papa from 'papaparse';
 	import SelectedFileList from './SelectedFileList.svelte';
 
 	export let files: FileList = <FileList>{};
@@ -21,9 +27,10 @@
 		extractZip(files).then((data) => {
 			let result = data.map((file: { name: string, data: any[] }) => {
 				let date = getDateFromFileName(file.name);
-				let subject = getSubjectFromFileName(file.name);
+				let studyName = getStudyFromFileName(file.name)
+				let participant = getParticipantFromFileName(file.name);
 				let info = collectData(file.data);
-				return {subject: subject, date: date, info: info} 
+				return {study: studyName, participant: participant, date: date, info: info}
 			})
 			.filter((entry) => !objectIsEmpty(entry.info));
 			let csvArray = dataToWideFormat(result);
