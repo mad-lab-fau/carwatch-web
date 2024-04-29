@@ -30,7 +30,7 @@
 			for(let id of idList) {
 				let element = document.getElementById(id);
 				if(element instanceof HTMLInputElement){
-					if(!(element.reportValidity())){
+					if(!element.checkValidity()){
 						return false;
 					}
 				}

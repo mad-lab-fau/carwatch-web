@@ -75,7 +75,7 @@
 		}
 		for (let id of idList) {
 			let element = document.getElementById(id);
-			if (element instanceof HTMLInputElement && !element.reportValidity()) {
+			if (element instanceof HTMLInputElement && !element.checkValidity()) {
 				return false;
 			}
 		}
@@ -216,7 +216,8 @@
 										id="distance{i}"
 										type="number"
 										bind:value={salivaDistances[i]}
-										on:input={salivaListChanged}/>
+										on:input={salivaListChanged}
+										required />
 									<div class="input-group-shim">min</div>
 								</div>
 							{/each}
@@ -232,7 +233,8 @@
 										id="time{i}"
 										type="time"
 										bind:value={salivaTimes[i]}
-										on:input={salivaListChanged}/>
+										on:input={salivaListChanged}
+										required />
 								</div>
 							{/each}
 						</div>
