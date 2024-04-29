@@ -17,7 +17,7 @@
     $: $studyProps, studyPropsValid.set(isValid());
 
     function isValid(){
-      let permanentIdList = ["study_name", "num_days", "num_samples", "pref_bio"]
+      let permanentIdList = ["study_name", "num_days", "num_samples", "prefix_bio"]
       let optionalIdList = ["num_participants"]
       if (!validateInputsFromList(permanentIdList)){
         return false;
@@ -41,7 +41,7 @@
       for(let id of list) {
           let element = document.getElementById(id);
           if(element instanceof HTMLInputElement){
-            if(!(element.reportValidity())){
+            if(!(element.checkValidity())) {
               return false;
             }
           }
