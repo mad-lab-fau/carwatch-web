@@ -48,7 +48,12 @@
 					let caption = '';
 					if ($barcodeProps.addName) {
 						caption += studyName + '_';
+
+						if (!$barcodeProps.hasBarcode) {
+							caption += '<wbr>_';
+						}
 					}
+
 					// special case: evening sample referred to a "A"
 					let sampleCaption = sample.toString();
 					if (sample == lastSampleId && $studyProps.hasEveningSample) {

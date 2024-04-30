@@ -25,6 +25,10 @@
                 });  
             }); 
         }
+
+        document.querySelectorAll('.adjust-text-size').forEach(element => {
+            adjustFontSize(element);
+        })
     });
 
     // page properties
@@ -46,6 +50,15 @@
     let labelWidth = (pageWidth - $barcodeProps.leftMargin - $barcodeProps.rightMargin - $barcodeProps.colDist * ($barcodeProps.numCols - 1)) / $barcodeProps.numCols + "mm";
     let labelHeight = (pageHeight - $barcodeProps.topMargin - $barcodeProps.bottomMargin - $barcodeProps.rowDist * ($barcodeProps.numRows - 1)) / $barcodeProps.numRows + "mm";
 
+    function adjustFontSize(e) {
+        const parentWidth = e.parentElement.offsetWidth;
+        let fontSize = parseInt(window.getComputedStyle(e, null).getPropertyValue('font-size'));
+
+        while (e.offsetWidth > parentWidth && fontSize > 0) {
+            fontSize--;
+            e.style.fontSize = fontSize + "px";
+        }
+    }
 </script>
 
 
@@ -60,10 +73,10 @@
                 <div class="label p-2 overflow-hidden" style="--label-width: {labelWidth}; --label-height: {labelHeight}">
                     {#if $barcodeProps.hasBarcode}
                         <svg class="barcode" id="barcode{page*cellsPerPage + i}"></svg>
-                        <p class="text-black px-2" style:bottom=0>{$captionArray[page*cellsPerPage + i]}</p>
+                        <p class="adjust-text-size text-black px-2" style:bottom=0>{@html $captionArray[page*cellsPerPage + i]}</p>
                     {:else}
                         <svg class="barcode"></svg>
-                        <p class="text-black px-2" style:top=0 style:font-size=large>{$captionArray[page*cellsPerPage + i]}</p>
+                        <p class="adjust-text-size text-black px-2" style:top=0 style:font-size=large>{@html $captionArray[page*cellsPerPage + i]}</p>
                     {/if}
 
                 </div>
@@ -93,6 +106,12 @@
             display: flex;
             justify-content: center;
             outline: 2px #000000 dotted;
+        }
+
+        .adjust-text-size {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: none !important;
         }
 
         .label svg {
