@@ -60,10 +60,10 @@
                 <div class="label p-2 overflow-hidden" style="--label-width: {labelWidth}; --label-height: {labelHeight}">
                     {#if $barcodeProps.hasBarcode}
                         <svg class="barcode" id="barcode{page*cellsPerPage + i}"></svg>
-                        <p class="text-black px-2" style:bottom=0>{$captionArray[page*cellsPerPage + i]}</p>
+                        <p class="text-black px-2" style:bottom=0>{@html $captionArray[page*cellsPerPage + i]}</p>
                     {:else}
                         <svg class="barcode"></svg>
-                        <p class="text-black px-2" style:top=0 style:font-size=large>{$captionArray[page*cellsPerPage + i]}</p>
+                        <p class="text-black px-2" style:top=0 style:font-size=large>{@html $captionArray[page*cellsPerPage + i]}</p>
                     {/if}
 
                 </div>

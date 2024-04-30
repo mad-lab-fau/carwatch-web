@@ -46,7 +46,7 @@
 					let participantString = participant.toString().padStart(3, '0');
 					let caption = '';
 					if ($barcodeProps.addName) {
-						caption += studyName + '_';
+						caption += studyName + '<wbr>_';
 					}
 					// special case: evening sample referred to a "A"
 					let sampleCaption = sample.toString();
