@@ -50,7 +50,7 @@
 						caption += studyName + '_';
 
 						if (!$barcodeProps.hasBarcode) {
-							caption += '<wbr>_';
+							caption += '<wbr>';
 						}
 					}
 
