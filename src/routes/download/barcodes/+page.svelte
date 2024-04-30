@@ -70,16 +70,17 @@
         <div class="page grid grid-cols-{`${$barcodeProps.numCols}`} bg-white" style="--width: {width}; --height: {height}" style:gap={`${rowDist} ${colDist}`} style:padding-top={paddingTop} style:padding-bottom={paddingBottom} style:padding-left={paddingLeft} style:padding-right={paddingRight}>
             {#each Array(cellsPerPage) as _, i}
                 {#if !(page*cellsPerPage + i >= numBarcodes)}
-                <div class="label p-2 overflow-hidden" style="--label-width: {labelWidth}; --label-height: {labelHeight}">
                     {#if $barcodeProps.hasBarcode}
-                        <svg class="barcode" id="barcode{page*cellsPerPage + i}"></svg>
-                        <p class="adjust-text-size text-black px-2" style:bottom=0>{@html $captionArray[page*cellsPerPage + i]}</p>
+                        <div class="label p-2 overflow-hidden" style="--label-width: {labelWidth}; --label-height: {labelHeight}">
+                            <svg class="barcode" id="barcode{page*cellsPerPage + i}"></svg>
+                            <p class="adjust-text-size text-black px-2" style:bottom=0>{$captionArray[page*cellsPerPage + i]}</p>
+                        </div>
                     {:else}
-                        <svg class="barcode"></svg>
-                        <p class="adjust-text-size text-black px-2" style:top=0 style:font-size=large>{@html $captionArray[page*cellsPerPage + i]}</p>
+                        <div class="label p-2 overflow-hidden items-center" style="--label-width: {labelWidth}; --label-height: {labelHeight}">
+                            <svg class="barcode"></svg>
+                            <p class="adjust-text-size text-black px-2 text-center" style:font-size=large>{@html $captionArray[page*cellsPerPage + i]}</p>
+                        </div>
                     {/if}
-
-                </div>
                 {:else}
                 <!-- display empty labels to last page to preserve format -->
                 <div class="label p-2 overflow-hidden">

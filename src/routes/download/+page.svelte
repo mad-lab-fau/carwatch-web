@@ -47,10 +47,12 @@
 					let participantString = participant.toString().padStart(3, '0');
 					let caption = '';
 					if ($barcodeProps.addName) {
-						caption += studyName + '_';
+						caption += studyName;
 
-						if (!$barcodeProps.hasBarcode) {
-							caption += '<wbr>';
+						if ($barcodeProps.hasBarcode) {
+							caption += '_';
+						} else {
+							caption += '<br>';
 						}
 					}
 
