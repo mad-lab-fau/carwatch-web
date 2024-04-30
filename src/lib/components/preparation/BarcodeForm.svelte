@@ -15,6 +15,7 @@
 					generateBarcodes: false
 			}});
 		barcodePropsValid.set(isValid());
+		layoutPresetId = getCurrentPresetIdFromValues();
 	});
 	// after hiding/showing conditional form elements
 	afterUpdate(()=> barcodePropsValid.set(isValid()));
@@ -39,10 +40,10 @@
 		return true;
     }
 
-	function updatePresets() {
+	function changePrintFormat() {
 		printFormat = $barcodeProps.useLetterFormat ? "letter" : "A4";
 		presets = PRESETS.filter((preset) => preset.printFormat === printFormat);
-		setCustomPreset();
+		layoutPresetId = getCurrentPresetIdFromValues();
 	}
 
 	function insertPresetValues() {
@@ -63,6 +64,22 @@
 				bottomMargin: preset.bottomMargin
 			}
 		});
+	}
+
+	function getCurrentPresetIdFromValues() {
+		for (let preset of presets) {
+			if (preset.numCols === $barcodeProps.numCols &&
+				preset.numRows === $barcodeProps.numRows &&
+				preset.distanceBetweenCols === $barcodeProps.colDist &&
+				preset.distanceBetweenRows === $barcodeProps.rowDist &&
+				preset.leftMargin === $barcodeProps.leftMargin &&
+				preset.rightMargin === $barcodeProps.rightMargin &&
+				preset.topMargin === $barcodeProps.topMargin &&
+				preset.bottomMargin === $barcodeProps.bottomMargin) {
+				return preset.id;
+			}
+		}
+		return customPresetId;
 	}
 
 	function setCustomPreset() {
@@ -91,7 +108,7 @@
 		<hr class="my-4">
 		<h4>Print label layout:</h4>
 		<label class="flex items-center space-x-2 my-3">
-			<input class="checkbox" id="use_letter_format" type="checkbox" bind:checked={$barcodeProps.useLetterFormat} on:change={updatePresets}>
+			<input class="checkbox" id="use_letter_format" type="checkbox" bind:checked={$barcodeProps.useLetterFormat} on:change={changePrintFormat}>
 			<p>Use ANSI letter format (11 in &times; 8.5 in) instead of A4 (297 mm &times; 210 mm)</p>
 		</label>
 		<label class="label md:w-1/3 my-4">
