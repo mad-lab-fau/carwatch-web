@@ -36,6 +36,7 @@
 		let captions = [];
 		let startSample = $studyProps.startSampleFromZero ? 0 : 1;
 		let studyName = $studyProps.studyName;
+		let addStudyDay = $studyProps.numDays > 1;
 		for (let participant = 1; participant <= $studyProps.numParticipants; participant++) {
 			for (let day = 1; day <= $studyProps.numDays; day++) {
 				let lastSampleId = $studyProps.numSamples + startSample + Number($studyProps.hasEveningSample) - 1;
@@ -47,13 +48,22 @@
 					let caption = '';
 					if ($barcodeProps.addName) {
 						caption += studyName + '_';
+
+						if (!$barcodeProps.hasBarcode) {
+							caption += '<wbr>_';
+						}
 					}
+
 					// special case: evening sample referred to a "A"
 					let sampleCaption = sample.toString();
 					if (sample == lastSampleId && $studyProps.hasEveningSample) {
 						sampleCaption = 'E';
 					}
-					caption += $studyProps.participantList[participant - 1] + '_D' + day + '_' + $studyProps.samplePrefix + sampleCaption;
+					caption += $studyProps.participantList[participant - 1];
+					if (addStudyDay) {
+						caption += '_D' + day;
+					}
+					caption += '_' + $studyProps.samplePrefix + sampleCaption;
 					captions.push(caption);
 					let data = participantString + dayString + sampleString;
 					barcodeData.push(data);
