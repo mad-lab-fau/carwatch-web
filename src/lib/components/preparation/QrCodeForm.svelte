@@ -61,7 +61,7 @@
 	}
 
 	function isValid() {
-		let idList = ["mail"];
+		let idList = ["mail", "columns", "rows"];
 		if (uniformSalivaDistances) {
 			idList = [...idList, "distances"];
 		} else {
@@ -248,11 +248,26 @@
 				<div class="flex">
 					<label class="label w-1/6">
 						<span>Number of columns</span>
-						<input class="input" type="number" min="1" max="5" bind:value={$qrCodeProps.numColumns} />
+						<input
+							bind:value={$qrCodeProps.numColumns}
+							id="columns"
+							class="input"
+							type="number"
+							min="1" max="5"
+							required
+						/>
 					</label>
 					<label class="label w-1/6 mx-6">
 						<span>Number of rows</span>
-						<input class="input" type="number" min="1" max="{$qrCodeProps.includeParticipantId ? 5 : $qrCodeProps.useLetterFormat ? 6 : 7}" bind:value={$qrCodeProps.numRows} />
+						<input
+							bind:value={$qrCodeProps.numRows}
+							id="rows"
+							class="input"
+							type="number"
+							min="1"
+							max="{$qrCodeProps.includeParticipantId ? 5 : $qrCodeProps.useLetterFormat ? 6 : 7}"
+							required
+						/>
 					</label>
 				</div>
 			{/if}
