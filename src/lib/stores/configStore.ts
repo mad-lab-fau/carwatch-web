@@ -63,9 +63,9 @@ const defaultBarcodeProps: BarcodeProperties = { generateBarcodes: true, hasBarc
 const defaultQrCodeProps: QrCodeProperties = { generateQrCodes: true, numSampleAlarmTimes: 0, salivaDistances: [], salivaAlarmTimes: [], contact: '', includeParticipantId: false, checkDuplicates: false, enableManualScan: false, useLetterFormat: false, numColumns: 3, numRows: 6 }
 
 // Create the stores
-export const studyProps = storedStudyProps ? writable<StudyProperties>(JSON.parse(storedStudyProps)) : writable<StudyProperties>(defaultStudyProps);
-export const barcodeProps = storedBarcodeProps ? writable<BarcodeProperties>(JSON.parse(storedBarcodeProps)) : writable<BarcodeProperties>(defaultBarcodeProps);
-export const qrCodeProps = storedQrCodeProps ? writable<QrCodeProperties>(JSON.parse(storedQrCodeProps)) : writable<QrCodeProperties>(defaultQrCodeProps);
+export const studyProps = storedStudyProps ? writable<StudyProperties>(addMissingProperties(JSON.parse(storedStudyProps), defaultStudyProps)) : writable<StudyProperties>(defaultStudyProps);
+export const barcodeProps = storedBarcodeProps ? writable<BarcodeProperties>(addMissingProperties(JSON.parse(storedBarcodeProps), defaultBarcodeProps)) : writable<BarcodeProperties>(defaultBarcodeProps);
+export const qrCodeProps = storedQrCodeProps ? writable<QrCodeProperties>(addMissingProperties(JSON.parse(storedQrCodeProps), defaultQrCodeProps)) : writable<QrCodeProperties>(defaultQrCodeProps);
 
 export const studyPropsValid = writable(Boolean(storedStudyProps));
 export const barcodePropsValid = writable(Boolean(storedBarcodeProps));
@@ -88,4 +88,13 @@ if (browser) {
       localStorage.storedQrCodeProps = JSON.stringify(value)
     }
   });
+}
+
+function addMissingProperties(storedValues, defaultValues) {
+  for (const key in defaultValues) {
+    if (!(key in storedValues) || storedValues[key] === undefined || storedValues[key] === null) {
+      storedValues[key] = defaultValues[key];
+    }
+  }
+  return storedValues;
 }
