@@ -169,11 +169,12 @@
 				<hr class="my-4">
 
 				{#if !uniformSalivaDistances}
-					<label class="label md:w-1/3">
+					<label class="label">
 						<span>Number of samples that have to be taken at a fixed time</span>
 						<input
-							class="input md:w-1/4"
+							class="input"
 							id="samplesAbsTime"
+							style="width: 8rem;"
 							type="number"
 							bind:value={numSampleAlarmTimes}
 							min="0"
@@ -185,9 +186,9 @@
 
 				<h4>Times for biomarker samples</h4>
 					{#if uniformSalivaDistances}
-						<div class="h-full max-h-72 py-2 md:w-1/4 p overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
+						<div class="h-full max-h-72 py-2 p overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
 							<label class="label pb-1" for="distances"><span>Time between all samples</span></label>
-							<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+							<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]" style="width: 15rem;">
 								<input
 									class="input col-span-2"
 									id="distances"
@@ -201,7 +202,7 @@
 							</div>
 						</div>
 					{:else}
-						<div class="h-full md:w-1/3 py-2 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
+						<div class="h-full py-2 overflow-y-auto overflow-x-hidden flex flex-col flex-grow px-4">
 							{#each Array($studyProps.numSamples - numSampleAlarmTimes) as _, i}
 								<label class="label pt-2 pb-1" for="distance{i}">
 									{#if i === 0}
@@ -210,7 +211,7 @@
 										<span>Time span between sample {i + Number(!$studyProps.startSampleFromZero) - 1} and sample {i + Number(!$studyProps.startSampleFromZero)}</span>
 									{/if}
 								</label>
-								<div class="input-group input-group-divider grid-cols-[auto_2fr_auto]">
+								<div class="input-group input-group-divider grid-cols-[auto_2fr_auto]" style="width: 15rem;">
 									<input
 										class="input col-span-2"
 										id="distance{i}"
@@ -227,7 +228,7 @@
 										Alarm time for sample {$studyProps.numSamples - numSampleAlarmTimes + i + Number(!$studyProps.startSampleFromZero)}
 									</span>
 								</label>
-								<div class="input-group input-group-divider grid-cols-[auto_2fr_auto]">
+								<div class="input-group input-group-divider grid-cols-[auto_2fr_auto]" style="width: 15rem;">
 									<input
 										class="input col-span-2"
 										id="time{i}"
